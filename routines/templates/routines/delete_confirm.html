@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Delete Habit</title>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: Georgia, serif;
+      background: #f7f3eb;
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 60px 20px;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 500px;
+      background: white;
+      padding: 45px 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      margin-bottom: 16px;
+      color: #c0392b;
+    }
+
+    p.warning {
+      color: #555;
+      line-height: 1.7;
+      margin-bottom: 8px;
+    }
+
+    p.warning b {
+      color: #333;
+    }
+
+    .stat-line {
+      color: #999;
+      font-size: 0.9rem;
+      margin-bottom: 25px;
+    }
+
+    .error-msg {
+      background: #fbeae7;
+      color: #c0392b;
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      text-align: left;
+      font-size: 0.85rem;
+      color: #666;
+      margin-bottom: 6px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-family: Georgia, serif;
+      font-size: 1rem;
+      margin-bottom: 20px;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    a.btn, button.btn {
+      text-decoration: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      transition: 0.2s;
+      font-family: Georgia, serif;
+      font-size: 1rem;
+      border: none;
+      cursor: pointer;
+    }
+
+    .danger {
+      background: #c0392b;
+      color: white;
+    }
+
+    .danger:hover {
+      background: #a5311f;
+    }
+
+    .secondary {
+      border: 1px solid #999;
+      color: #444;
+      background: white;
+    }
+
+    .secondary:hover {
+      background: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Delete "{{ habit.name }}"?</h1>
+
+    <p class="warning">
+      This will <b>permanently delete</b> this habit and all its history.
+      This cannot be undone.
+    </p>
+    <p class="stat-line">
+      {{ log_count }} log{{ log_count|pluralize }} will be removed &middot;
+      archived {{ habit.archived_at|date:"M j, Y" }}
+    </p>
+
+    {% if error %}
+      <div class="error-msg">The name didn't match. Nothing was deleted.</div>
+    {% endif %}
+
+    <form method="post">
+      {% csrf_token %}
+      <label for="confirm_name">Type <b>{{ habit.name }}</b> to confirm:</label>
+      <input type="text" id="confirm_name" name="confirm_name" autocomplete="off" required>
+
+      <div class="buttons">
+        <a href="{% url 'routines:manage' %}" class="btn secondary">Cancel</a>
+        <button type="submit" class="btn danger">Delete Permanently</button>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

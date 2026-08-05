@@ -1,0 +1,20 @@
+{% extends 'admin/change_list.html' %}
+
+{% block result_list %}
+  <div class="row">
+    {% for note in cl.result_list %}
+      <div class="col-md-4">
+        <div class="card mb-3">
+          <div class="card-body">
+            <div>{{ note.note|safe }}</div>
+            <div>
+              <a href="{{ note.pk }}/change/" class="btn btn-primary">Edit</a>
+
+              <a href="{{ note.pk }}/delete/" class="btn btn-danger">Delete</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}

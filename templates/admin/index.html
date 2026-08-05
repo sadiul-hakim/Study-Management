@@ -1,0 +1,25 @@
+{% extends 'admin/index.html' %}
+
+{% block content %}
+  {% if guide %}
+    <div class="card {{ guide.bootstrap_class }} mb-3">
+      <div class="card-body">
+        {% if guide.type == guide.WARNING %}
+          <p class="text-warning display-6 text-center">{{ guide.text }}</p>
+        {% elif guide.type == guide.DANGER %}
+          <p class="text-danger display-6 text-center">{{ guide.text }}</p>
+        {% else %}
+          <p class="text-primary display-6 text-center">{{ guide.text }}</p>
+        {% endif %}
+      </div>
+    </div>
+  {% endif %}
+  <div class="d-flex p-2 my-2 bg-dark rounded">
+    
+      <a href="/admin/viewer" class="btn btn-primary">Document Viewer</a>
+    
+      <a href="/silk" class="btn btn-primary ms-2">Silk</a>
+    
+  </div>
+  {{ block.super }}
+{% endblock %}

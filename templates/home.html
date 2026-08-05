@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Study Management</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      
+      body {
+        font-family: Georgia, serif;
+        background: #f7f3eb;
+        color: #333;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      
+      .container {
+        width: 90%;
+        max-width: 700px;
+        text-align: center;
+        background: white;
+        padding: 50px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      }
+      
+      h1 {
+        font-size: 3rem;
+        margin-bottom: 10px;
+      }
+      
+      .subtitle {
+        color: #666;
+        font-size: 1.1rem;
+        margin-bottom: 30px;
+      }
+      
+      .quote {
+        font-style: italic;
+        color: #777;
+        margin-bottom: 35px;
+        line-height: 1.7;
+      }
+      
+      .buttons {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        flex-wrap: wrap;
+      }
+      
+      a {
+        text-decoration: none;
+        padding: 12px 24px;
+        border-radius: 6px;
+        transition: 0.2s;
+      }
+      
+      .primary {
+        background: #4a5d4f;
+        color: white;
+      }
+      
+      .primary:hover {
+        background: #39473d;
+      }
+      
+      .secondary {
+        border: 1px solid #999;
+        color: #444;
+      }
+      
+      .secondary:hover {
+        background: #f2f2f2;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>B.A. Study Management</h1>
+
+      <p class="subtitle">Organize reading, revision, examinations, and long-term learning.</p>
+
+      <p class="quote">
+        "Reading maketh a full man; conference a ready man; and writing an exact man."
+        <br />
+        <i><b>Francis Bacon</b></i>
+      </p>
+
+      <div class="buttons">
+        <a href="/routines/" class="primary">Today's Routine</a>
+        <a href="/admin/" class="secondary">Open Dashboard</a>
+      </div>
+    </div>
+  </body>
+</html>

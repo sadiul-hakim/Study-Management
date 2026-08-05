@@ -1,0 +1,341 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-14 17:03+0600\n"
+"PO-Revision-Date: 2025-01-01 00:00+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Bengali\n"
+"Language: bn\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: .\BookCollection\models.py:8 .\BookCollection\models.py:19
+#: .\book_reading\models.py:9 .\document\models.py:8 .\document\models.py:19
+#: .\document\models.py:59 .\exam_management\models.py:11
+#: .\literature\models.py:8 .\literature\models.py:19
+#: .\literature\models.py:30
+msgid "Name"
+msgstr "নাম"
+
+#: .\BookCollection\models.py:11 .\BookCollection\models.py:34
+#: .\book_reading\models.py:35 .\literature\models.py:11
+#: .\literature\models.py:35
+msgid "Author"
+msgstr "লেখক"
+
+#: .\BookCollection\models.py:12 .\literature\models.py:12
+msgid "Authors"
+msgstr "লেখকগণ"
+
+#: .\BookCollection\models.py:22 .\BookCollection\models.py:39
+#: .\document\models.py:11 .\document\models.py:26 .\document\models.py:66
+#: .\literature\models.py:22 .\literature\models.py:41
+msgid "Genre"
+msgstr "ধরন"
+
+#: .\BookCollection\models.py:23 .\document\models.py:12
+#: .\literature\models.py:23
+msgid "Genres"
+msgstr "ধরনসমূহ"
+
+#: .\BookCollection\models.py:30 .\book_reading\models.py:34
+#: .\book_reading\models.py:52
+msgid "Title"
+msgstr "শিরোনাম"
+
+#: .\BookCollection\models.py:43 .\BookCollection\models.py:52
+#: .\BookCollection\models.py:70 .\BookCollection\models.py:85
+#: .\BookCollection\models.py:99 .\book_reading\models.py:40
+#: .\book_reading\models.py:50 .\book_reading\models.py:80
+#: .\book_reading\models.py:141 .\book_reading\models.py:171
+#: .\exam_management\models.py:26 .\general\models.py:11
+#: .\writing_plan\models.py:23
+msgid "Book"
+msgstr "বই"
+
+#: .\BookCollection\models.py:44 .\book_reading\models.py:41
+msgid "Books"
+msgstr "বইসমূহ"
+
+#: .\BookCollection\models.py:53
+msgid "Reading page"
+msgstr "পঠন পৃষ্ঠা"
+
+#: .\BookCollection\models.py:54
+msgid "Is completed"
+msgstr "সম্পন্ন হয়েছে কিনা"
+
+#: .\BookCollection\models.py:55
+msgid "Is postponed"
+msgstr "স্থগিত হয়েছে কিনা"
+
+#: .\BookCollection\models.py:56 .\book_reading\models.py:87
+msgid "Updated at"
+msgstr "আপডেট করা হয়েছে"
+
+#: .\BookCollection\models.py:57 .\book_reading\models.py:88
+msgid "Finish around"
+msgstr "শেষ হওয়ার সম্ভাব্য সময়"
+
+#: .\BookCollection\models.py:60 .\BookCollection\models.py:61
+#: .\book_reading\models.py:91 .\book_reading\models.py:92
+msgid "Reading Progress"
+msgstr "পঠন অগ্রগতি"
+
+#: .\BookCollection\models.py:71 .\BookCollection\models.py:87
+#: .\book_reading\models.py:113 .\book_reading\models.py:145
+#: .\book_reading\models.py:175 .\general\models.py:13 .\general\models.py:24
+#: .\general\models.py:27 .\writing_plan\models.py:27
+msgid "Note"
+msgstr "নোট"
+
+#: .\BookCollection\models.py:72 .\book_reading\models.py:146
+msgid "Start around"
+msgstr "শুরু হওয়ার সম্ভাব্য সময়"
+
+#: .\BookCollection\models.py:73 .\book_reading\models.py:147
+#: .\book_reading\models.py:177
+msgid "Order"
+msgstr "ক্রম"
+
+#: .\BookCollection\models.py:76 .\book_reading\models.py:150
+msgid "Reading Plan"
+msgstr "পঠন পরিকল্পনা"
+
+#: .\BookCollection\models.py:77 .\book_reading\models.py:151
+msgid "Reading Plans"
+msgstr "পঠন পরিকল্পনাসমূহ"
+
+#: .\BookCollection\models.py:86 .\general\models.py:12
+msgid "Page"
+msgstr "পৃষ্ঠা"
+
+#: .\BookCollection\models.py:90 .\general\models.py:16
+msgid "Study Note"
+msgstr "অধ্যয়ন নোট"
+
+#: .\BookCollection\models.py:91 .\general\models.py:17
+msgid "Study Notes"
+msgstr "অধ্যয়ন নোটসমূহ"
+
+#: .\BookCollection\models.py:100
+msgid "Receiver"
+msgstr "গ্রহীতা"
+
+#: .\BookCollection\models.py:101
+msgid "Date"
+msgstr "তারিখ"
+
+#: .\BookCollection\models.py:102
+msgid "Return date"
+msgstr "ফেরতের তারিখ"
+
+#: .\BookCollection\models.py:105
+msgid "Lend"
+msgstr "ধার"
+
+#: .\BookCollection\models.py:106
+msgid "Lends"
+msgstr "ধারসমূহ"
+
+#: .\book_reading\models.py:10 .\document\models.py:20
+msgid "Description"
+msgstr "বিবরণ"
+
+#: .\book_reading\models.py:13 .\book_reading\models.py:33
+#: .\book_reading\models.py:139 .\exam_management\models.py:10
+#: .\exam_management\models.py:24
+msgid "Course"
+msgstr "কোর্স"
+
+#: .\book_reading\models.py:14
+msgid "Courses"
+msgstr "কোর্সসমূহ"
+
+#: .\book_reading\models.py:26 .\book_reading\models.py:131
+#: .\book_reading\models.py:163 .\writing_plan\models.py:15
+msgid "Low"
+msgstr "নিম্ন"
+
+#: .\book_reading\models.py:27 .\book_reading\models.py:132
+#: .\book_reading\models.py:164 .\writing_plan\models.py:16
+msgid "Medium"
+msgstr "মাঝারি"
+
+#: .\book_reading\models.py:28 .\book_reading\models.py:133
+#: .\book_reading\models.py:165 .\writing_plan\models.py:17
+msgid "High"
+msgstr "উচ্চ"
+
+#: .\book_reading\models.py:37 .\book_reading\models.py:137
+#: .\book_reading\models.py:169 .\guide\models.py:17
+#: .\writing_plan\models.py:21
+msgid "Priority"
+msgstr "অগ্রাধিকার"
+
+#: .\book_reading\models.py:53
+msgid "Chapter number"
+msgstr "অধ্যায় নম্বর"
+
+#: .\book_reading\models.py:56 .\book_reading\models.py:78
+#: .\book_reading\models.py:144 .\book_reading\models.py:174
+#: .\writing_plan\models.py:26
+msgid "Chapter"
+msgstr "অধ্যায়"
+
+#: .\book_reading\models.py:57
+msgid "Chapters"
+msgstr "অধ্যায়সমূহ"
+
+#: .\book_reading\models.py:70 .\book_reading\models.py:105
+msgid "Not Started"
+msgstr "শুরু হয়নি"
+
+#: .\book_reading\models.py:71 .\book_reading\models.py:106
+msgid "In Progress"
+msgstr "চলমান"
+
+#: .\book_reading\models.py:72 .\book_reading\models.py:107
+msgid "Postponed"
+msgstr "স্থগিত"
+
+#: .\book_reading\models.py:73 .\book_reading\models.py:108
+msgid "Completed"
+msgstr "সম্পন্ন"
+
+#: .\book_reading\models.py:81
+msgid "Current page"
+msgstr "বর্তমান পৃষ্ঠা"
+
+#: .\book_reading\models.py:82
+msgid "Model"
+msgstr "মডেল"
+
+#: .\book_reading\models.py:84 .\book_reading\models.py:115
+msgid "Status"
+msgstr "অবস্থা"
+
+#: .\book_reading\models.py:85
+msgid "Reading model"
+msgstr "রিডিং মডেল"
+
+#: .\book_reading\models.py:112
+msgid "Topic name"
+msgstr "বিষয়ের নাম"
+
+#: .\book_reading\models.py:118 .\book_reading\models.py:119
+msgid "Other Study Progress"
+msgstr "অন্যান্য অধ্যয়ন অগ্রগতি"
+
+#: .\book_reading\models.py:176 .\writing_plan\models.py:28
+msgid "Possible date"
+msgstr "সম্ভাব্য তারিখ"
+
+#: .\book_reading\models.py:180
+msgid "Revise"
+msgstr "পুনরালোচনা"
+
+#: .\book_reading\models.py:181
+msgid "Revises"
+msgstr "পুনরালোচনাসমূহ"
+
+#: .\document\models.py:30 .\document\models.py:42
+msgid "Document"
+msgstr "নথি"
+
+#: .\document\models.py:31
+msgid "Documents"
+msgstr "নথিসমূহ"
+
+#: .\document\models.py:46
+msgid "File"
+msgstr "ফাইল"
+
+#: .\document\models.py:51
+msgid "Document File"
+msgstr "নথি ফাইল"
+
+#: .\document\models.py:52
+msgid "Document Files"
+msgstr "নথি ফাইলসমূহ"
+
+#: .\document\models.py:60 .\document\models.py:70
+msgid "Link"
+msgstr "লিংক"
+
+#: .\document\models.py:71
+msgid "Links"
+msgstr "লিংকসমূহ"
+
+#: .\exam_management\models.py:12
+msgid "Exam date"
+msgstr "পরীক্ষার তারিখ"
+
+#: .\exam_management\models.py:15
+msgid "Exam"
+msgstr "পরীক্ষা"
+
+#: .\exam_management\models.py:16
+msgid "Exams"
+msgstr "পরীক্ষাসমূহ"
+
+#: .\exam_management\models.py:29 .\exam_management\models.py:30
+msgid "Improve"
+msgstr "উন্নতি"
+
+#: .\general\models.py:28
+msgid "Notes"
+msgstr "নোটসমূহ"
+
+#: .\guide\models.py:11
+msgid "Primary"
+msgstr "প্রাথমিক"
+
+#: .\guide\models.py:12
+msgid "Warning"
+msgstr "সতর্কতা"
+
+#: .\guide\models.py:13
+msgid "Danger"
+msgstr "বিপদ"
+
+#: .\guide\models.py:16
+msgid "Text"
+msgstr "লেখা"
+
+#: .\guide\models.py:18
+msgid "Type"
+msgstr "ধরন"
+
+#: .\guide\models.py:22
+msgid "Guide"
+msgstr "নির্দেশিকা"
+
+#: .\guide\models.py:23
+msgid "Guides"
+msgstr "নির্দেশিকাসমূহ"
+
+#: .\literature\models.py:45
+msgid "Literary Work"
+msgstr "সাহিত্যকর্ম"
+
+#: .\literature\models.py:46
+msgid "Literary Works"
+msgstr "সাহিত্যকর্মসমূহ"
+
+#: .\writing_plan\models.py:31
+msgid "Writing Plan"
+msgstr "লেখার পরিকল্পনা"
+
+#: .\writing_plan\models.py:32
+msgid "Writing Plans"
+msgstr "লেখার পরিকল্পনাসমূহ"
+
+#~ msgid "Dashboard"
+#~ msgstr "ড্যাশবোর্ড"
+
+#~ msgid "Welcome, %(user)s!"
+#~ msgstr "স্বাগতম, %(user)s!"

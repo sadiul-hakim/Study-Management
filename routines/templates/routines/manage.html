@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manage Habits</title>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: Georgia, serif;
+      background: #f7f3eb;
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 60px 20px;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 650px;
+      background: white;
+      padding: 45px 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 6px;
+    }
+
+    .sub {
+      color: #777;
+      font-size: 0.95rem;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    h2.section-title {
+      font-size: 1.1rem;
+      margin: 30px 0 14px;
+      color: #4a5d4f;
+      border-bottom: 2px solid #eee6d8;
+      padding-bottom: 8px;
+    }
+
+    .habit-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 6px;
+      border-bottom: 1px solid #eee6d8;
+    }
+
+    .habit-row:last-child {
+      border-bottom: none;
+    }
+
+    .habit-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .habit-info .name {
+      font-size: 1.02rem;
+    }
+
+    .habit-info .meta {
+      font-size: 0.8rem;
+      color: #999;
+      margin-top: 2px;
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      border-radius: 10px;
+      margin-left: 8px;
+    }
+
+    .badge.active {
+      background: #e6efe7;
+      color: #4a5d4f;
+    }
+
+    .badge.archived {
+      background: #f2e9d8;
+      color: #8a6d3b;
+    }
+
+    .row-actions a {
+      text-decoration: none;
+      font-size: 0.85rem;
+      padding: 7px 14px;
+      border-radius: 6px;
+      border: 1px solid #c0392b;
+      color: #c0392b;
+      transition: 0.2s;
+    }
+
+    .row-actions a:hover {
+      background: #c0392b;
+      color: white;
+    }
+
+    .empty-note {
+      color: #999;
+      font-size: 0.9rem;
+      padding: 10px 6px;
+      font-style: italic;
+    }
+
+    .hint {
+      background: #f7f3eb;
+      border-radius: 8px;
+      padding: 14px 16px;
+      font-size: 0.85rem;
+      color: #777;
+      margin-top: 10px;
+      line-height: 1.6;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-top: 40px;
+    }
+
+    a.btn {
+      text-decoration: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      transition: 0.2s;
+      font-family: Georgia, serif;
+    }
+
+    .primary {
+      background: #4a5d4f;
+      color: white;
+    }
+
+    .primary:hover {
+      background: #39473d;
+    }
+
+    .secondary {
+      border: 1px solid #999;
+      color: #444;
+    }
+
+    .secondary:hover {
+      background: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Manage Habits</h1>
+    </div>
+    <p class="sub">Add or edit habits from the admin dashboard. Archived habits can be permanently removed here.</p>
+
+    <h2 class="section-title">Active</h2>
+    {% for habit in active_habits %}
+      <div class="habit-row">
+        <div class="habit-info">
+          <span class="name">{% if habit.icon %}{{ habit.icon }} {% endif %}{{ habit.name }}<span class="badge active">active</span></span>
+          <span class="meta">tracking since {{ habit.created_at|date:"M j, Y" }}</span>
+        </div>
+      </div>
+    {% empty %}
+      <p class="empty-note">No active habits.</p>
+    {% endfor %}
+
+    <h2 class="section-title">Archived</h2>
+    {% for habit in archived_habits %}
+      <div class="habit-row">
+        <div class="habit-info">
+          <span class="name">{% if habit.icon %}{{ habit.icon }} {% endif %}{{ habit.name }}<span class="badge archived">archived</span></span>
+          <span class="meta">
+            {{ habit.created_at|date:"M j, Y" }} &rarr; {{ habit.archived_at|date:"M j, Y" }}
+            &middot; {{ habit.logs.count }} log{{ habit.logs.count|pluralize }}
+          </span>
+        </div>
+        <div class="row-actions">
+          <a href="{% url 'routines:delete' habit.id %}">Delete Permanently</a>
+        </div>
+      </div>
+    {% empty %}
+      <p class="empty-note">Nothing archived.</p>
+    {% endfor %}
+
+    <div class="hint">
+      To archive a habit (stop tracking it going forward but keep its history), uncheck
+      "is active" on it in the admin dashboard. It'll show up here once archived.
+    </div>
+
+    <div class="buttons">
+      <a href="{% url 'routines:stats' %}" class="btn secondary">Back to Stats</a>
+      <a href="{% url 'routines:today' %}" class="btn primary">Today</a>
+    </div>
+  </div>
+</body>
+</html>
