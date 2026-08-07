@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'document',
     'guide',
     'BookCollection',
-    'routines'
 ]
 
 JAZZMIN_SETTINGS = {
@@ -282,9 +281,3 @@ LOGGING = {
 }
 #
 X_FRAME_OPTIONS = "SAMEORIGIN"
-
-# Add these to your project's settings.py (anywhere near the bottom is fine)
-
-LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = 'routines:today'
-LOGOUT_REDIRECT_URL = 'login'

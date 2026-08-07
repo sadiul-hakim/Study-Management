@@ -18,11 +18,6 @@ urlpatterns += i18n_patterns(
 
     path("ckeditor5/", include("django_ckeditor_5.urls")),
     path('admin/', admin.site.urls),
-
-    # app
-    path('login/', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
-    path('routines/', include('routines.urls')),
 )
 
 urlpatterns += static(
