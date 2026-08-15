@@ -17,7 +17,8 @@ class Genre(models.Model):
 
 class Document(models.Model):
     name = models.CharField(_("Name"), max_length=200)
-    description = models.TextField(_("Description"), blank=True)
+    description = models.TextField(
+        _("Description"), blank=True, max_length=600)
     genre = models.ForeignKey(
         Genre,
         on_delete=models.PROTECT,
@@ -56,8 +57,8 @@ class DocumentFile(models.Model):
 
 
 class Link(models.Model):
-    name = models.CharField(_("Name"))
-    link = models.CharField(_("Link"))
+    name = models.CharField(_("Name"), max_length=250)
+    link = models.CharField(_("Link"), max_length=1000)
     genre = models.ForeignKey(
         Genre,
         on_delete=models.PROTECT,

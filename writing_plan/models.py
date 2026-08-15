@@ -24,7 +24,7 @@ class WritingPlan(models.Model):
     chapter = models.ForeignKey(
         Chapter, on_delete=models.CASCADE, null=True, blank=True,
         verbose_name=_("Chapter"))
-    note = models.TextField(_("Note"), blank=True)
+    note = models.TextField(_("Note"), blank=True, max_length=1000)
     possible_date = models.DateField(_("Possible date"), null=True, blank=True)
 
     class Meta:
