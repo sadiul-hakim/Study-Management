@@ -3,7 +3,7 @@ from .admin_views import document_viewer
 from django.contrib import admin
 from .models import Document, DocumentFile, Genre, Link, GenreAccess
 from django.utils.html import format_html
-from .permissions import get_accessible_documents, user_can_access_document
+from .permissions import get_accessible_documents, get_accessible_links
 # Register your models here.
 
 
@@ -13,6 +13,9 @@ class LinkAdmin(admin.ModelAdmin):
     search_fields = ("name", )
     list_filter = ("genre", )
     list_per_page = 25
+
+    def get_queryset(self, request):
+        return get_accessible_links(request.user)
 
 
 @admin.register(Genre)

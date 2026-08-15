@@ -1,4 +1,4 @@
-from .models import Document, GenreAccess
+from .models import Document, GenreAccess, Link
 
 
 def user_can_access_document(user, document):
@@ -16,6 +16,15 @@ def get_accessible_documents(user):
         return Document.objects.all()
 
     return Document.objects.filter(
+        genre__access_rules__group__user=user,
+    ).distinct()
+
+
+def get_accessible_links(user):
+    if user.is_superuser:
+        return Link.objects.all()
+
+    return Link.objects.filter(
         genre__access_rules__group__user=user,
     ).distinct()
 

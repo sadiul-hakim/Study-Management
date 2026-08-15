@@ -1,6 +1,6 @@
-
 import os
 from pathlib import Path
+from decouple import config, Csv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -10,13 +10,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-1ypb5wucojbf7j6ckqfjvca=z9vcvgv1u23gtilgo@%^rlpr4n'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
-INTERNAL_IPS = ["127.0.0.1"]
+ALLOWED_HOSTS = config(
+    'ALLOWED_HOSTS', default='127.0.0.1,localhost', cast=Csv())
+INTERNAL_IPS = config('INTERNAL_IPS', default='127.0.0.1', cast=Csv())
 
 # Application definition
 
@@ -31,7 +32,6 @@ INSTALLED_APPS = [
     'django_ckeditor_5',
     'mamood_django_admin_log_viewer',
     'import_export',
-    'guardian',
 
     # apps
     'general',
@@ -44,10 +44,12 @@ INSTALLED_APPS = [
     'BookCollection',
 ]
 
+SITE_TITLE_TEXT = f"{config('SITE_OWNER')}'s Study Tracker"
+
 JAZZMIN_SETTINGS = {
-    "site_title": "Study Tracker",
-    "site_header": "Study Tracker",
-    "site_brand": "Study Tracker",
+    "site_title": SITE_TITLE_TEXT,
+    "site_header": SITE_TITLE_TEXT,
+    "site_brand": SITE_TITLE_TEXT,
     "welcome_sign": "Welcome to the Dashboard",
     "site_icon": "images/fav.png",
     "site_logo": "images/logo.png",
@@ -118,11 +120,6 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
-AUTHENTICATION_BACKENDS = [
-    "django.contrib.auth.backends.ModelBackend",
-    "guardian.backends.ObjectPermissionBackend",
-]
-
 ROOT_URLCONF = 'BA_study_management.urls'
 
 TEMPLATES = [
@@ -151,8 +148,16 @@ WSGI_APPLICATION = 'BA_study_management.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': config('DB_ENGINE', default='django.db.backends.sqlite3'),
+        'NAME': (
+            BASE_DIR / config('DB_NAME', default='db.sqlite3')
+            if config('DB_ENGINE', default='django.db.backends.sqlite3') == 'django.db.backends.sqlite3'
+            else config('DB_NAME', default='')
+        ),
+        'USER': config('DB_USER', default=''),
+        'PASSWORD': config('DB_PASSWORD', default=''),
+        'HOST': config('DB_HOST', default=''),
+        'PORT': config('DB_PORT', default=''),
     }
 }
 
@@ -179,15 +184,13 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = config('LANGUAGE_CODE', default='en')
 
-TIME_ZONE = 'Asia/Dhaka'
+TIME_ZONE = config('TIME_ZONE', default='Asia/Dhaka')
 
 USE_I18N = True
 
 USE_TZ = True
-
-LANGUAGE_CODE = "en"
 
 LANGUAGES = [
     ("en", "English"),
@@ -213,7 +216,8 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 LOG_VIEWER_FILES = ['app.log', 'error.log']  # add your actual log file names
 LOG_VIEWER_FILES_DIR = BASE_DIR / 'logs'  # path to your logs folder
-LOG_VIEWER_PAGE_LENGTH = 100
+LOG_VIEWER_PAGE_LENGTH = config(
+    'LOG_VIEWER_PAGE_LENGTH', default=100, cast=int)
 
 LOG_VIEWER_FORMATS = {
     'bracket_timestamp': {

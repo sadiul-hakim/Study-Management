@@ -25,3 +25,4 @@ pgloader.log
 db.sqlite3.backup
 
 staticfiles/
+.env
