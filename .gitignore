@@ -23,3 +23,5 @@ logs/
 Study Management.bat - Shortcut.lnk
 pgloader.log
 db.sqlite3.backup
+
+staticfiles/
