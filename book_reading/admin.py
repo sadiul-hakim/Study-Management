@@ -1,6 +1,8 @@
 from django.contrib import admin
 from .models import Book, Chapter, ReadingProgress, Course, ReadingPlan, Revise, OtherStudyProgress
 
+from .resources import ReadingProgressResource
+from import_export.admin import ImportExportModelAdmin
 # Models
 
 
@@ -20,7 +22,8 @@ class BookAdmin(admin.ModelAdmin):
 
 
 @admin.register(ReadingProgress)
-class ReadingProgressAdmin(admin.ModelAdmin):
+class ReadingProgressAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    resource_class = ReadingProgressResource
     list_display = ("book", "chapter", "model", "current_page",
                     "reading_model", "status", "finish_around")
     list_filter = ("book", "status")

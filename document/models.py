@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-
+from django.contrib.auth.models import Group
 # Create your models here.
 
 
@@ -10,9 +10,37 @@ class Genre(models.Model):
     class Meta:
         verbose_name = _("Genre")
         verbose_name_plural = _("Genres")
+        permissions = [
+            ("access_genre", "Can access this genre"),
+        ]
 
     def __str__(self):
         return self.name
+
+
+class GenreAccess(models.Model):
+    genre = models.ForeignKey(
+        Genre,
+        on_delete=models.CASCADE,
+        related_name="access_rules",
+    )
+
+    group = models.ForeignKey(
+        Group,
+        on_delete=models.CASCADE,
+        related_name="genre_access_rules",
+    )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["genre", "group"],
+                name="unique_genre_group_access",
+            )
+        ]
+
+    def __str__(self):
+        return f"{self.group} → {self.genre}"
 
 
 class Document(models.Model):

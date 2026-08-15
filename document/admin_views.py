@@ -6,35 +6,15 @@ from django.shortcuts import render
 from django.contrib.admin.views.decorators import staff_member_required
 
 from .models import Document, DocumentFile
-
-"""
-Logging:
--------
-import logging
-
-logger = logging.getLogger(__name__)
-
-logger.info("Application started")
-
-logger.info(
-    "User '%s' viewed document '%s'",
-    request.user.username,
-    selected_document.name,
+from .permissions import (
+    get_accessible_documents,
+    user_can_access_document,
 )
-
-logger.warning("Unsupported file type: %s", ext)
-
-try:
-    ...
-except Exception:
-    logger.exception("Failed to render markdown")
-
-"""
 
 
 @staff_member_required
 def document_viewer(request):
-    documents = Document.objects.all()
+    documents = get_accessible_documents(request.user)
 
     selected_document = None
     selected_file = None
