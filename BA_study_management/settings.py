@@ -19,6 +19,17 @@ ALLOWED_HOSTS = config(
     'ALLOWED_HOSTS', default='127.0.0.1,localhost', cast=Csv())
 INTERNAL_IPS = config('INTERNAL_IPS', default='127.0.0.1', cast=Csv())
 
+REMINDER_TASK_TOKEN = config('REMINDER_TASK_TOKEN')
+
+# mail
+EMAIL_BACKEND = config('EMAIL_BACKEND')
+EMAIL_HOST = config('EMAIL_HOST')
+EMAIL_PORT = config('EMAIL_PORT', cast=int)
+EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
 # Application definition
 
 INSTALLED_APPS = [

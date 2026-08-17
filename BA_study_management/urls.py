@@ -1,7 +1,7 @@
 
 from django.contrib import admin
 from django.urls import path, include
-from .views import home
+from .views import home, send_daily_reminders
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import include, path
@@ -18,6 +18,8 @@ urlpatterns += i18n_patterns(
 
     path("ckeditor5/", include("django_ckeditor_5.urls")),
     path('admin/', admin.site.urls),
+    path("tasks/send-daily-reminders/",
+         send_daily_reminders, name="send_daily_reminders"),
 )
 
 urlpatterns += static(

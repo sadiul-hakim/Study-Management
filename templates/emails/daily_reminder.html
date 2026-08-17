@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      body {
+        font-family: -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+        background: #f4f5f7;
+        margin: 0;
+        padding: 24px;
+        color: #1f2937;
+      }
+      .container {
+        max-width: 560px;
+        margin: 0 auto;
+        background: #ffffff;
+        border-radius: 10px;
+        overflow: hidden;
+        border: 1px solid #e5e7eb;
+      }
+      .header {
+        background: #4f46e5;
+        color: #ffffff;
+        padding: 20px 24px;
+      }
+      .header h1 {
+        margin: 0;
+        font-size: 18px;
+      }
+      .header p {
+        margin: 4px 0 0;
+        font-size: 13px;
+        opacity: 0.85;
+      }
+      .content {
+        padding: 20px 24px;
+      }
+      .section-title {
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: #6b7280;
+        margin: 20px 0 8px;
+      }
+      .item {
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 12px 14px;
+        margin-bottom: 8px;
+      }
+      .item-title {
+        font-weight: 600;
+        font-size: 14px;
+        margin: 0 0 4px;
+      }
+      .item-sub {
+        font-size: 13px;
+        color: #6b7280;
+        margin: 0;
+      }
+      .badge {
+        display: inline-block;
+        font-size: 11px;
+        font-weight: 600;
+        padding: 2px 8px;
+        border-radius: 999px;
+        margin-left: 6px;
+      }
+      .badge-low {
+        background: #dcfce7;
+        color: #166534;
+      }
+      .badge-medium {
+        background: #fef9c3;
+        color: #854d0e;
+      }
+      .badge-high {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+      .footer {
+        padding: 16px 24px;
+        font-size: 12px;
+        color: #9ca3af;
+        border-top: 1px solid #e5e7eb;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>Study Reminder</h1>
+        <p>{{ today }}</p>
+      </div>
+      <div class="content">
+        {% if revises %}
+          <div class="section-title">Revises Due Today</div>
+          {% for r in revises %}
+            <div class="item">
+              <p class="item-title">
+                {{ r.book }}
+                <span class="badge badge-{{ r.priority_label|lower }}">{{ r.priority_label }}</span>
+              </p>
+              <p class="item-sub">{{ r.chapter|default:'' }}</p>
+            </div>
+          {% endfor %}
+        {% endif %}
+
+        {% if plans %}
+          <div class="section-title">Writing Plans Due Today</div>
+          {% for p in plans %}
+            <div class="item">
+              <p class="item-title">
+                {{ p.book }}
+                <span class="badge badge-{{ p.priority_label|lower }}">{{ p.priority_label }}</span>
+              </p>
+              <p class="item-sub">{{ p.chapter|default:'' }}</p>
+            </div>
+          {% endfor %}
+        {% endif %}
+
+        {% if not revises and not plans %}
+          <p>Nothing due today. 🎉</p>
+        {% endif %}
+      </div>
+      <div class="footer">Sent automatically by BA Study Management</div>
+    </div>
+  </body>
+</html>
