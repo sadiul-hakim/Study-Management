@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import Group
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 # Create your models here.
 
 
@@ -101,3 +103,10 @@ class Link(models.Model):
 
     def __str__(self):
         return self.name
+
+
+@receiver(post_delete, sender=DocumentFile)
+def delete_file_on_delete(sender, instance, **kwargs):
+    """Remove the physical file from storage when a DocumentFile row is deleted."""
+    if instance.file:
+        instance.file.delete(save=False)
