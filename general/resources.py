@@ -9,6 +9,6 @@ class WordCollectionResource(resources.ModelResource):
                   'status', 'created_at', 'updated_at')
         export_order = fields
         # avoid duplicate rows on repeated imports of the same word
-        import_id_fields = ('id',)
+        import_id_fields = ('english',)
         skip_unchanged = True
         report_skipped = True

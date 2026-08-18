@@ -38,7 +38,7 @@ class WordCollection(models.Model):
         UNFAMILIAR = 'unfamiliar', 'Unfamiliar'
         CONFIDENT = 'confident', 'Confident'
 
-    english = models.CharField(max_length=255)
+    english = models.CharField(max_length=255, unique=True)
     bengali = models.CharField(max_length=255, blank=True)
     status = models.CharField(
         max_length=20,
