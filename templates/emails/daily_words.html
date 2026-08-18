@@ -1,0 +1,101 @@
+{# templates/emails/daily_words.html #}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f4f4f4;
+        margin: 0;
+        padding: 20px;
+      }
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        background: #fff;
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      .header {
+        background: #1f2937;
+        color: #fff;
+        padding: 20px;
+        text-align: center;
+      }
+      .header h1 {
+        margin: 0;
+        font-size: 20px;
+      }
+      .content {
+        padding: 20px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+      }
+      th,
+      td {
+        text-align: left;
+        padding: 10px;
+        border-bottom: 1px solid #e5e7eb;
+      }
+      th {
+        background: #f9fafb;
+        font-size: 13px;
+        text-transform: uppercase;
+        color: #6b7280;
+      }
+      .bengali {
+        font-size: 16px;
+        font-weight: bold;
+        color: #111827;
+      }
+      .status-badge {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-size: 12px;
+        background: #e0f2fe;
+        color: #0369a1;
+      }
+      .footer {
+        padding: 15px 20px;
+        text-align: center;
+        font-size: 12px;
+        color: #9ca3af;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>📚 Daily Word Practice — {{ today }}</h1>
+      </div>
+      <div class="content">
+        <table>
+          <thead>
+            <tr>
+              <th>English</th>
+              <th>Bengali</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for w in words %}
+              <tr>
+                <td>{{ w.english }}</td>
+                <td class="bengali">{{ w.bengali }}</td>
+                <td>
+                  <span class="status-badge">{{ w.status_label }}</span>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div class="footer">Sent automatically from your Study Management App.</div>
+    </div>
+  </body>
+</html>
