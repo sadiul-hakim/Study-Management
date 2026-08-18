@@ -20,6 +20,8 @@ ALLOWED_HOSTS = config(
 INTERNAL_IPS = config('INTERNAL_IPS', default='127.0.0.1', cast=Csv())
 
 REMINDER_TASK_TOKEN = config('REMINDER_TASK_TOKEN')
+REMINDER_EMAIL_TO = config("REMINDER_EMAIL_TO", cast=Csv())
+WORD_MEANING_EMAIL_TO = config("WORD_MEANING_EMAIL_TO", cast=Csv())
 
 # mail
 EMAIL_BACKEND = config('EMAIL_BACKEND')

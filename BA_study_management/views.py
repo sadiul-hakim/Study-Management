@@ -50,7 +50,7 @@ def send_daily_reminders(request):
         subject=f"Study Reminder - {today.strftime('%B %d, %Y')}",
         body=text_content,
         from_email=settings.DEFAULT_FROM_EMAIL,
-        to=["sadiulhakim@gmail.com"],
+        to=settings.REMINDER_EMAIL_TO,
     )
     email.attach_alternative(html_content, "text/html")
     email.send(fail_silently=False)
@@ -91,7 +91,7 @@ def send_daily_words(request):
         subject=f"Daily Word Practice - {today.strftime('%B %d, %Y')}",
         body=text_content,
         from_email=settings.DEFAULT_FROM_EMAIL,
-        to=["sadiulhakim@gmail.com"],
+        to=settings.WORD_MEANING_EMAIL_TO,
     )
     email.attach_alternative(html_content, "text/html")
     email.send(fail_silently=False)
