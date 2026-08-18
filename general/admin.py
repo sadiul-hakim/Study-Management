@@ -1,7 +1,17 @@
 from django.contrib import admin
-from .models import Notes, StudyNote
-
+from .models import Notes, StudyNote, WordCollection
+from .resources import WordCollectionResource
+from import_export.admin import ImportExportModelAdmin
 # Register your models here.
+
+
+@admin.register(WordCollection)
+class WordCollectionAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    resource_classes = [WordCollectionResource]
+    list_display = ('bengali', 'english', 'status')
+    list_filter = ('status', 'created_at')
+    search_fields = ('english', 'bengali')
+    list_editable = ('status',)
 
 
 @admin.register(StudyNote)

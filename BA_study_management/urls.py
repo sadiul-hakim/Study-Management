@@ -20,6 +20,7 @@ urlpatterns += i18n_patterns(
     path('admin/', admin.site.urls),
     path("tasks/send-daily-reminders/",
          send_daily_reminders, name="send_daily_reminders"),
+    path('general/', include('general.urls'))
 )
 
 urlpatterns += static(

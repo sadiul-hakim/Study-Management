@@ -1,4 +1,8 @@
 {% extends 'admin/index.html' %}
+{% block extrahead %}
+  {{ block.super }}
+  <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+{% endblock %}
 
 {% block content %}
   {% if guide %}
@@ -14,10 +18,21 @@
       </div>
     </div>
   {% endif %}
-  <div class="d-flex p-2 my-2 bg-dark rounded">
-    
+
+  <div class="d-flex justify-content-between align-items-start p-2 my-2 bg-dark rounded">
+    <div>
       <a href="/admin/viewer" class="btn btn-primary">Document Viewer</a>
-    
+    </div>
+
+    <div style="min-width: 320px;">
+      <form hx-post="{% url 'add_word_htmx' %}" hx-target="#word-add-result" hx-swap="innerHTML" hx-on::after-request="if(event.detail.successful) this.reset()" class="d-flex gap-2">
+        {% csrf_token %}
+        <input type="text" name="english" class="form-control" placeholder="Enter English word" required />
+        <button type="submit" class="btn btn-success text-nowrap">Add Word</button>
+      </form>
+      <div id="word-add-result"></div>
+    </div>
   </div>
+
   {{ block.super }}
 {% endblock %}

@@ -29,3 +29,29 @@ class Notes(models.Model):
 
     def __str__(self):
         return self.note[:50]
+
+
+class WordCollection(models.Model):
+    class Status(models.TextChoices):
+        NEW = 'new', 'New'
+        FAMILIAR = 'familiar', 'Familiar'
+        UNFAMILIAR = 'unfamiliar', 'Unfamiliar'
+        CONFIDENT = 'confident', 'Confident'
+
+    english = models.CharField(max_length=255)
+    bengali = models.CharField(max_length=255, blank=True)
+    status = models.CharField(
+        max_length=20,
+        choices=Status.choices,
+        default=Status.NEW,
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Word Collection"
+        verbose_name_plural = "Word Collections"
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.english} → {self.bengali}"
