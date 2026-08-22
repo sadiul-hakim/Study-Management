@@ -28,10 +28,11 @@ body, .main-sidebar, .card, .btn, .form-control, table, .navbar, .select2 {
   -moz-osx-font-smoothing: grayscale;
 }
 
-body {
+body, .content-wrapper, .main-footer {
   background-color: #f8fafc !important;
   color: var(--text-main);
 }
+
 
 /* Modern Gap Utilities for Bootstrap 4 */
 .gap-1 { gap: 0.25rem !important; }
@@ -190,7 +191,7 @@ body {
   border: 1px solid var(--card-border) !important;
   border-radius: var(--radius-lg) !important;
   box-shadow: var(--shadow-sm) !important;
-  background-color: var(--card-bg);
+  background-color: #ffffff !important;
   transition: box-shadow 0.25s ease;
   margin-bottom: 1.5rem;
 }
@@ -200,23 +201,96 @@ body {
 }
 
 .card-header {
-  background-color: #ffffff;
+  background-color: #ffffff !important;
   border-bottom: 1px solid var(--card-border) !important;
   padding: 0.85rem 1.25rem !important;
   font-weight: 700;
   font-size: 0.95rem;
-  color: var(--text-main);
+  color: #0f172a !important;
 }
 
 .card-title {
   font-weight: 700 !important;
   font-size: 1rem !important;
   letter-spacing: -0.01em;
-  color: #0f172a;
+  color: #0f172a !important;
 }
 
 .card-body {
   padding: 1.25rem !important;
+  background-color: #ffffff !important;
+}
+
+/* Dashboard App Model Tables */
+.card table,
+.card .table,
+.card .table tbody,
+.card .table tr,
+.card .table td,
+.card .table th {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #f1f5f9 !important;
+}
+
+.card .table tbody tr {
+  background-color: #ffffff !important;
+  transition: background-color 0.15s ease;
+}
+
+.card .table tbody tr:hover {
+  background-color: #f8fafc !important;
+}
+
+.card .table td a:not(.btn),
+.card .table th a:not(.btn) {
+  color: #0f172a !important;
+  font-weight: 600 !important;
+  font-size: 0.92rem !important;
+  text-decoration: none !important;
+}
+
+.card .table td a:not(.btn):hover,
+.card .table th a:not(.btn):hover {
+  color: #4f46e5 !important;
+  text-decoration: underline !important;
+}
+
+/* Dashboard Recent Actions Section */
+#content-related,
+#content-related .card,
+.recent-actions-widget {
+  background-color: #ffffff !important;
+  color: #1e293b !important;
+}
+
+#content-related h2,
+#content-related h3,
+.recent-actions-title {
+  color: #0f172a !important;
+  font-weight: 700 !important;
+  font-size: 1.1rem !important;
+}
+
+.timeline > div > .timeline-item,
+#content-related .timeline-item {
+  background-color: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #1e293b !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow: none !important;
+}
+
+.timeline-header a,
+#content-related .timeline-header a {
+  color: #4f46e5 !important;
+  font-weight: 600 !important;
+}
+
+.timeline .time,
+#content-related .time {
+  color: #64748b !important;
+  font-size: 0.8rem !important;
 }
 
 /* Dashboard Action Banner & Widget */
@@ -279,6 +353,7 @@ body {
   color: var(--text-main);
   margin-bottom: 0;
 }
+
 
 .table thead th {
   background-color: #f8fafc !important;
