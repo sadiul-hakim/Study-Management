@@ -1,98 +1,219 @@
 {% extends "admin/base_site.html" %}
 {% load static %}
 
+{% block extrahead %}
+  {{ block.super }}
+  <style>
+    .doc-viewer-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+    .doc-viewer-toolbar {
+      background: #f8fafc;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 1.25rem 1.5rem;
+    }
+    .doc-content-area {
+      padding: 2rem;
+      min-height: 500px;
+      background: #ffffff;
+    }
+    .markdown-rendered-body {
+      font-size: 1rem;
+      line-height: 1.75;
+      color: #1e293b;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .markdown-rendered-body h1, .markdown-rendered-body h2, .markdown-rendered-body h3 {
+      color: #0f172a;
+      font-weight: 700;
+      margin-top: 1.75rem;
+      margin-bottom: 0.75rem;
+    }
+    .markdown-rendered-body h1 {
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 0.5rem;
+    }
+    .markdown-rendered-body p {
+      margin-bottom: 1.25rem;
+    }
+    .markdown-rendered-body code {
+      background: #f1f5f9;
+      color: #0f172a;
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.88em;
+    }
+    .markdown-rendered-body pre {
+      background: #0f172a;
+      color: #f8fafc;
+      padding: 1.25rem;
+      border-radius: 10px;
+      overflow-x: auto;
+      margin: 1.5rem 0;
+    }
+    .markdown-rendered-body table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+    }
+    .markdown-rendered-body table th, .markdown-rendered-body table td {
+      border: 1px solid #cbd5e1;
+      padding: 0.65rem 0.9rem;
+      text-align: left;
+    }
+    .markdown-rendered-body table th {
+      background: #f1f5f9;
+    }
+    .markdown-rendered-body blockquote {
+      border-left: 4px solid #6366f1;
+      padding-left: 1rem;
+      color: #475569;
+      font-style: italic;
+      margin: 1.5rem 0;
+      background: #f8fafc;
+      padding: 0.75rem 1rem;
+      border-radius: 0 8px 8px 0;
+    }
+    .file-type-pill {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.25rem 0.6rem;
+      border-radius: 6px;
+    }
+  </style>
+{% endblock %}
+
 {% block content %}
-
-<h1>Document Viewer</h1>
-
-<form method="get">
-
-    <div class="row">
-
-        <div class="col-12 col-md-6">
-            <label>Document</label>
-
-            <select name="document" onchange="this.form.submit()">
-
-                <option value="">---------</option>
-
-                {% for doc in documents %}
-
-                <option
-                    value="{{ doc.id }}"
-                    {% if selected_document.id == doc.id %}selected{% endif %}
-                >
-                    {{ doc.name }}
-                </option>
-
-                {% endfor %}
-
-            </select>
-
-        </div>
-        <div class="col-12 col-md-6">
-
-            {% if selected_document %}
-
-            <label>File</label>
-
-            <select name="file">
-
-                {% for f in selected_document.files.all %}
-
-                <option
-                    value="{{ f.id }}"
-                    {% if selected_file.id == f.id %}selected{% endif %}
-                >
-                    {{ f.file.name }}
-                </option>
-
-                {% endfor %}
-
-            </select>
-        </div>
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <div>
+    <h1 class="h3 font-weight-bold mb-1" style="color: #0f172a;">
+      <i class="fa-solid fa-file-invoice text-primary me-2"></i> Document Reader Studio
+    </h1>
+    <p class="text-muted mb-0">Browse course material, summaries, PDFs, markdown notes, and reference files.</p>
+  </div>
+  {% if selected_file %}
+    <div>
+      <a href="{{ selected_file.file.url }}" download class="btn btn-outline-primary btn-sm">
+        <i class="fa-solid fa-download me-1"></i> Download File
+      </a>
     </div>
-    
-    <button type="submit" class="btn btn-primary my-2">View</button>
+  {% endif %}
+</div>
 
-    {% endif %}
+<div class="doc-viewer-card">
+  <!-- Toolbar Selector Form -->
+  <div class="doc-viewer-toolbar">
+    <form method="get">
+      <div class="row align-items-end">
+        <div class="col-12 col-md-5 mb-3 mb-md-0">
+          <label class="form-label font-weight-bold text-muted small mb-1 d-block">
+            <i class="fa-solid fa-folder mr-1 text-primary"></i> SELECT DOCUMENT
+          </label>
+          <select name="document" class="form-control custom-select" onchange="this.form.submit()">
+            <option value="">-- Choose a Document Collection --</option>
+            {% for doc in documents %}
+              <option value="{{ doc.id }}" {% if selected_document.id == doc.id %}selected{% endif %}>
+                {{ doc.name }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
 
-</form>
+        {% if selected_document %}
+          <div class="col-12 col-md-5 mb-3 mb-md-0">
+            <label class="form-label font-weight-bold text-muted small mb-1 d-block">
+              <i class="fa-solid fa-file mr-1 text-info"></i> SELECT FILE
+            </label>
+            <select name="file" class="form-control custom-select" onchange="this.form.submit()">
+              {% for f in selected_document.files.all %}
+                <option value="{{ f.id }}" {% if selected_file.id == f.id %}selected{% endif %}>
+                  {{ f.file.name }}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-12 col-md-2">
+            <button type="submit" class="btn btn-primary btn-block">
+              <i class="fa-solid fa-eye mr-1"></i> View
+            </button>
+          </div>
+        {% endif %}
+      </div>
+    </form>
+  </div>
 
-<hr>
-<div class="container">
+  <!-- Content Viewing Stage -->
+  <div class="doc-content-area">
+    {% if selected_file %}
+      <div class="d-flex align-items-center justify-content-between pb-3 mb-4 border-bottom">
+        <div class="d-flex align-items-center gap-2">
+          <i class="fa-solid fa-file-lines text-primary" style="font-size: 1.3rem;"></i>
+          <span class="fw-bold" style="font-size: 1.1rem; color: #1e293b;">
+            {{ selected_file.file.name }}
+          </span>
+        </div>
+        <div>
+          {% if file_type == "pdf" %}
+            <span class="file-type-pill bg-danger text-white">PDF Document</span>
+          {% elif file_type == "markdown" %}
+            <span class="file-type-pill bg-primary text-white">Markdown Notes</span>
+          {% elif file_type == "image" %}
+            <span class="file-type-pill bg-success text-white">Image Preview</span>
+          {% else %}
+            <span class="file-type-pill bg-secondary text-white">Raw File</span>
+          {% endif %}
+        </div>
+      </div>
 
+      {% if file_type == "image" %}
+        <div class="text-center p-3 bg-light rounded border">
+          <img src="{{ selected_file.file.url }}" alt="{{ selected_file.file.name }}" class="img-fluid rounded shadow-sm" style="max-height: 800px; object-fit: contain;" />
+        </div>
 
-{% if selected_file %}
+      {% elif file_type == "pdf" %}
+        <div class="rounded border shadow-sm overflow-hidden" style="height: 850px; background: #525659;">
+          <embed src="{{ selected_file.file.url }}" type="application/pdf" width="100%" height="100%" />
+        </div>
 
-    {% if file_type == "image" %}
+      {% elif file_type == "markdown" %}
+        <div class="markdown-rendered-body bg-white p-4 rounded border">
+          {{ markdown_html|safe }}
+        </div>
 
-        <img
-            src="{{ selected_file.file.url }}"
-            style="max-width:100%;">
-
-    {% elif file_type == "pdf" %}
-        <embed
-            src="{{ selected_file.file.url }}"
-            type="application/pdf"
-            width="100%"
-            height="900">
-
-    {% elif file_type == "markdown" %}
-
-        {{ markdown_html|safe }}
+      {% else %}
+        <div class="text-center py-5">
+          <div class="p-4 bg-light rounded d-inline-block border">
+            <i class="fa-solid fa-file-circle-question text-muted mb-3" style="font-size: 3rem;"></i>
+            <h5 class="text-dark">Inline Preview Not Supported</h5>
+            <p class="text-muted mb-3">This file type cannot be previewed directly in the browser.</p>
+            <a href="{{ selected_file.file.url }}" download class="btn btn-primary">
+              <i class="fa-solid fa-cloud-arrow-down me-1"></i> Download File
+            </a>
+          </div>
+        </div>
+      {% endif %}
 
     {% else %}
-
-        <p>Preview not supported.</p>
-
-        <a href="{{ selected_file.file.url }}">
-            Download
-        </a>
-
+      <div class="text-center py-5">
+        <div class="py-4">
+          <div class="p-3 bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 70px; height: 70px;">
+            <i class="fa-solid fa-book-bookmark text-primary" style="font-size: 2rem;"></i>
+          </div>
+          <h4 class="fw-bold" style="color: #0f172a;">No Document Selected</h4>
+          <p class="text-muted" style="max-width: 420px; margin: 0 auto;">
+            Choose a document collection and specific file from the dropdown above to start reading.
+          </p>
+        </div>
+      </div>
     {% endif %}
-
-{% endif %}
-
+  </div>
 </div>
-{% endblock %}
+{% endblock %}

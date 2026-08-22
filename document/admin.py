@@ -9,13 +9,36 @@ from .permissions import get_accessible_documents, get_accessible_links
 
 @admin.register(Link)
 class LinkAdmin(admin.ModelAdmin):
-    list_display = ("name", "genre", "link")
-    search_fields = ("name", )
+    list_display = ("name", "genre", "display_link", "open_link")
+    search_fields = ("name", "link")
     list_filter = ("genre", )
     list_per_page = 25
 
     def get_queryset(self, request):
         return get_accessible_links(request.user)
+
+    @admin.display(description="Link")
+    def display_link(self, obj):
+        if not obj.link:
+            return "—"
+        truncated = obj.link if len(obj.link) <= 55 else f"{obj.link[:52]}..."
+        return format_html(
+            '<a href="{}" target="_blank" rel="noopener noreferrer" style="color: #4f46e5; text-decoration: underline; word-break: break-all;">{}</a>',
+            obj.link,
+            truncated
+        )
+
+    @admin.display(description="Action")
+    def open_link(self, obj):
+        if not obj.link:
+            return "—"
+        return format_html(
+            '<a href="{}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-primary" style="padding: 3px 10px; font-size: 12px; white-space: nowrap;">'
+            '<i class="fa-solid fa-arrow-up-right-from-square mr-1"></i> Open'
+            '</a>',
+            obj.link
+        )
+
 
 
 @admin.register(Genre)

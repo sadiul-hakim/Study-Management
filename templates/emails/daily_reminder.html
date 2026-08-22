@@ -2,69 +2,87 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Daily Study Digest</title>
     <style>
       body {
-        font-family: -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-        background: #f4f5f7;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        background-color: #f1f5f9;
         margin: 0;
-        padding: 24px;
-        color: #1f2937;
+        padding: 30px 15px;
+        color: #0f172a;
+        -webkit-font-smoothing: antialiased;
       }
       .container {
-        max-width: 560px;
+        max-width: 580px;
         margin: 0 auto;
         background: #ffffff;
-        border-radius: 10px;
+        border-radius: 12px;
         overflow: hidden;
-        border: 1px solid #e5e7eb;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
       }
       .header {
-        background: #4f46e5;
+        background: linear-gradient(135deg, #1e293b, #0f172a);
         color: #ffffff;
-        padding: 20px 24px;
+        padding: 24px 28px;
+        border-bottom: 3px solid #6366f1;
       }
       .header h1 {
         margin: 0;
-        font-size: 18px;
+        font-size: 20px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
       }
       .header p {
-        margin: 4px 0 0;
+        margin: 6px 0 0;
         font-size: 13px;
-        opacity: 0.85;
+        color: #94a3b8;
       }
       .content {
-        padding: 20px 24px;
+        padding: 24px 28px;
       }
       .section-title {
-        font-size: 13px;
+        font-size: 12px;
+        font-weight: 700;
         text-transform: uppercase;
-        letter-spacing: 0.04em;
-        color: #6b7280;
-        margin: 20px 0 8px;
+        letter-spacing: 0.06em;
+        color: #64748b;
+        margin: 20px 0 10px;
+        padding-bottom: 4px;
+        border-bottom: 1px solid #f1f5f9;
+      }
+      .section-title:first-child {
+        margin-top: 0;
       }
       .item {
-        border: 1px solid #e5e7eb;
-        border-radius: 8px;
-        padding: 12px 14px;
-        margin-bottom: 8px;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 14px 16px;
+        margin-bottom: 10px;
       }
       .item-title {
         font-weight: 600;
         font-size: 14px;
+        color: #1e293b;
         margin: 0 0 4px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
       }
       .item-sub {
         font-size: 13px;
-        color: #6b7280;
+        color: #64748b;
         margin: 0;
       }
       .badge {
         display: inline-block;
         font-size: 11px;
-        font-weight: 600;
+        font-weight: 700;
         padding: 2px 8px;
         border-radius: 999px;
-        margin-left: 6px;
+        text-transform: uppercase;
       }
       .badge-low {
         background: #dcfce7;
@@ -78,52 +96,65 @@
         background: #fee2e2;
         color: #991b1b;
       }
+      .empty-state {
+        text-align: center;
+        padding: 24px 0;
+        color: #64748b;
+      }
       .footer {
-        padding: 16px 24px;
+        padding: 16px 28px;
         font-size: 12px;
-        color: #9ca3af;
-        border-top: 1px solid #e5e7eb;
+        color: #94a3b8;
+        background: #f8fafc;
+        border-top: 1px solid #e2e8f0;
+        text-align: center;
       }
     </style>
   </head>
   <body>
     <div class="container">
       <div class="header">
-        <h1>Study Reminder</h1>
+        <h1>📖 Daily Study Reminder</h1>
         <p>{{ today }}</p>
       </div>
       <div class="content">
         {% if revises %}
-          <div class="section-title">Revises Due Today</div>
+          <div class="section-title">Revises Scheduled for Today</div>
           {% for r in revises %}
             <div class="item">
               <p class="item-title">
-                {{ r.book }}
+                <span>{{ r.book }}</span>
                 <span class="badge badge-{{ r.priority_label|lower }}">{{ r.priority_label }}</span>
               </p>
-              <p class="item-sub">{{ r.chapter|default:'' }}</p>
+              <p class="item-sub">{{ r.chapter|default:'Whole Book' }}</p>
             </div>
           {% endfor %}
         {% endif %}
 
         {% if plans %}
-          <div class="section-title">Writing Plans Due Today</div>
+          <div class="section-title">Writing Plans Scheduled for Today</div>
           {% for p in plans %}
             <div class="item">
               <p class="item-title">
-                {{ p.book }}
+                <span>{{ p.book }}</span>
                 <span class="badge badge-{{ p.priority_label|lower }}">{{ p.priority_label }}</span>
               </p>
-              <p class="item-sub">{{ p.chapter|default:'' }}</p>
+              <p class="item-sub">{{ p.chapter|default:'General Plan' }}</p>
             </div>
           {% endfor %}
         {% endif %}
 
         {% if not revises and not plans %}
-          <p>Nothing due today. 🎉</p>
+          <div class="empty-state">
+            <p style="font-size: 1.1rem; margin-bottom: 4px;">🎉 Nothing due today!</p>
+            <p style="font-size: 0.9rem; margin: 0;">Enjoy your study time or review previous notes.</p>
+          </div>
         {% endif %}
       </div>
-      <div class="footer">Sent automatically by BA Study Management</div>
+      <div class="footer">
+        Automated notification from <strong>B.A. Study Management System</strong>
+      </div>
     </div>
   </body>
 </html>
+
