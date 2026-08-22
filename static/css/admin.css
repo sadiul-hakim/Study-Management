@@ -28,10 +28,37 @@ body, .main-sidebar, .card, .btn, .form-control, table, .navbar, .select2 {
   -moz-osx-font-smoothing: grayscale;
 }
 
-body, .content-wrapper, .main-footer {
+body, 
+.content-wrapper, 
+.main-footer,
+.content-wrapper.bg-body-tertiary,
+.content-wrapper.bg-light,
+.content-wrapper.bg-body-secondary,
+.content-wrapper.bg-body,
+.bg-body-tertiary,
+.bg-body-secondary,
+.bg-body {
   background-color: #f8fafc !important;
   color: var(--text-main);
 }
+
+/* Card & Table background utilities override */
+.card.bg-body-tertiary,
+.card-body.bg-body-tertiary,
+.card.bg-dark,
+.card-body.bg-dark {
+  background-color: #ffffff !important;
+  color: #1e293b !important;
+}
+
+table.bg-body-tertiary,
+table.bg-dark,
+.table-dark {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+}
+
+
 
 
 /* Modern Gap Utilities for Bootstrap 4 */
