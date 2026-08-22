@@ -23,10 +23,32 @@
 
 /* Global Font & Body */
 body, .main-sidebar, .card, .btn, .form-control, table, .navbar, .select2 {
-  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+/* Ensure Font Awesome & Material Icons are NEVER overwritten by typography */
+.fa, .fas, .far, .fal, .fad, .fab, .fa-solid, .fa-regular, .fa-brands, [class*=" fa-"], [class^="fa-"] {
+  font-family: "Font Awesome 5 Free", "Font Awesome 6 Free", "FontAwesome" !important;
+  font-style: normal !important;
+  font-variant: normal !important;
+  text-rendering: auto !important;
+  line-height: 1 !important;
+}
+
+.far, .fa-regular {
+  font-weight: 400 !important;
+}
+
+.fas, .fa-solid {
+  font-weight: 900 !important;
+}
+
+.material-symbols-outlined, .material-icons {
+  font-family: 'Material Symbols Outlined', 'Material Icons' !important;
+}
+
 
 body, 
 .content-wrapper, 
@@ -94,6 +116,46 @@ table.bg-dark,
 .navbar-light {
   background-color: #ffffff !important;
 }
+
+/* Top Navbar Action Buttons (Language & User Menu) */
+.main-header.navbar .navbar-nav .nav-link,
+.main-header.navbar .navbar-nav .nav-link.btn {
+  background-color: #f1f5f9 !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #334155 !important;
+  border-radius: 8px !important;
+  padding: 0.45rem 0.75rem !important;
+  margin-left: 0.35rem !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 36px !important;
+  height: 36px !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+  transition: all 0.2s ease !important;
+}
+
+.main-header.navbar .navbar-nav .nav-link:hover,
+.main-header.navbar .navbar-nav .nav-link.btn:hover {
+  background-color: #e2e8f0 !important;
+  border-color: #cbd5e1 !important;
+  color: #4f46e5 !important;
+}
+
+.main-header.navbar .navbar-nav .nav-link i,
+.main-header.navbar .navbar-nav .nav-link.btn i {
+  color: #475569 !important;
+  font-size: 1rem !important;
+  line-height: 1 !important;
+  margin: 0 !important;
+  transition: color 0.2s ease !important;
+}
+
+.main-header.navbar .navbar-nav .nav-link:hover i,
+.main-header.navbar .navbar-nav .nav-link.btn:hover i {
+  color: #4f46e5 !important;
+}
+
 
 .brand-link {
   border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
