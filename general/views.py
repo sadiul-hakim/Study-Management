@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.utils.html import format_html
 from deep_translator import GoogleTranslator
 
-from .models import WordCollection
+from vocabulary.models import WordCollection
 
 
 @staff_member_required

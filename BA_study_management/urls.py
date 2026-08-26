@@ -23,7 +23,8 @@ urlpatterns += i18n_patterns(
     # urls.py
     path('send-daily-words/',
          send_daily_words, name='send_daily_words'),
-    path('general/', include('general.urls'))
+    path('general/', include('general.urls')),
+    path('vocabulary/', include('vocabulary.urls')),
 )
 
 urlpatterns += static(

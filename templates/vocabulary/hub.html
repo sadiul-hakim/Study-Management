@@ -1,0 +1,1483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vocabulary Practice & Exam Hub — Study Management</title>
+  <meta name="description" content="Read, master, and test your vocabulary with random word batches and interactive multiple-choice exams." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Cinzel:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <style>
+    :root {
+      --bg-primary: #0b0f19;
+      --bg-card: rgba(18, 24, 38, 0.85);
+      --bg-card-hover: rgba(28, 38, 58, 0.95);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --border-color-hover: rgba(99, 102, 241, 0.4);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      
+      --accent-indigo: #6366f1;
+      --accent-indigo-glow: rgba(99, 102, 241, 0.35);
+      --accent-emerald: #10b981;
+      --accent-emerald-glow: rgba(16, 185, 129, 0.35);
+      --accent-amber: #f59e0b;
+      --accent-amber-glow: rgba(245, 158, 11, 0.35);
+      --accent-rose: #f43f5e;
+      --accent-rose-glow: rgba(244, 63, 94, 0.35);
+      --accent-cyan: #06b6d4;
+
+      --status-new: #38bdf8;
+      --status-familiar: #fbbf24;
+      --status-unfamiliar: #fb7185;
+      --status-confident: #34d399;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: -10%;
+      left: 15%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, rgba(139, 92, 246, 0.04) 50%, transparent 70%);
+      border-radius: 50%;
+      filter: blur(60px);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      bottom: -10%;
+      right: 15%;
+      width: 550px;
+      height: 550px;
+      background: radial-gradient(circle, rgba(16, 185, 129, 0.12) 0%, rgba(6, 182, 212, 0.03) 50%, transparent 70%);
+      border-radius: 50%;
+      filter: blur(60px);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .noise-layer {
+      position: fixed;
+      inset: 0;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 0);
+      background-size: 24px 24px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    header {
+      position: relative;
+      z-index: 20;
+      padding: 1.25rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1280px;
+      margin: 0 auto;
+      width: 100%;
+      border-bottom: 1px solid var(--border-color);
+      background: rgba(11, 15, 25, 0.6);
+      backdrop-filter: blur(12px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--text-primary);
+      font-weight: 700;
+      font-size: 1.2rem;
+    }
+
+    .brand-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent-indigo), #4338ca);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      box-shadow: 0 4px 12px var(--accent-indigo-glow);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .nav-btn {
+      padding: 0.55rem 1.1rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border-radius: 9999px;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .nav-btn-ghost {
+      color: var(--text-secondary);
+      border: 1px solid var(--border-color);
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .nav-btn-ghost:hover {
+      color: var(--text-primary);
+      border-color: rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .nav-btn-primary {
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      color: #ffffff;
+      box-shadow: 0 4px 12px var(--accent-indigo-glow);
+    }
+
+    .nav-btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px var(--accent-indigo-glow);
+    }
+
+    main {
+      position: relative;
+      z-index: 10;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+      width: 100%;
+      flex: 1;
+    }
+
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      backdrop-filter: blur(16px);
+      border-radius: 14px;
+      padding: 1.1rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      transition: all 0.25s ease;
+    }
+
+    .stat-card:hover {
+      border-color: var(--border-color-hover);
+      transform: translateY(-2px);
+    }
+
+    .stat-icon-box {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.15rem;
+    }
+
+    .stat-total .stat-icon-box { background: rgba(99, 102, 241, 0.15); color: #818cf8; }
+    .stat-new .stat-icon-box { background: rgba(56, 189, 248, 0.15); color: #38bdf8; }
+    .stat-familiar .stat-icon-box { background: rgba(251, 191, 36, 0.15); color: #fbbf24; }
+    .stat-unfamiliar .stat-icon-box { background: rgba(251, 113, 133, 0.15); color: #fb7185; }
+    .stat-confident .stat-icon-box { background: rgba(52, 211, 153, 0.15); color: #34d399; }
+
+    .stat-info .stat-num {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1.1;
+    }
+
+    .stat-info .stat-label {
+      font-size: 0.775rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-top: 0.2rem;
+      font-weight: 600;
+    }
+
+    .tab-nav {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      background: rgba(18, 24, 38, 0.6);
+      padding: 0.4rem;
+      border-radius: 14px;
+      border: 1px solid var(--border-color);
+      max-width: fit-content;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .tab-btn {
+      padding: 0.7rem 1.5rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: transparent;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn:hover {
+      color: var(--text-primary);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(135deg, #4f46e5, #6366f1);
+      color: #ffffff;
+      box-shadow: 0 4px 14px var(--accent-indigo-glow);
+    }
+
+    .tab-pane {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .tab-pane.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .pane-header {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.5rem 2rem;
+      margin-bottom: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1.25rem;
+    }
+
+    .pane-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    .pane-subtitle {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      margin-top: 0.25rem;
+    }
+
+    .filter-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .custom-select, .custom-input {
+      background: #151d2f;
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      padding: 0.6rem 1rem;
+      border-radius: 10px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .custom-select:focus, .custom-input:focus {
+      border-color: var(--accent-indigo);
+    }
+
+    .action-btn-glow {
+      background: linear-gradient(135deg, #4f46e5, #6366f1);
+      color: white;
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 0.65rem 1.4rem;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 4px 14px var(--accent-indigo-glow);
+      transition: all 0.2s ease;
+    }
+
+    .action-btn-glow:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px var(--accent-indigo-glow);
+    }
+
+    .action-btn-emerald {
+      background: linear-gradient(135deg, #059669, #10b981);
+      color: white;
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 0.65rem 1.4rem;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 4px 14px var(--accent-emerald-glow);
+      transition: all 0.2s ease;
+    }
+
+    .action-btn-emerald:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px var(--accent-emerald-glow);
+    }
+
+    .word-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .word-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.4rem 1.5rem;
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .word-card:hover {
+      border-color: var(--border-color-hover);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.6);
+    }
+
+    .word-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.75rem;
+    }
+
+    .english-word-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.01em;
+      word-break: break-word;
+    }
+
+    .tts-btn {
+      background: rgba(99, 102, 241, 0.12);
+      border: 1px solid rgba(99, 102, 241, 0.25);
+      color: #a5b4fc;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .tts-btn:hover {
+      background: var(--accent-indigo);
+      color: white;
+      transform: scale(1.08);
+    }
+
+    .bengali-meaning-box {
+      margin-bottom: 1.25rem;
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+    }
+
+    .bengali-text {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.08);
+      border-left: 3px solid #38bdf8;
+      padding: 0.4rem 0.75rem;
+      border-radius: 0 8px 8px 0;
+      width: 100%;
+    }
+
+    .status-actions-group {
+      border-top: 1px solid var(--border-color);
+      padding-top: 0.9rem;
+    }
+
+    .status-group-label {
+      font-size: 0.725rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .current-badge {
+      font-size: 0.7rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 9999px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .badge-new { background: rgba(56, 189, 248, 0.15); color: var(--status-new); border: 1px solid rgba(56, 189, 248, 0.3); }
+    .badge-familiar { background: rgba(251, 191, 36, 0.15); color: var(--status-familiar); border: 1px solid rgba(251, 191, 36, 0.3); }
+    .badge-unfamiliar { background: rgba(251, 113, 133, 0.15); color: var(--status-unfamiliar); border: 1px solid rgba(251, 113, 133, 0.3); }
+    .badge-confident { background: rgba(52, 211, 153, 0.15); color: var(--status-confident); border: 1px solid rgba(52, 211, 153, 0.3); }
+
+    .status-buttons-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.35rem;
+    }
+
+    .btn-status-pill {
+      font-size: 0.725rem;
+      font-weight: 600;
+      padding: 0.4rem 0.2rem;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text-secondary);
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s ease;
+    }
+
+    .btn-status-pill:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #ffffff;
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-status-pill.active-status {
+      font-weight: 700;
+    }
+
+    .btn-status-pill.pill-new.active-status { background: rgba(56, 189, 248, 0.2); color: var(--status-new); border-color: var(--status-new); }
+    .btn-status-pill.pill-familiar.active-status { background: rgba(251, 191, 36, 0.2); color: var(--status-familiar); border-color: var(--status-familiar); }
+    .btn-status-pill.pill-unfamiliar.active-status { background: rgba(251, 113, 133, 0.2); color: var(--status-unfamiliar); border-color: var(--status-unfamiliar); }
+    .btn-status-pill.pill-confident.active-status { background: rgba(52, 211, 153, 0.2); color: var(--status-confident); border-color: var(--status-confident); }
+
+    .exam-wrapper {
+      max-width: 820px;
+      margin: 0 auto;
+    }
+
+    .exam-start-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 2.5rem 2rem;
+      text-align: center;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+    }
+
+    .exam-icon-hero {
+      width: 70px;
+      height: 70px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      margin: 0 auto 1.5rem;
+      box-shadow: 0 8px 24px var(--accent-emerald-glow);
+    }
+
+    .exam-active-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 2rem;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+    }
+
+    .exam-progress-bar-wrap {
+      height: 8px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 9999px;
+      overflow: hidden;
+      margin-bottom: 1.75rem;
+    }
+
+    .exam-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-indigo), var(--accent-emerald));
+      width: 10%;
+      transition: width 0.3s ease;
+    }
+
+    .exam-meta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+
+    .exam-prompt-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      margin-bottom: 1.75rem;
+    }
+
+    .exam-prompt-label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent-indigo);
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .exam-prompt-word {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 0.5rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .exam-options-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .exam-option-btn {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 1.25rem 1.25rem;
+      color: #f1f5f9;
+      font-size: 1.05rem;
+      font-weight: 600;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .exam-option-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(99, 102, 241, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .exam-option-btn.selected {
+      background: rgba(99, 102, 241, 0.2);
+      border-color: var(--accent-indigo);
+      box-shadow: 0 0 16px var(--accent-indigo-glow);
+    }
+
+    .option-letter {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .exam-option-btn.selected .option-letter {
+      background: var(--accent-indigo);
+      color: white;
+    }
+
+    .exam-nav-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--border-color);
+      padding-top: 1.5rem;
+    }
+
+    .results-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 2.5rem 2rem;
+      backdrop-filter: blur(16px);
+      text-align: center;
+    }
+
+    .score-circle {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      margin: 0 auto 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border: 4px solid var(--accent-emerald);
+      box-shadow: 0 0 25px var(--accent-emerald-glow);
+    }
+
+    .score-circle .score-digits {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1;
+    }
+
+    .score-circle .score-total {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      font-weight: 600;
+    }
+
+    .results-breakdown-list {
+      margin-top: 2rem;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+    }
+
+    .review-item {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .review-item.is-correct {
+      border-left: 4px solid var(--accent-emerald);
+    }
+
+    .review-item.is-wrong {
+      border-left: 4px solid var(--accent-rose);
+    }
+
+    #toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      pointer-events: none;
+    }
+
+    .toast-msg {
+      background: #1e293b;
+      color: #ffffff;
+      padding: 0.8rem 1.25rem;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      font-size: 0.875rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      animation: slideIn 0.25s ease;
+      pointer-events: auto;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    @media (max-width: 768px) {
+      header {
+        padding: 1rem;
+        flex-direction: column;
+        gap: 1rem;
+      }
+      .exam-options-grid {
+        grid-template-columns: 1fr;
+      }
+      .pane-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .filter-controls {
+        width: 100%;
+      }
+      .filter-controls select, .filter-controls button {
+        flex: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="noise-layer"></div>
+
+  <!-- Header -->
+  <header>
+    <a href="/" class="brand">
+      <div class="brand-icon">
+        <i class="fa-solid fa-spell-check"></i>
+      </div>
+      <span>Vocabulary Hub</span>
+    </a>
+
+    <nav class="nav-links">
+      <a href="/" class="nav-btn nav-btn-ghost">
+        <i class="fa-solid fa-house"></i>
+        <span>Home</span>
+      </a>
+      <a href="/admin/viewer" class="nav-btn nav-btn-ghost">
+        <i class="fa-solid fa-file-lines"></i>
+        <span>Documents</span>
+      </a>
+      <a href="/admin/" class="nav-btn nav-btn-primary">
+        <i class="fa-solid fa-gauge-high"></i>
+        <span>Dashboard</span>
+      </a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Stats Overview -->
+    <div class="stats-bar">
+      <div class="stat-card stat-total">
+        <div class="stat-icon-box"><i class="fa-solid fa-database"></i></div>
+        <div class="stat-info">
+          <div class="stat-num" id="stat-total">{{ total_count }}</div>
+          <div class="stat-label">Total Words</div>
+        </div>
+      </div>
+      <div class="stat-card stat-new">
+        <div class="stat-icon-box"><i class="fa-solid fa-sparkles"></i></div>
+        <div class="stat-info">
+          <div class="stat-num" id="stat-new">{{ new_count }}</div>
+          <div class="stat-label">New</div>
+        </div>
+      </div>
+      <div class="stat-card stat-familiar">
+        <div class="stat-icon-box"><i class="fa-solid fa-eye"></i></div>
+        <div class="stat-info">
+          <div class="stat-num" id="stat-familiar">{{ familiar_count }}</div>
+          <div class="stat-label">Familiar</div>
+        </div>
+      </div>
+      <div class="stat-card stat-unfamiliar">
+        <div class="stat-icon-box"><i class="fa-solid fa-triangle-exclamation"></i></div>
+        <div class="stat-info">
+          <div class="stat-num" id="stat-unfamiliar">{{ unfamiliar_count }}</div>
+          <div class="stat-label">Unfamiliar</div>
+        </div>
+      </div>
+      <div class="stat-card stat-confident">
+        <div class="stat-icon-box"><i class="fa-solid fa-circle-check"></i></div>
+        <div class="stat-info">
+          <div class="stat-num" id="stat-confident">{{ confident_count }}</div>
+          <div class="stat-label">Confident</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mode Selector Tabs -->
+    <div class="tab-nav">
+      <button class="tab-btn active" onclick="switchTab('practice')">
+        <i class="fa-solid fa-book-open-reader"></i>
+        <span>Random Words Reader</span>
+      </button>
+      <button class="tab-btn" onclick="switchTab('exam')">
+        <i class="fa-solid fa-graduation-cap"></i>
+        <span>Take Exam</span>
+      </button>
+      <button class="tab-btn" onclick="switchTab('add')">
+        <i class="fa-solid fa-plus-circle"></i>
+        <span>Add Word</span>
+      </button>
+    </div>
+
+    <!-- TAB 1: RANDOM WORDS READER -->
+    <div id="tab-practice" class="tab-pane active">
+      <div class="pane-header">
+        <div>
+          <h2 class="pane-title">
+            <i class="fa-solid fa-shuffle text-indigo"></i>
+            <span>Interactive Word Reader</span>
+          </h2>
+          <p class="pane-subtitle">Read random words, listen to pronunciation, and quickly update your recall status.</p>
+        </div>
+
+        <div class="filter-controls">
+          <label style="font-size: 0.825rem; color: var(--text-secondary); font-weight: 600;">Status:</label>
+          <select id="reader-status-filter" class="custom-select" onchange="loadRandomWords()">
+            <option value="all">All Words (Mixed)</option>
+            <option value="new">New Words</option>
+            <option value="unfamiliar">Unfamiliar (Need Revision)</option>
+            <option value="familiar">Familiar</option>
+            <option value="confident">Confident</option>
+          </select>
+
+          <label style="font-size: 0.825rem; color: var(--text-secondary); font-weight: 600;">Count:</label>
+          <select id="reader-count-filter" class="custom-select" onchange="loadRandomWords()">
+            <option value="10">10 Words</option>
+            <option value="15">15 Words</option>
+            <option value="20" selected>20 Words</option>
+          </select>
+
+          <button class="action-btn-glow" onclick="loadRandomWords()">
+            <i class="fa-solid fa-rotate"></i>
+            <span>Pick Random Words</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Word Cards Grid Container -->
+      <div id="word-cards-container" class="word-grid">
+        <!-- Injected via JavaScript -->
+      </div>
+    </div>
+
+    <!-- TAB 2: VOCABULARY EXAM -->
+    <div id="tab-exam" class="tab-pane">
+      <div class="exam-wrapper">
+        
+        <!-- State 1: Start Exam Screen -->
+        <div id="exam-start-view" class="exam-start-card">
+          <div class="exam-icon-hero">
+            <i class="fa-solid fa-trophy"></i>
+          </div>
+          <h2 style="font-size: 1.85rem; font-weight: 800; margin-bottom: 0.75rem;">10-Word Vocabulary Challenge</h2>
+          <p style="color: var(--text-secondary); max-width: 500px; margin: 0 auto 2rem; font-size: 0.95rem;">
+            Test your active vocabulary knowledge with 10 questions picked randomly from your database. Review full results at the end.
+          </p>
+
+          <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 2.25rem;">
+            <div style="text-align: left;">
+              <label style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 0.4rem;">Exam Mode:</label>
+              <select id="exam-mode-select" class="custom-select" style="min-width: 220px;">
+                <option value="en_to_bn">English → Bengali (Default)</option>
+                <option value="bn_to_en">Bengali → English</option>
+                <option value="mixed">Mixed Direction Quiz</option>
+              </select>
+            </div>
+
+            <div style="text-align: left;">
+              <label style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 0.4rem;">Questions:</label>
+              <select id="exam-count-select" class="custom-select" style="min-width: 140px;">
+                <option value="10" selected>10 Questions</option>
+                <option value="15">15 Questions</option>
+                <option value="20">20 Questions</option>
+              </select>
+            </div>
+          </div>
+
+          <button class="action-btn-emerald" style="padding: 0.9rem 2.5rem; font-size: 1.05rem;" onclick="startExam()">
+            <i class="fa-solid fa-play"></i>
+            <span>Take Exam Now</span>
+          </button>
+        </div>
+
+        <!-- State 2: Active Exam Screen -->
+        <div id="exam-active-view" class="exam-active-card" style="display: none;">
+          <div class="exam-progress-bar-wrap">
+            <div id="exam-progress-fill" class="exam-progress-fill"></div>
+          </div>
+
+          <div class="exam-meta-row">
+            <span id="exam-question-counter"><i class="fa-solid fa-list-ol mr-1"></i> Question 1 of 10</span>
+            <span id="exam-type-badge" class="badge-pill" style="margin: 0; padding: 0.2rem 0.75rem; font-size: 0.75rem;">English → Bengali</span>
+            <span id="exam-timer"><i class="fa-regular fa-clock mr-1"></i> <span id="timer-val">00:00</span></span>
+          </div>
+
+          <div class="exam-prompt-card">
+            <div class="exam-prompt-label">Select the correct meaning</div>
+            <div class="exam-prompt-word">
+              <span id="exam-prompt-text">Word</span>
+              <button id="exam-prompt-audio" class="tts-btn" title="Listen Pronunciation">
+                <i class="fa-solid fa-volume-high"></i>
+              </button>
+            </div>
+          </div>
+
+          <div id="exam-options-container" class="exam-options-grid">
+            <!-- 4 Multiple Choice Option Buttons -->
+          </div>
+
+          <div class="exam-nav-row">
+            <button id="exam-prev-btn" class="nav-btn nav-btn-ghost" onclick="prevQuestion()" disabled>
+              <i class="fa-solid fa-arrow-left"></i> Previous
+            </button>
+            <button id="exam-next-btn" class="action-btn-glow" onclick="nextQuestion()">
+              Next Question <i class="fa-solid fa-arrow-right"></i>
+            </button>
+            <button id="exam-submit-btn" class="action-btn-emerald" style="display: none;" onclick="submitExam()">
+              <i class="fa-solid fa-check-double"></i> Finish & Submit
+            </button>
+          </div>
+        </div>
+
+        <!-- State 3: Exam Results View -->
+        <div id="exam-results-view" class="results-card" style="display: none;">
+          <div id="results-score-circle" class="score-circle">
+            <div id="results-score-num" class="score-digits">8/10</div>
+            <div id="results-score-pct" class="score-total">80%</div>
+          </div>
+
+          <h2 id="results-title" style="font-size: 1.75rem; font-weight: 800; margin-bottom: 0.5rem;">Great Job!</h2>
+          <p id="results-feedback" style="color: var(--text-secondary); max-width: 550px; margin: 0 auto 1.75rem; font-size: 1rem;">
+            You have solid retention on these words.
+          </p>
+
+          <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+            <button class="action-btn-glow" onclick="startExam()">
+              <i class="fa-solid fa-rotate-right"></i> Retake New Exam
+            </button>
+            <button class="nav-btn nav-btn-ghost" onclick="switchTab('practice')">
+              <i class="fa-solid fa-book-open-reader"></i> Back to Word Reader
+            </button>
+          </div>
+
+          <!-- Question Breakdown -->
+          <div class="results-breakdown-list" id="results-breakdown-list">
+            <!-- Injected dynamically -->
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- TAB 3: QUICK ADD WORD -->
+    <div id="tab-add" class="tab-pane">
+      <div class="exam-wrapper">
+        <div class="exam-start-card" style="text-align: left;">
+          <h2 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.6rem;">
+            <i class="fa-solid fa-plus-circle text-indigo"></i>
+            <span>Add New Vocabulary Word</span>
+          </h2>
+          <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1.5rem;">
+            Enter an English word. It will automatically be translated to Bengali using Google Translate and added directly to your collection.
+          </p>
+
+          <form id="add-word-form" onsubmit="handleQuickAddWord(event)">
+            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+              <input type="text" id="new-word-input" class="custom-input" placeholder="e.g. Serendipity, Ephemeral, Resilient..." required style="flex: 1; font-size: 1rem; padding: 0.75rem 1.25rem;" autocomplete="off" />
+              <button type="submit" class="action-btn-glow" style="padding: 0.75rem 1.75rem; font-size: 0.95rem;">
+                <i class="fa-solid fa-language"></i>
+                <span>Translate & Add</span>
+              </button>
+            </div>
+          </form>
+
+          <div id="add-word-feedback" style="margin-top: 1.25rem;"></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <div id="toast-container"></div>
+
+  <script>
+    // Base URL resolver for i18n support
+    const baseUrl = window.location.pathname.replace(/\/+$/, '');
+
+    // CSRF Helper
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
+    const csrftoken = getCookie('csrftoken');
+
+    // Toast notifications
+    function showToast(message, icon = 'fa-check') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = 'toast-msg';
+      toast.innerHTML = `<i class="fa-solid ${icon} text-emerald"></i> <span>${message}</span>`;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(100%)';
+        toast.style.transition = 'all 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    // Audio Pronunciation using browser SpeechSynthesis
+    function speakWord(word) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(word);
+        utterance.lang = 'en-US';
+        utterance.rate = 0.9;
+        window.speechSynthesis.speak(utterance);
+      }
+    }
+
+    // Tab Switching
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+
+      if (tabName === 'practice') {
+        document.querySelector('.tab-btn:nth-child(1)').classList.add('active');
+        document.getElementById('tab-practice').classList.add('active');
+      } else if (tabName === 'exam') {
+        document.querySelector('.tab-btn:nth-child(2)').classList.add('active');
+        document.getElementById('tab-exam').classList.add('active');
+      } else if (tabName === 'add') {
+        document.querySelector('.tab-btn:nth-child(3)').classList.add('active');
+        document.getElementById('tab-add').classList.add('active');
+      }
+    }
+
+    // --- TAB 1: RANDOM WORDS READER ---
+    async function loadRandomWords() {
+      const container = document.getElementById('word-cards-container');
+      const statusFilter = document.getElementById('reader-status-filter').value;
+      const count = document.getElementById('reader-count-filter').value;
+
+      container.innerHTML = `
+        <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: var(--text-secondary);">
+          <i class="fa-solid fa-spinner fa-spin fa-2x" style="color: var(--accent-indigo); margin-bottom: 1rem;"></i>
+          <p>Picking ${count} random words from database...</p>
+        </div>
+      `;
+
+      try {
+        const resp = await fetch(`${baseUrl}/api/random-words/?count=${count}&status=${statusFilter}`);
+        const data = await resp.json();
+
+        if (!data.words || data.words.length === 0) {
+          container.innerHTML = `
+            <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: var(--text-secondary); background: var(--bg-card); border-radius: 16px; border: 1px solid var(--border-color);">
+              <i class="fa-solid fa-folder-open fa-2x" style="color: var(--accent-amber); margin-bottom: 1rem;"></i>
+              <p>No words found matching this filter.</p>
+            </div>
+          `;
+          return;
+        }
+
+        container.innerHTML = '';
+        data.words.forEach(word => {
+          const card = createWordCardElement(word);
+          container.appendChild(card);
+        });
+
+      } catch (err) {
+        console.error(err);
+        container.innerHTML = `
+          <div style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: var(--accent-rose);">
+            <p>Failed to load random words. Please try again.</p>
+          </div>
+        `;
+      }
+    }
+
+    function createWordCardElement(word) {
+      const card = document.createElement('div');
+      card.className = 'word-card';
+      card.id = `word-card-${word.id}`;
+
+      card.innerHTML = `
+        <div>
+          <div class="word-card-top">
+            <h3 class="english-word-title">${word.english}</h3>
+            <button class="tts-btn" onclick="speakWord('${word.english.replace(/'/g, "\\'")}')" title="Listen pronunciation">
+              <i class="fa-solid fa-volume-high"></i>
+            </button>
+          </div>
+          <div class="bengali-meaning-box">
+            <div class="bengali-text">${word.bengali || '(No translation)'}</div>
+          </div>
+        </div>
+
+        <div class="status-actions-group">
+          <div class="status-group-label">
+            <span>Status</span>
+            <span class="current-badge badge-${word.status}" id="status-badge-${word.id}">${word.status_label || word.status}</span>
+          </div>
+          <div class="status-buttons-row">
+            <button class="btn-status-pill pill-new ${word.status === 'new' ? 'active-status' : ''}" onclick="updateWordStatus(${word.id}, 'new')">New</button>
+            <button class="btn-status-pill pill-familiar ${word.status === 'familiar' ? 'active-status' : ''}" onclick="updateWordStatus(${word.id}, 'familiar')">Familiar</button>
+            <button class="btn-status-pill pill-unfamiliar ${word.status === 'unfamiliar' ? 'active-status' : ''}" onclick="updateWordStatus(${word.id}, 'unfamiliar')">Unfamiliar</button>
+            <button class="btn-status-pill pill-confident ${word.status === 'confident' ? 'active-status' : ''}" onclick="updateWordStatus(${word.id}, 'confident')">Confident</button>
+          </div>
+        </div>
+      `;
+      return card;
+    }
+
+    async function updateWordStatus(wordId, newStatus) {
+      try {
+        const resp = await fetch(`${baseUrl}/api/words/${wordId}/status/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken,
+          },
+          body: JSON.stringify({ status: newStatus }),
+        });
+        const data = await resp.json();
+
+        if (data.status === 'ok') {
+          // Update card UI
+          const card = document.getElementById(`word-card-${wordId}`);
+          if (card) {
+            const badge = document.getElementById(`status-badge-${wordId}`);
+            badge.className = `current-badge badge-${newStatus}`;
+            badge.textContent = data.status_label;
+
+            const buttons = card.querySelectorAll('.btn-status-pill');
+            buttons.forEach(btn => btn.classList.remove('active-status'));
+            card.querySelector(`.pill-${newStatus}`).classList.add('active-status');
+          }
+
+          // Update header counters
+          if (data.counts) {
+            document.getElementById('stat-total').textContent = data.counts.total;
+            document.getElementById('stat-new').textContent = data.counts.new;
+            document.getElementById('stat-familiar').textContent = data.counts.familiar;
+            document.getElementById('stat-unfamiliar').textContent = data.counts.unfamiliar;
+            document.getElementById('stat-confident').textContent = data.counts.confident;
+          }
+
+          showToast(`Word marked as ${data.status_label}`);
+        }
+      } catch (err) {
+        console.error(err);
+        showToast('Failed to update status', 'fa-triangle-exclamation');
+      }
+    }
+
+    // --- TAB 2: VOCABULARY EXAM ---
+    let examData = [];
+    let currentQIndex = 0;
+    let userAnswers = {};
+    let examTimerInterval = null;
+    let examSeconds = 0;
+
+    async function startExam() {
+      const mode = document.getElementById('exam-mode-select').value;
+      const count = document.getElementById('exam-count-select').value;
+
+      try {
+        const resp = await fetch(`${baseUrl}/api/exam/start/?mode=${mode}&count=${count}`);
+        const data = await resp.json();
+
+        if (data.status !== 'ok' || !data.questions || data.questions.length === 0) {
+          alert(data.message || 'Could not start exam. Please make sure words have translations.');
+          return;
+        }
+
+        examData = data.questions;
+        currentQIndex = 0;
+        userAnswers = {};
+
+        // Switch to active exam view
+        document.getElementById('exam-start-view').style.display = 'none';
+        document.getElementById('exam-results-view').style.display = 'none';
+        document.getElementById('exam-active-view').style.display = 'block';
+
+        // Start Timer
+        examSeconds = 0;
+        clearInterval(examTimerInterval);
+        examTimerInterval = setInterval(() => {
+          examSeconds++;
+          const mins = String(Math.floor(examSeconds / 60)).padStart(2, '0');
+          const secs = String(examSeconds % 60).padStart(2, '0');
+          document.getElementById('timer-val').textContent = `${mins}:${secs}`;
+        }, 1000);
+
+        renderExamQuestion();
+
+      } catch (err) {
+        console.error(err);
+        alert('Error loading exam questions.');
+      }
+    }
+
+    function renderExamQuestion() {
+      if (!examData || examData.length === 0) return;
+      const q = examData[currentQIndex];
+
+      // Update counters & progress
+      const total = examData.length;
+      document.getElementById('exam-question-counter').innerHTML = `<i class="fa-solid fa-list-ol mr-1"></i> Question ${currentQIndex + 1} of ${total}`;
+      document.getElementById('exam-type-badge').textContent = q.question_type;
+      document.getElementById('exam-progress-fill').style.width = `${((currentQIndex + 1) / total) * 100}%`;
+
+      // Prompt word
+      document.getElementById('exam-prompt-text').textContent = q.prompt;
+      const ttsBtn = document.getElementById('exam-prompt-audio');
+      if (q.mode === 'en_to_bn') {
+        ttsBtn.style.display = 'inline-flex';
+        ttsBtn.onclick = () => speakWord(q.prompt);
+      } else {
+        ttsBtn.style.display = 'none';
+      }
+
+      // Options
+      const optionsContainer = document.getElementById('exam-options-container');
+      optionsContainer.innerHTML = '';
+      const letters = ['A', 'B', 'C', 'D'];
+
+      q.options.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        const isSelected = (userAnswers[q.word_id] === opt);
+        btn.className = `exam-option-btn ${isSelected ? 'selected' : ''}`;
+        btn.innerHTML = `
+          <span class="option-letter">${letters[idx] || (idx + 1)}</span>
+          <span>${opt}</span>
+        `;
+        btn.onclick = () => selectOption(q.word_id, opt);
+        optionsContainer.appendChild(btn);
+      });
+
+      // Navigation Buttons
+      document.getElementById('exam-prev-btn').disabled = (currentQIndex === 0);
+      if (currentQIndex === total - 1) {
+        document.getElementById('exam-next-btn').style.display = 'none';
+        document.getElementById('exam-submit-btn').style.display = 'inline-flex';
+      } else {
+        document.getElementById('exam-next-btn').style.display = 'inline-flex';
+        document.getElementById('exam-submit-btn').style.display = 'none';
+      }
+    }
+
+    function selectOption(wordId, optionValue) {
+      userAnswers[wordId] = optionValue;
+      renderExamQuestion();
+    }
+
+    function nextQuestion() {
+      if (currentQIndex < examData.length - 1) {
+        currentQIndex++;
+        renderExamQuestion();
+      }
+    }
+
+    function prevQuestion() {
+      if (currentQIndex > 0) {
+        currentQIndex--;
+        renderExamQuestion();
+      }
+    }
+
+    async function submitExam() {
+      clearInterval(examTimerInterval);
+
+      // Prepare answers payload
+      const answersPayload = examData.map(q => ({
+        word_id: q.word_id,
+        selected: userAnswers[q.word_id] || '',
+        mode: q.mode,
+        prompt: q.prompt,
+      }));
+
+      try {
+        const resp = await fetch(`${baseUrl}/api/exam/submit/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken,
+          },
+          body: JSON.stringify({
+            mode: document.getElementById('exam-mode-select').value,
+            answers: answersPayload,
+          }),
+        });
+
+        const result = await resp.json();
+        if (result.status !== 'ok') {
+          alert(result.message || 'Submission error');
+          return;
+        }
+
+        // Show Results Screen
+        document.getElementById('exam-active-view').style.display = 'none';
+        document.getElementById('exam-results-view').style.display = 'block';
+
+        document.getElementById('results-score-num').textContent = `${result.score}/${result.total}`;
+        document.getElementById('results-score-pct').textContent = `${result.percentage}%`;
+        document.getElementById('results-feedback').textContent = result.feedback;
+
+        const circle = document.getElementById('results-score-circle');
+        if (result.percentage >= 70) {
+          circle.style.borderColor = 'var(--accent-emerald)';
+          circle.style.boxShadow = '0 0 25px var(--accent-emerald-glow)';
+        } else {
+          circle.style.borderColor = 'var(--accent-amber)';
+          circle.style.boxShadow = '0 0 25px var(--accent-amber-glow)';
+        }
+
+        // Render Breakdown
+        const breakdownList = document.getElementById('results-breakdown-list');
+        breakdownList.innerHTML = '<h3 style="font-size: 1.15rem; font-weight: 700; margin: 1.5rem 0 0.5rem;">Detailed Answer Review</h3>';
+
+        result.breakdown.forEach((item, i) => {
+          const row = document.createElement('div');
+          row.className = `review-item ${item.is_correct ? 'is-correct' : 'is-wrong'}`;
+
+          row.innerHTML = `
+            <div>
+              <div style="font-weight: 700; font-size: 1.05rem; color: #ffffff;">
+                ${i + 1}. ${item.english} <span style="color: var(--text-muted); font-weight: 400;">→</span> ${item.bengali}
+              </div>
+              <div style="font-size: 0.85rem; margin-top: 0.25rem;">
+                <span style="color: var(--text-secondary);">Your Answer:</span> 
+                <strong style="color: ${item.is_correct ? 'var(--accent-emerald)' : 'var(--accent-rose)'};">${item.selected || '(No answer)'}</strong>
+                ${!item.is_correct ? `<span style="margin-left: 0.5rem; color: var(--accent-emerald); font-weight: 600;">(Correct: ${item.correct_answer})</span>` : ''}
+              </div>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <span class="current-badge badge-${item.current_status}">${item.status_label}</span>
+              <button class="btn-status-pill pill-unfamiliar" style="padding: 0.35rem 0.6rem;" onclick="updateWordStatus(${item.word_id}, 'unfamiliar'); this.textContent='Marked!';">Mark Unfamiliar</button>
+              <button class="btn-status-pill pill-confident" style="padding: 0.35rem 0.6rem;" onclick="updateWordStatus(${item.word_id}, 'confident'); this.textContent='Marked!';">Mark Confident</button>
+            </div>
+          `;
+          breakdownList.appendChild(row);
+        });
+
+      } catch (err) {
+        console.error(err);
+        alert('Failed to submit exam.');
+      }
+    }
+
+    // --- TAB 3: QUICK ADD WORD ---
+    async function handleQuickAddWord(e) {
+      e.preventDefault();
+      const input = document.getElementById('new-word-input');
+      const feedback = document.getElementById('add-word-feedback');
+      const word = input.value.trim();
+      if (!word) return;
+
+      feedback.innerHTML = '<span style="color: var(--accent-indigo); font-weight: 600;"><i class="fa-solid fa-spinner fa-spin mr-1"></i> Translating and adding...</span>';
+
+      try {
+        const formData = new FormData();
+        formData.append('english', word);
+
+        const resp = await fetch(`${baseUrl}/add-word/`, {
+          method: 'POST',
+          headers: {
+            'X-CSRFToken': csrftoken,
+          },
+          body: formData,
+        });
+
+        const html = await resp.text();
+        feedback.innerHTML = html;
+        input.value = '';
+
+        const countStat = document.getElementById('stat-total');
+        if (countStat) {
+          countStat.textContent = parseInt(countStat.textContent || 0) + 1;
+        }
+      } catch (err) {
+        console.error(err);
+        feedback.innerHTML = '<div class="alert alert-danger mt-2">Error adding word.</div>';
+      }
+    }
+
+    // Initialize Random Words on Page Load
+    document.addEventListener('DOMContentLoaded', () => {
+      loadRandomWords();
+    });
+  </script>
+</body>
+</html>

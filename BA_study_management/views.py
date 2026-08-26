@@ -11,7 +11,7 @@ from django.http import JsonResponse, HttpResponseForbidden
 from django.conf import settings
 from django.shortcuts import render
 import random
-from general.models import WordCollection
+from vocabulary.models import WordCollection
 
 
 def home(request):

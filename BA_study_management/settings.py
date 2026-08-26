@@ -48,6 +48,7 @@ INSTALLED_APPS = [
 
     # apps
     'general',
+    'vocabulary',
     'book_reading',
     'writing_plan',
     'exam_management',
@@ -72,6 +73,7 @@ JAZZMIN_SETTINGS = {
     "topmenu_links": [
         {"name": "Home Portal", "url": "home", "permissions": ["auth.view_user"], "icon": "fas fa-home"},
         {"name": "Document Viewer", "url": "/admin/viewer", "permissions": ["document.view_document"], "icon": "fas fa-file-alt"},
+        {"name": "Vocabulary Hub", "url": "/vocabulary/", "icon": "fas fa-spell-check"},
     ],
     "icons": {
         "auth.user": "fas fa-user-shield",
@@ -91,7 +93,8 @@ JAZZMIN_SETTINGS = {
         "exam_management.improve": "fa-solid fa-arrow-trend-up",
         "general.notes": "fa-solid fa-sticky-note",
         "general.studyNote": "fa-solid fa-file-pen",
-        "general.wordcollection": "fa-solid fa-spell-check",
+        "vocabulary.wordcollection": "fa-solid fa-spell-check",
+        "vocabulary.vocabularyexamresult": "fa-solid fa-graduation-cap",
         "writing_plan.writingPlan": "fa-solid fa-feather",
         "literature.author": "fa-solid fa-feather-pointed",
         "literature.genre": "fa-solid fa-tags",
