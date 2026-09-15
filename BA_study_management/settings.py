@@ -69,7 +69,7 @@ JAZZMIN_SETTINGS = {
     "site_icon": "images/fav.png",
     "site_logo": "images/logo.png",
     "login_logo": "images/login_logo.png",
-    "show_theme_chooser": False,
+    "show_theme_chooser": True,
     "language_chooser": True,
     "topmenu_links": [
         {"name": "Home Portal", "url": "home", "permissions": ["auth.view_user"], "icon": "fas fa-home"},
@@ -109,7 +109,6 @@ JAZZMIN_SETTINGS = {
         "BookCollection.studynote": "fa-solid fa-note-sticky",
         "BookCollection.lend": "fa-solid fa-hand-holding-heart",
     },
-    "custom_css": "css/admin.css",
     "changeform_format": "horizontal_tabs",
 }
 
@@ -133,7 +132,7 @@ JAZZMIN_UI_TWEAKS = {
     "sidebar_nav_compact_style": False,
     "sidebar_nav_legacy_style": False,
     "sidebar_nav_flat_style": False,
-    "theme": "default",
+    "theme": "sandstone",
     "dark_mode_theme": None,
     "button_classes": {
         "primary": "btn-primary",
