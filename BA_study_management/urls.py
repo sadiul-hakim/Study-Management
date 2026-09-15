@@ -11,8 +11,10 @@ from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path("i18n/", include("django.conf.urls.i18n")),
-    path("tasks/send-daily-reminders/", send_daily_reminders, name="send_daily_reminders"),
+    path("tasks/send-daily-reminders/",
+         send_daily_reminders, name="send_daily_reminders"),
     path("send-daily-words/", send_daily_words, name="send_daily_words"),
+    path("", include("pwa.urls")),
 ]
 
 urlpatterns += i18n_patterns(
@@ -27,4 +29,3 @@ urlpatterns += static(
     settings.MEDIA_URL,
     document_root=settings.MEDIA_ROOT,
 )
-

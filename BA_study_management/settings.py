@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django_ckeditor_5',
     'mamood_django_admin_log_viewer',
     'import_export',
+    'pwa',
 
     # apps
     'general',
@@ -57,6 +58,25 @@ INSTALLED_APPS = [
     'document',
     'guide',
     'BookCollection',
+]
+
+PWA_APP_NAME = 'StudyManagement Admin'
+PWA_APP_DESCRIPTION = "StudyManagement Admin Dashboard"
+PWA_APP_THEME_COLOR = '#10B981'
+PWA_APP_BACKGROUND_COLOR = '#111827'
+PWA_APP_DISPLAY = 'standalone'
+PWA_APP_SCOPE = '/'
+PWA_APP_START_URL = '/'
+
+PWA_APP_ICONS = [
+    {
+        'src': '/static/admin/img/icon-192.png',
+        'sizes': '192x192'
+    },
+    {
+        'src': '/static/admin/img/icon-512.png',
+        'sizes': '512x512'
+    }
 ]
 
 SITE_TITLE_TEXT = f"{config('SITE_OWNER')}'s Study Tracker"
@@ -72,9 +92,12 @@ JAZZMIN_SETTINGS = {
     "show_theme_chooser": True,
     "language_chooser": True,
     "topmenu_links": [
-        {"name": "Home Portal", "url": "home", "permissions": ["auth.view_user"], "icon": "fas fa-home"},
-        {"name": "Document Viewer", "url": "/admin/viewer", "permissions": ["document.view_document"], "icon": "fas fa-file-alt"},
-        {"name": "Vocabulary Hub", "url": "/vocabulary/", "icon": "fas fa-spell-check"},
+        {"name": "Home Portal", "url": "home", "permissions": [
+            "auth.view_user"], "icon": "fas fa-home"},
+        {"name": "Document Viewer", "url": "/admin/viewer",
+            "permissions": ["document.view_document"], "icon": "fas fa-file-alt"},
+        {"name": "Vocabulary Hub", "url": "/vocabulary/",
+            "icon": "fas fa-spell-check"},
     ],
     "icons": {
         "auth.user": "fas fa-user-shield",

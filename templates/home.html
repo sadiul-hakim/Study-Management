@@ -1,9 +1,11 @@
+{% load pwa %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>B.A. Study Management — Personal Academic Hub</title>
+    {% progressive_web_app_meta %}
     <meta name="description" content="Personal academic tracker to organize book reading, writing plans, examinations, vocabulary building, and long-term learning." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -26,13 +28,13 @@
         --accent-amber: #f59e0b;
         --glow-color: rgba(99, 102, 241, 0.15);
       }
-
+      
       * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
       }
-
+      
       body {
         font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
         background-color: var(--bg-primary);
@@ -44,7 +46,7 @@
         overflow-x: hidden;
         position: relative;
       }
-
+      
       /* Dynamic Background Gradients */
       body::before {
         content: '';
@@ -59,7 +61,7 @@
         z-index: 0;
         pointer-events: none;
       }
-
+      
       body::after {
         content: '';
         position: fixed;
@@ -73,7 +75,7 @@
         z-index: 0;
         pointer-events: none;
       }
-
+      
       .noise-layer {
         position: fixed;
         inset: 0;
@@ -82,7 +84,7 @@
         pointer-events: none;
         z-index: 0;
       }
-
+      
       /* Navbar */
       header {
         position: relative;
@@ -95,7 +97,7 @@
         margin: 0 auto;
         width: 100%;
       }
-
+      
       .brand {
         display: flex;
         align-items: center;
@@ -106,7 +108,7 @@
         font-size: 1.25rem;
         letter-spacing: -0.02em;
       }
-
+      
       .brand-icon {
         width: 40px;
         height: 40px;
@@ -119,13 +121,13 @@
         box-shadow: 0 4px 15px rgba(99, 102, 241, 0.35);
         font-size: 1.1rem;
       }
-
+      
       .nav-links {
         display: flex;
         align-items: center;
         gap: 1rem;
       }
-
+      
       .nav-btn {
         padding: 0.6rem 1.25rem;
         font-size: 0.875rem;
@@ -137,32 +139,32 @@
         align-items: center;
         gap: 0.5rem;
       }
-
+      
       .nav-btn-ghost {
         color: var(--text-secondary);
         border: 1px solid var(--border-color);
         background: rgba(255, 255, 255, 0.02);
       }
-
+      
       .nav-btn-ghost:hover {
         color: var(--text-primary);
         border-color: rgba(255, 255, 255, 0.2);
         background: rgba(255, 255, 255, 0.06);
         transform: translateY(-1px);
       }
-
+      
       .nav-btn-primary {
         background: linear-gradient(135deg, #6366f1, #4f46e5);
         color: #ffffff;
         box-shadow: 0 4px 14px rgba(79, 70, 229, 0.35);
       }
-
+      
       .nav-btn-primary:hover {
         background: linear-gradient(135deg, #4f46e5, #4338ca);
         box-shadow: 0 6px 20px rgba(79, 70, 229, 0.5);
         transform: translateY(-2px);
       }
-
+      
       /* Main Content */
       main {
         position: relative;
@@ -175,7 +177,7 @@
         align-items: center;
         text-align: center;
       }
-
+      
       .badge-pill {
         display: inline-flex;
         align-items: center;
@@ -192,7 +194,7 @@
         text-transform: uppercase;
         backdrop-filter: blur(8px);
       }
-
+      
       .badge-pill .pulse {
         width: 7px;
         height: 7px;
@@ -201,13 +203,22 @@
         box-shadow: 0 0 8px var(--accent-emerald);
         animation: pulse 2s infinite;
       }
-
+      
       @keyframes pulse {
-        0% { transform: scale(0.95); opacity: 0.8; }
-        50% { transform: scale(1.3); opacity: 1; }
-        100% { transform: scale(0.95); opacity: 0.8; }
+        0% {
+          transform: scale(0.95);
+          opacity: 0.8;
+        }
+        50% {
+          transform: scale(1.3);
+          opacity: 1;
+        }
+        100% {
+          transform: scale(0.95);
+          opacity: 0.8;
+        }
       }
-
+      
       h1 {
         font-size: clamp(2.5rem, 5vw, 3.75rem);
         font-weight: 800;
@@ -218,7 +229,7 @@
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
       }
-
+      
       .hero-desc {
         max-width: 650px;
         font-size: 1.15rem;
@@ -226,7 +237,7 @@
         color: var(--text-secondary);
         margin-bottom: 2.25rem;
       }
-
+      
       /* Verse Quote Card */
       .quote-card {
         background: var(--bg-card);
@@ -240,12 +251,12 @@
         box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
         transition: transform 0.3s ease, border-color 0.3s ease;
       }
-
+      
       .quote-card:hover {
         border-color: rgba(255, 255, 255, 0.15);
         transform: translateY(-2px);
       }
-
+      
       .quote-card::before {
         content: '“';
         position: absolute;
@@ -257,7 +268,7 @@
         color: rgba(99, 102, 241, 0.25);
         pointer-events: none;
       }
-
+      
       .quote-text {
         font-family: 'Cinzel', 'Playfair Display', Georgia, serif;
         font-size: 1.15rem;
@@ -266,7 +277,7 @@
         margin-bottom: 0.75rem;
         letter-spacing: 0.01em;
       }
-
+      
       .quote-ref {
         display: inline-flex;
         align-items: center;
@@ -277,7 +288,7 @@
         letter-spacing: 0.05em;
         text-transform: uppercase;
       }
-
+      
       /* Action Buttons */
       .action-group {
         display: flex;
@@ -286,7 +297,7 @@
         flex-wrap: wrap;
         margin-bottom: 3.5rem;
       }
-
+      
       .btn-primary-glow {
         background: linear-gradient(135deg, #4f46e5, #6366f1);
         color: #ffffff;
@@ -301,14 +312,14 @@
         gap: 0.75rem;
         transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
       }
-
+      
       .btn-primary-glow:hover {
         background: linear-gradient(135deg, #4338ca, #4f46e5);
         box-shadow: 0 15px 30px -5px rgba(79, 70, 229, 0.65);
         transform: translateY(-2px);
         color: #ffffff;
       }
-
+      
       .btn-secondary-dark {
         background: rgba(255, 255, 255, 0.05);
         border: 1px solid var(--border-color);
@@ -324,14 +335,14 @@
         backdrop-filter: blur(8px);
         transition: all 0.25s ease;
       }
-
+      
       .btn-secondary-dark:hover {
         background: rgba(255, 255, 255, 0.1);
         border-color: rgba(255, 255, 255, 0.2);
         transform: translateY(-2px);
         color: #ffffff;
       }
-
+      
       /* Feature Showcase Grid */
       .features-grid {
         display: grid;
@@ -340,7 +351,7 @@
         width: 100%;
         text-align: left;
       }
-
+      
       .feature-card {
         background: var(--bg-card);
         border: 1px solid var(--border-color);
@@ -351,14 +362,14 @@
         position: relative;
         overflow: hidden;
       }
-
+      
       .feature-card:hover {
         background: var(--bg-card-hover);
         border-color: var(--border-color-hover);
         transform: translateY(-4px);
         box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.5);
       }
-
+      
       .feature-icon-wrap {
         width: 44px;
         height: 44px;
@@ -369,44 +380,44 @@
         font-size: 1.25rem;
         margin-bottom: 1rem;
       }
-
+      
       .icon-emerald {
         background: rgba(16, 185, 129, 0.12);
         color: #34d399;
         border: 1px solid rgba(16, 185, 129, 0.25);
       }
-
+      
       .icon-indigo {
         background: rgba(99, 102, 241, 0.12);
         color: #818cf8;
         border: 1px solid rgba(99, 102, 241, 0.25);
       }
-
+      
       .icon-amber {
         background: rgba(245, 158, 11, 0.12);
         color: #fbbf24;
         border: 1px solid rgba(245, 158, 11, 0.25);
       }
-
+      
       .icon-purple {
         background: rgba(168, 85, 247, 0.12);
         color: #c084fc;
         border: 1px solid rgba(168, 85, 247, 0.25);
       }
-
+      
       .feature-title {
         font-size: 1.05rem;
         font-weight: 700;
         color: #f1f5f9;
         margin-bottom: 0.35rem;
       }
-
+      
       .feature-desc {
         font-size: 0.85rem;
         color: var(--text-secondary);
         line-height: 1.5;
       }
-
+      
       /* Footer */
       footer {
         position: relative;
@@ -419,17 +430,17 @@
         background: rgba(11, 15, 25, 0.85);
         backdrop-filter: blur(8px);
       }
-
+      
       footer a {
         color: var(--text-secondary);
         text-decoration: none;
         transition: color 0.2s;
       }
-
+      
       footer a:hover {
         color: var(--text-primary);
       }
-
+      
       @media (max-width: 768px) {
         header {
           padding: 1rem;
@@ -469,7 +480,8 @@
           gap: 0.75rem;
           margin-bottom: 2.5rem;
         }
-        .btn-primary-glow, .btn-secondary-dark {
+        .btn-primary-glow,
+        .btn-secondary-dark {
           width: 100%;
           justify-content: center;
           padding: 0.85rem 1.5rem;
@@ -480,7 +492,7 @@
           gap: 1rem;
         }
       }
-
+      
       @media (max-width: 480px) {
         h1 {
           font-size: 1.85rem;
@@ -526,14 +538,10 @@
 
       <h1>Focus. Track. Master.</h1>
 
-      <p class="hero-desc">
-        A unified academic workspace engineered for literature reading, disciplined revisions, writing plans, and persistent vocabulary retention.
-      </p>
+      <p class="hero-desc">A unified academic workspace engineered for literature reading, disciplined revisions, writing plans, and persistent vocabulary retention.</p>
 
       <div class="quote-card">
-        <p class="quote-text">
-          "Read, ˹O Prophet,˺ in the Name of your Lord Who created—"
-        </p>
+        <p class="quote-text">"Read, ˹O Prophet,˺ in the Name of your Lord Who created—"</p>
         <div class="quote-ref">
           <i class="fa-solid fa-book-quran"></i>
           <span>Surah Al-'Alaq • Verse 1</span>
@@ -591,9 +599,7 @@
     </main>
 
     <footer>
-      <p>
-        B.A. Study Management System &bull; Crafting consistency in learning
-      </p>
+      <p>B.A. Study Management System &bull; Crafting consistency in learning</p>
     </footer>
   </body>
 </html>
