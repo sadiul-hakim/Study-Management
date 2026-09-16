@@ -17,7 +17,7 @@ class WordCollectionAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 @admin.register(VerbForm)
 class VerbFormAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = ('present', 'past', 'pp', "status",)
-    list_filter = ('present',)
+    list_filter = ('status',)
     search_fields = ('present', 'past', 'pp',)
     list_editable = ('status',)
     list_per_page = 50
