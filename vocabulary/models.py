@@ -10,7 +10,8 @@ class WordCollection(models.Model):
         CONFIDENT = 'confident', _('Confident')
 
     english = models.CharField(_('English Word'), max_length=255, unique=True)
-    bengali = models.CharField(_('Bengali Meaning'), max_length=255, blank=True)
+    bengali = models.CharField(
+        _('Bengali Meaning'), max_length=255, blank=True)
     status = models.CharField(
         _('Status'),
         max_length=20,
@@ -55,3 +56,24 @@ class VocabularyExamResult(models.Model):
 
     def __str__(self):
         return f"Exam on {self.created_at.strftime('%Y-%m-%d %H:%M')} — Score: {self.score}/{self.total_questions} ({self.percentage:.1f}%)"
+
+
+class VerbForm(models.Model):
+    class Status(models.TextChoices):
+        NEW = 'new', _('New')
+        FAMILIAR = 'familiar', _('Familiar')
+        UNFAMILIAR = 'unfamiliar', _('Unfamiliar')
+        CONFIDENT = 'confident', _('Confident')
+
+    present = models.CharField(_("Base Form"), max_length=100)
+    past = models.CharField(_("Past Form"), max_length=100)
+    pp = models.CharField(_("Past Participle"), max_length=100, unique=True)
+    status = models.CharField(
+        _('Status'),
+        max_length=20,
+        choices=Status.choices,
+        default=Status.NEW,
+    )
+
+    def __str__(self):
+        return f"{self.present}-{self.past}-{self.pp}"
