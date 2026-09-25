@@ -3,6 +3,10 @@
 
 {% block extrahead %}
   {{ block.super }}
+  <!-- Django Select2 & Vendor CSS -->
+  <link href="{% static 'admin/css/vendor/select2/select2.min.css' %}" rel="stylesheet" />
+  <link href="{% static 'django_select2/django_select2.css' %}" rel="stylesheet" />
+
   <style>
     .doc-viewer-card {
       background: #ffffff;
@@ -88,6 +92,58 @@
       padding: 0.25rem 0.6rem;
       border-radius: 6px;
     }
+
+    /* Select2 Polished Integration for Document Viewer */
+    .select2-container--default .select2-selection--single {
+      height: 42px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 6px 12px;
+      display: flex;
+      align-items: center;
+      background-color: #ffffff;
+      transition: all 0.2s ease;
+    }
+    .select2-container--default.select2-container--focus .select2-selection--single,
+    .select2-container--default.select2-container--open .select2-selection--single {
+      border-color: #6366f1;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+    }
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+      line-height: 28px;
+      padding-left: 0;
+      color: #0f172a;
+      font-weight: 500;
+      font-size: 0.925rem;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+      height: 40px;
+      right: 10px;
+    }
+    .select2-dropdown {
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+      overflow: hidden;
+      z-index: 99999;
+    }
+    .select2-search--dropdown {
+      padding: 8px;
+    }
+    .select2-search--dropdown .select2-search__field {
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 7px 10px;
+      font-size: 0.9rem;
+    }
+    .select2-results__option {
+      padding: 8px 12px;
+      font-size: 0.9rem;
+    }
+    .select2-container--default .select2-results__option--highlighted[aria-selected] {
+      background-color: #6366f1;
+      color: #ffffff;
+    }
   </style>
 {% endblock %}
 
@@ -111,13 +167,13 @@
 <div class="doc-viewer-card">
   <!-- Toolbar Selector Form -->
   <div class="doc-viewer-toolbar">
-    <form method="get">
+    <form method="get" id="doc-viewer-form">
       <div class="row align-items-end">
         <div class="col-12 col-md-5 mb-3 mb-md-0">
           <label class="form-label font-weight-bold text-muted small mb-1 d-block">
             <i class="fa-solid fa-folder mr-1 text-primary"></i> SELECT DOCUMENT
           </label>
-          <select name="document" class="form-control custom-select" onchange="this.form.submit()">
+          <select name="document" id="doc-select" class="form-control select2-viewer" style="width: 100%;">
             <option value="">-- Choose a Document Collection --</option>
             {% for doc in documents %}
               <option value="{{ doc.id }}" {% if selected_document.id == doc.id %}selected{% endif %}>
@@ -132,7 +188,8 @@
             <label class="form-label font-weight-bold text-muted small mb-1 d-block">
               <i class="fa-solid fa-file mr-1 text-info"></i> SELECT FILE
             </label>
-            <select name="file" class="form-control custom-select" onchange="this.form.submit()">
+            <select name="file" id="file-select" class="form-control select2-viewer" style="width: 100%;">
+              <option value="">-- Choose a File --</option>
               {% for f in selected_document.files.all %}
                 <option value="{{ f.id }}" {% if selected_file.id == f.id %}selected{% endif %}>
                   {{ f.file.name }}
@@ -141,7 +198,7 @@
             </select>
           </div>
           <div class="col-12 col-md-2">
-            <button type="submit" class="btn btn-primary btn-block">
+            <button type="submit" class="btn btn-primary btn-block" style="height: 42px; border-radius: 8px;">
               <i class="fa-solid fa-eye mr-1"></i> View
             </button>
           </div>
@@ -209,11 +266,45 @@
           </div>
           <h4 class="fw-bold" style="color: #0f172a;">No Document Selected</h4>
           <p class="text-muted" style="max-width: 420px; margin: 0 auto;">
-            Choose a document collection and specific file from the dropdown above to start reading.
+            Choose a document collection and specific file from the searchable Select2 dropdowns above to start reading.
           </p>
         </div>
       </div>
     {% endif %}
   </div>
 </div>
-{% endblock %}
+{% endblock %}
+
+{% block extrajs %}
+  {{ block.super }}
+  <!-- Select2 Scripts -->
+  <script src="{% static 'admin/js/vendor/select2/select2.full.min.js' %}"></script>
+  <script src="{% static 'django_select2/django_select2.js' %}"></script>
+  <script>
+    (function() {
+      function initDocViewerSelect2() {
+        var $ = window.jQuery || window.$ || (window.django && window.django.jQuery);
+        if ($ && $.fn.select2) {
+          $('.select2-viewer').each(function() {
+            var $elem = $(this);
+            var isDoc = $elem.attr('name') === 'document';
+            $elem.select2({
+              width: '100%',
+              placeholder: isDoc ? '-- Search & Choose Document --' : '-- Search & Choose File --',
+              allowClear: false
+            }).on('select2:select', function(e) {
+              // Submit form on selection
+              document.getElementById('doc-viewer-form').submit();
+            });
+          });
+        }
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initDocViewerSelect2);
+      } else {
+        initDocViewerSelect2();
+      }
+    })();
+  </script>
+{% endblock %}

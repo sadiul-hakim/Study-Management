@@ -14,6 +14,7 @@ urlpatterns = [
     path("tasks/send-daily-reminders/",
          send_daily_reminders, name="send_daily_reminders"),
     path("send-daily-words/", send_daily_words, name="send_daily_words"),
+    path("select2/", include("django_select2.urls")),
     path("", include("pwa.urls")),
 ]
 

@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'mamood_django_admin_log_viewer',
     'import_export',
     'pwa',
+    'django_select2',
 
     # apps
     'general',
@@ -246,6 +247,19 @@ DATABASES = {
         'PORT': config('DB_PORT', default=''),
     }
 }
+
+# Cache configuration for django-select2 and general caching
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'study-management-default-cache',
+    },
+    'select2': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'study-management-select2-cache',
+    },
+}
+SELECT2_CACHE_BACKEND = 'select2'
 
 
 # Password validation
