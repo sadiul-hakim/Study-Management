@@ -95,10 +95,6 @@ JAZZMIN_SETTINGS = {
     "topmenu_links": [
         {"name": "Home Portal", "url": "home", "permissions": [
             "auth.view_user"], "icon": "fas fa-home"},
-        {"name": "Document Viewer", "url": "/admin/viewer",
-            "permissions": ["document.view_document"], "icon": "fas fa-file-alt"},
-        {"name": "Vocabulary Hub", "url": "/vocabulary/",
-            "icon": "fas fa-spell-check"},
     ],
     "icons": {
         "auth.user": "fas fa-user-shield",

@@ -5,7 +5,7 @@ from django.http import JsonResponse, HttpResponse
 from django.views.decorators.http import require_GET, require_POST
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.html import format_html
-from deep_translator import GoogleTranslator
+from .translator import translate_en_to_bn
 
 from .models import WordCollection, VocabularyExamResult
 
@@ -305,10 +305,7 @@ def add_word_htmx(request):
             )
         )
 
-    try:
-        bengali = GoogleTranslator(source='en', target='bn').translate(english)
-    except Exception:
-        bengali = ''
+    bengali = translate_en_to_bn(english)
 
     try:
         word = WordCollection.objects.create(

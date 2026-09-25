@@ -2,8 +2,7 @@
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import HttpResponse
 from django.utils.html import format_html
-from deep_translator import GoogleTranslator
-
+from vocabulary.translator import translate_en_to_bn
 from vocabulary.models import WordCollection
 
 
@@ -21,10 +20,7 @@ def add_word_htmx(request):
             )
         )
 
-    try:
-        bengali = GoogleTranslator(source='en', target='bn').translate(english)
-    except Exception:
-        bengali = ''
+    bengali = translate_en_to_bn(english)
 
     try:
         WordCollection.objects.create(
