@@ -7,7 +7,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.html import format_html
 from .translator import translate_en_to_bn
 
-from .models import WordCollection, VocabularyExamResult
+from .models import WordCollection, VocabularyExamResult, VocabularyType
 
 
 @ensure_csrf_cookie
@@ -19,6 +19,7 @@ def vocabulary_hub(request):
     unfamiliar_count = WordCollection.objects.filter(status=WordCollection.Status.UNFAMILIAR).count()
     confident_count = WordCollection.objects.filter(status=WordCollection.Status.CONFIDENT).count()
 
+    vocab_types = list(VocabularyType.objects.all())
     recent_exams = VocabularyExamResult.objects.all()[:5]
 
     context = {
@@ -27,6 +28,7 @@ def vocabulary_hub(request):
         'familiar_count': familiar_count,
         'unfamiliar_count': unfamiliar_count,
         'confident_count': confident_count,
+        'vocab_types': vocab_types,
         'recent_exams': recent_exams,
         'status_choices': WordCollection.Status.choices,
     }
@@ -35,7 +37,7 @@ def vocabulary_hub(request):
 
 @require_GET
 def api_random_words(request):
-    """Returns 10-20 random words with optional status filtering."""
+    """Returns 10-20 random words with optional status and type filtering."""
     try:
         count = int(request.GET.get('count', 10))
         count = max(5, min(count, 30))
@@ -43,10 +45,17 @@ def api_random_words(request):
         count = 10
 
     status_filter = request.GET.get('status', 'all').strip().lower()
+    type_filter = request.GET.get('type', request.GET.get('type_id', 'all')).strip().lower()
 
-    qs = WordCollection.objects.all()
+    qs = WordCollection.objects.select_related('vocabulary_type')
     if status_filter and status_filter != 'all':
         qs = qs.filter(status=status_filter)
+
+    if type_filter and type_filter != 'all':
+        if type_filter == 'none' or type_filter == 'untyped':
+            qs = qs.filter(vocabulary_type__isnull=True)
+        elif type_filter.isdigit():
+            qs = qs.filter(vocabulary_type_id=int(type_filter))
 
     ids = list(qs.values_list('id', flat=True))
     if not ids:
@@ -59,7 +68,7 @@ def api_random_words(request):
 
     sample_size = min(len(ids), count)
     random_ids = random.sample(ids, sample_size)
-    words_qs = list(WordCollection.objects.filter(id__in=random_ids))
+    words_qs = list(WordCollection.objects.select_related('vocabulary_type').filter(id__in=random_ids))
     random.shuffle(words_qs)
 
     words_data = [
@@ -67,6 +76,8 @@ def api_random_words(request):
             'id': w.id,
             'english': w.english,
             'bengali': w.bengali,
+            'type_id': w.vocabulary_type_id,
+            'type_name': w.vocabulary_type.name if w.vocabulary_type else None,
             'status': w.status,
             'status_label': w.get_status_display(),
         }
@@ -123,7 +134,7 @@ def api_update_word_status(request, word_id):
 
 @require_GET
 def api_take_exam(request):
-    """Generates 10 multiple-choice questions for the exam."""
+    """Generates 10 multiple-choice questions for the exam with optional type filtering."""
     mode = request.GET.get('mode', 'en_to_bn').strip()
     if mode not in ['en_to_bn', 'bn_to_en', 'mixed']:
         mode = 'en_to_bn'
@@ -134,14 +145,26 @@ def api_take_exam(request):
     except (ValueError, TypeError):
         count = 10
 
-    # Ensure words have both english and non-empty bengali
-    valid_words = list(WordCollection.objects.exclude(bengali='').exclude(bengali__isnull=True).values('id', 'english', 'bengali', 'status'))
+    type_filter = request.GET.get('type', request.GET.get('type_id', 'all')).strip().lower()
+
+    # Base valid words
+    qs = WordCollection.objects.exclude(bengali='').exclude(bengali__isnull=True)
+    if type_filter and type_filter != 'all':
+        if type_filter == 'none' or type_filter == 'untyped':
+            qs = qs.filter(vocabulary_type__isnull=True)
+        elif type_filter.isdigit():
+            qs = qs.filter(vocabulary_type_id=int(type_filter))
+
+    valid_words = list(qs.values('id', 'english', 'bengali', 'status'))
 
     if len(valid_words) < 4:
         return JsonResponse({
             'status': 'error',
-            'message': 'At least 4 words with Bengali translations are required to generate an exam.'
+            'message': 'At least 4 words with Bengali translations are required in this category to generate an exam.'
         }, status=400)
+
+    # Distractor pool can come from all words to make distractors rich
+    all_valid_words = list(WordCollection.objects.exclude(bengali='').exclude(bengali__isnull=True).values('id', 'english', 'bengali'))
 
     sample_size = min(len(valid_words), count)
     exam_targets = random.sample(valid_words, sample_size)
@@ -153,7 +176,7 @@ def api_take_exam(request):
             q_mode = random.choice(['en_to_bn', 'bn_to_en'])
 
         # Pick 3 random distractor words
-        other_words = [w for w in valid_words if w['id'] != target['id']]
+        other_words = [w for w in all_valid_words if w['id'] != target['id']]
         distractors = random.sample(other_words, min(3, len(other_words)))
 
         if q_mode == 'en_to_bn':
@@ -287,6 +310,7 @@ def add_word_htmx(request):
         return HttpResponse(status=405)
 
     english = request.POST.get('english', '').strip()
+    type_id = request.POST.get('vocabulary_type', request.POST.get('type_id', '')).strip()
 
     if not english:
         return HttpResponse(
@@ -298,26 +322,33 @@ def add_word_htmx(request):
     # Check for existing word
     existing = WordCollection.objects.filter(english__iexact=english).first()
     if existing:
+        type_str = f" [{existing.vocabulary_type.name}]" if existing.vocabulary_type else ""
         return HttpResponse(
             format_html(
-                '<div class="alert alert-warning mt-2 mb-0 py-2">"{}" already exists with meaning "{}" ({})</div>',
-                existing.english, existing.bengali, existing.get_status_display()
+                '<div class="alert alert-warning mt-2 mb-0 py-2">"{}" already exists with meaning "{}"{}({})</div>',
+                existing.english, existing.bengali, type_str, existing.get_status_display()
             )
         )
 
     bengali = translate_en_to_bn(english)
+    vocab_type = None
+    if type_id and type_id.isdigit():
+        vocab_type = VocabularyType.objects.filter(id=int(type_id)).first()
 
     try:
         word = WordCollection.objects.create(
             english=english,
             bengali=bengali,
+            vocabulary_type=vocab_type,
             status=WordCollection.Status.NEW,
         )
+        type_badge = f' <span class="badge badge-info" style="font-size: 0.8rem; background: rgba(99,102,241,0.2); color: #818cf8; padding: 2px 8px; border-radius: 4px;">{vocab_type.name}</span>' if vocab_type else ''
         return HttpResponse(
             format_html(
                 '<div class="alert alert-success mt-2 mb-0 py-2">'
-                'Added <strong>"{}"</strong> → <strong>"{}"</strong> ✅</div>',
-                word.english, word.bengali or '(translation unavailable)'
+                'Added <strong>"{}"</strong> → <strong>"{}"</strong>{} ✅</div>',
+                word.english, word.bengali or '(translation unavailable)',
+                format_html(type_badge)
             )
         )
     except Exception as e:

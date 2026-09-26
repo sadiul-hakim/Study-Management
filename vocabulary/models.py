@@ -2,6 +2,22 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 
+class VocabularyType(models.Model):
+    name = models.CharField(_('Type Name'), max_length=100, unique=True)
+    description = models.TextField(_('Description'), blank=True, null=True)
+    created_at = models.DateTimeField(_('Created At'), auto_now_add=True)
+    updated_at = models.DateTimeField(_('Updated At'), auto_now=True)
+
+    class Meta:
+        db_table = 'vocabulary_type'
+        verbose_name = _('Vocabulary Type')
+        verbose_name_plural = _('Vocabulary Types')
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
+
+
 class WordCollection(models.Model):
     class Status(models.TextChoices):
         NEW = 'new', _('New')
@@ -12,6 +28,14 @@ class WordCollection(models.Model):
     english = models.CharField(_('English Word'), max_length=255, unique=True)
     bengali = models.CharField(
         _('Bengali Meaning'), max_length=255, blank=True)
+    vocabulary_type = models.ForeignKey(
+        VocabularyType,
+        verbose_name=_('Vocabulary Type'),
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='words'
+    )
     status = models.CharField(
         _('Status'),
         max_length=20,

@@ -492,6 +492,19 @@
     .badge-familiar { background: rgba(251, 191, 36, 0.15); color: var(--status-familiar); border: 1px solid rgba(251, 191, 36, 0.3); }
     .badge-unfamiliar { background: rgba(251, 113, 133, 0.15); color: var(--status-unfamiliar); border: 1px solid rgba(251, 113, 133, 0.3); }
     .badge-confident { background: rgba(52, 211, 153, 0.15); color: var(--status-confident); border: 1px solid rgba(52, 211, 153, 0.3); }
+    
+    .badge-vocab-type {
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 0.15rem 0.55rem;
+      border-radius: 6px;
+      background: rgba(99, 102, 241, 0.16);
+      color: #a5b4fc;
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
 
     .status-buttons-row {
       display: grid;
@@ -892,6 +905,15 @@
         </div>
 
         <div class="filter-controls">
+          <label style="font-size: 0.825rem; color: var(--text-secondary); font-weight: 600;">Type:</label>
+          <select id="reader-type-filter" class="custom-select" onchange="loadRandomWords()">
+            <option value="all">All Types (Mixed)</option>
+            <option value="none">Unassigned / No Type</option>
+            {% for vt in vocab_types %}
+            <option value="{{ vt.id }}">{{ vt.name }}</option>
+            {% endfor %}
+          </select>
+
           <label style="font-size: 0.825rem; color: var(--text-secondary); font-weight: 600;">Status:</label>
           <select id="reader-status-filter" class="custom-select" onchange="loadRandomWords()">
             <option value="all">All Words (Mixed)</option>
@@ -930,15 +952,26 @@
           <div class="exam-icon-hero">
             <i class="fa-solid fa-trophy"></i>
           </div>
-          <h2 style="font-size: 1.85rem; font-weight: 800; margin-bottom: 0.75rem;">10-Word Vocabulary Challenge</h2>
+          <h2 style="font-size: 1.85rem; font-weight: 800; margin-bottom: 0.75rem;">Vocabulary Challenge Exam</h2>
           <p style="color: var(--text-secondary); max-width: 500px; margin: 0 auto 2rem; font-size: 0.95rem;">
-            Test your active vocabulary knowledge with 10 questions picked randomly from your database. Review full results at the end.
+            Test your active vocabulary knowledge with questions picked randomly from your database. Review full results at the end.
           </p>
 
           <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 2.25rem;">
             <div style="text-align: left;">
+              <label style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 0.4rem;">Word Type / Category:</label>
+              <select id="exam-type-select" class="custom-select" style="min-width: 180px;">
+                <option value="all">All Types (Mixed)</option>
+                <option value="none">Unassigned / No Type</option>
+                {% for vt in vocab_types %}
+                <option value="{{ vt.id }}">{{ vt.name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <div style="text-align: left;">
               <label style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 0.4rem;">Exam Mode:</label>
-              <select id="exam-mode-select" class="custom-select" style="min-width: 220px;">
+              <select id="exam-mode-select" class="custom-select" style="min-width: 200px;">
                 <option value="en_to_bn">English → Bengali (Default)</option>
                 <option value="bn_to_en">Bengali → English</option>
                 <option value="mixed">Mixed Direction Quiz</option>
@@ -947,7 +980,7 @@
 
             <div style="text-align: left;">
               <label style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 0.4rem;">Questions:</label>
-              <select id="exam-count-select" class="custom-select" style="min-width: 140px;">
+              <select id="exam-count-select" class="custom-select" style="min-width: 130px;">
                 <option value="10" selected>10 Questions</option>
                 <option value="15">15 Questions</option>
                 <option value="20">20 Questions</option>
@@ -1039,12 +1072,18 @@
             <span>Add New Vocabulary Word</span>
           </h2>
           <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1.5rem;">
-            Enter an English word. It will automatically be translated to Bengali using Google Translate and added directly to your collection.
+            Enter an English word or phrase. It will automatically be translated to Bengali using Google Translate and saved directly to your collection.
           </p>
 
           <form id="add-word-form" onsubmit="handleQuickAddWord(event)">
-            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
-              <input type="text" id="new-word-input" class="custom-input" placeholder="e.g. Serendipity, Ephemeral, Resilient..." required style="flex: 1; font-size: 1rem; padding: 0.75rem 1.25rem;" autocomplete="off" />
+            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 0.75rem;">
+              <input type="text" id="new-word-input" class="custom-input" placeholder="e.g. Look after, Ephemeral, Piece of cake..." required style="flex: 1; min-width: 220px; font-size: 1rem; padding: 0.75rem 1.25rem;" autocomplete="off" />
+              <select id="new-word-type" class="custom-select" style="min-width: 180px; padding: 0.75rem 1rem;">
+                <option value="">-- Type (Optional) --</option>
+                {% for vt in vocab_types %}
+                <option value="{{ vt.id }}">{{ vt.name }}</option>
+                {% endfor %}
+              </select>
               <button type="submit" class="action-btn-glow" style="padding: 0.75rem 1.75rem; font-size: 0.95rem;">
                 <i class="fa-solid fa-language"></i>
                 <span>Translate & Add</span>
@@ -1128,6 +1167,7 @@
     // --- TAB 1: RANDOM WORDS READER ---
     async function loadRandomWords() {
       const container = document.getElementById('word-cards-container');
+      const typeFilter = document.getElementById('reader-type-filter').value;
       const statusFilter = document.getElementById('reader-status-filter').value;
       const count = document.getElementById('reader-count-filter').value;
 
@@ -1139,7 +1179,7 @@
       `;
 
       try {
-        const resp = await fetch(`${baseUrl}/api/random-words/?count=${count}&status=${statusFilter}`);
+        const resp = await fetch(`${baseUrl}/api/random-words/?count=${count}&status=${statusFilter}&type=${typeFilter}`);
         const data = await resp.json();
 
         if (!data.words || data.words.length === 0) {
@@ -1173,10 +1213,17 @@
       card.className = 'word-card';
       card.id = `word-card-${word.id}`;
 
+      const typeBadgeHtml = word.type_name
+        ? `<div style="margin-top: 0.35rem;"><span class="badge-vocab-type"><i class="fa-solid fa-tag"></i> ${word.type_name}</span></div>`
+        : '';
+
       card.innerHTML = `
         <div>
           <div class="word-card-top">
-            <h3 class="english-word-title">${word.english}</h3>
+            <div>
+              <h3 class="english-word-title">${word.english}</h3>
+              ${typeBadgeHtml}
+            </div>
             <button class="tts-btn" onclick="speakWord('${word.english.replace(/'/g, "\\'")}')" title="Listen pronunciation">
               <i class="fa-solid fa-volume-high"></i>
             </button>
@@ -1254,13 +1301,14 @@
     async function startExam() {
       const mode = document.getElementById('exam-mode-select').value;
       const count = document.getElementById('exam-count-select').value;
+      const type = document.getElementById('exam-type-select').value;
 
       try {
-        const resp = await fetch(`${baseUrl}/api/exam/start/?mode=${mode}&count=${count}`);
+        const resp = await fetch(`${baseUrl}/api/exam/start/?mode=${mode}&count=${count}&type=${type}`);
         const data = await resp.json();
 
         if (data.status !== 'ok' || !data.questions || data.questions.length === 0) {
-          alert(data.message || 'Could not start exam. Please make sure words have translations.');
+          alert(data.message || 'Could not start exam. Please make sure words have translations in this category.');
           return;
         }
 
@@ -1453,6 +1501,10 @@
       try {
         const formData = new FormData();
         formData.append('english', word);
+        const typeSelect = document.getElementById('new-word-type');
+        if (typeSelect && typeSelect.value) {
+          formData.append('vocabulary_type', typeSelect.value);
+        }
 
         const resp = await fetch(`${baseUrl}/add-word/`, {
           method: 'POST',
