@@ -12,16 +12,33 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Cinzel:wght@600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('vocab_hub_theme');
+      if (savedTheme === 'light' || savedTheme === 'dark') {
+        document.documentElement.setAttribute('data-theme', savedTheme);
+      } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+        document.documentElement.setAttribute('data-theme', 'light');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    })();
+  </script>
+
   <style>
     :root {
       --bg-primary: #0b0f19;
       --bg-card: rgba(18, 24, 38, 0.85);
       --bg-card-hover: rgba(28, 38, 58, 0.95);
+      --bg-surface: rgba(11, 15, 25, 0.75);
+      --bg-input: #151d2f;
       --border-color: rgba(255, 255, 255, 0.08);
-      --border-color-hover: rgba(99, 102, 241, 0.4);
+      --border-color-hover: rgba(99, 102, 241, 0.45);
       --text-primary: #f8fafc;
       --text-secondary: #94a3b8;
       --text-muted: #64748b;
+      --text-heading: #ffffff;
+      --card-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.6);
       
       --accent-indigo: #6366f1;
       --accent-indigo-glow: rgba(99, 102, 241, 0.35);
@@ -37,6 +54,54 @@
       --status-familiar: #fbbf24;
       --status-unfamiliar: #fb7185;
       --status-confident: #34d399;
+
+      --bengali-color: #38bdf8;
+      --bengali-bg: rgba(56, 189, 248, 0.08);
+      --quote-bg: rgba(255, 255, 255, 0.04);
+      --quote-text: #cbd5e1;
+      --pill-bg: rgba(255, 255, 255, 0.03);
+      --pill-hover-bg: rgba(255, 255, 255, 0.08);
+      --option-bg: rgba(255, 255, 255, 0.03);
+      --option-letter-bg: rgba(255, 255, 255, 0.06);
+    }
+
+    [data-theme="light"] {
+      --bg-primary: #f1f5f9;
+      --bg-card: #ffffff;
+      --bg-card-hover: #f8fafc;
+      --bg-surface: rgba(255, 255, 255, 0.85);
+      --bg-input: #ffffff;
+      --border-color: rgba(15, 23, 42, 0.1);
+      --border-color-hover: rgba(99, 102, 241, 0.5);
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #94a3b8;
+      --text-heading: #0f172a;
+      --card-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 4px 10px -2px rgba(15, 23, 42, 0.04);
+
+      --accent-indigo: #4f46e5;
+      --accent-indigo-glow: rgba(79, 70, 229, 0.22);
+      --accent-emerald: #059669;
+      --accent-emerald-glow: rgba(5, 150, 105, 0.22);
+      --accent-amber: #d97706;
+      --accent-amber-glow: rgba(217, 119, 6, 0.22);
+      --accent-rose: #e11d48;
+      --accent-rose-glow: rgba(225, 29, 72, 0.22);
+      --accent-cyan: #0891b2;
+
+      --status-new: #0284c7;
+      --status-familiar: #d97706;
+      --status-unfamiliar: #e11d48;
+      --status-confident: #059669;
+
+      --bengali-color: #0369a1;
+      --bengali-bg: rgba(2, 132, 199, 0.08);
+      --quote-bg: rgba(79, 70, 229, 0.05);
+      --quote-text: #334155;
+      --pill-bg: #f8fafc;
+      --pill-hover-bg: #e2e8f0;
+      --option-bg: #f8fafc;
+      --option-letter-bg: #e2e8f0;
     }
 
     * {
@@ -54,6 +119,7 @@
       flex-direction: column;
       overflow-x: hidden;
       position: relative;
+      transition: background-color 0.25s ease, color 0.25s ease;
     }
 
     body::before {
@@ -63,11 +129,15 @@
       left: 15%;
       width: 600px;
       height: 600px;
-      background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, rgba(139, 92, 246, 0.04) 50%, transparent 70%);
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.14) 0%, rgba(139, 92, 246, 0.03) 50%, transparent 70%);
       border-radius: 50%;
       filter: blur(60px);
       z-index: 0;
       pointer-events: none;
+    }
+
+    [data-theme="light"] body::before {
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, rgba(139, 92, 246, 0.02) 50%, transparent 70%);
     }
 
     body::after {
@@ -84,6 +154,10 @@
       pointer-events: none;
     }
 
+    [data-theme="light"] body::after {
+      background: radial-gradient(circle, rgba(16, 185, 129, 0.06) 0%, rgba(6, 182, 212, 0.02) 50%, transparent 70%);
+    }
+
     .noise-layer {
       position: fixed;
       inset: 0;
@@ -93,10 +167,14 @@
       z-index: 0;
     }
 
+    [data-theme="light"] .noise-layer {
+      background-image: radial-gradient(rgba(15, 23, 42, 0.02) 1px, transparent 0);
+    }
+
     header {
       position: relative;
       z-index: 20;
-      padding: 1.25rem 2rem;
+      padding: 1rem 2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -104,8 +182,9 @@
       margin: 0 auto;
       width: 100%;
       border-bottom: 1px solid var(--border-color);
-      background: rgba(11, 15, 25, 0.6);
+      background: var(--bg-surface);
       backdrop-filter: blur(12px);
+      transition: background 0.25s ease, border-color 0.25s ease;
     }
 
     .brand {
@@ -113,7 +192,7 @@
       align-items: center;
       gap: 0.75rem;
       text-decoration: none;
-      color: var(--text-primary);
+      color: var(--text-heading);
       font-weight: 700;
       font-size: 1.2rem;
     }
@@ -133,7 +212,8 @@
     .nav-links {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
+      gap: 0.65rem;
+      flex-wrap: wrap;
     }
 
     .nav-btn {
@@ -151,13 +231,13 @@
     .nav-btn-ghost {
       color: var(--text-secondary);
       border: 1px solid var(--border-color);
-      background: rgba(255, 255, 255, 0.02);
+      background: var(--pill-bg);
     }
 
     .nav-btn-ghost:hover {
-      color: var(--text-primary);
-      border-color: rgba(255, 255, 255, 0.2);
-      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-heading);
+      border-color: var(--border-color-hover);
+      background: var(--pill-hover-bg);
     }
 
     .nav-btn-primary {
@@ -169,6 +249,47 @@
     .nav-btn-primary:hover {
       transform: translateY(-1px);
       box-shadow: 0 6px 18px var(--accent-indigo-glow);
+    }
+
+    .theme-toggle-btn {
+      padding: 0.55rem 1rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border-radius: 9999px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      border: 1px solid var(--border-color);
+      background: var(--pill-bg);
+      color: var(--text-secondary);
+      transition: all 0.25s ease;
+      outline: none;
+    }
+
+    .theme-toggle-btn:hover {
+      color: var(--text-heading);
+      border-color: var(--border-color-hover);
+      background: var(--pill-hover-bg);
+      transform: translateY(-1px);
+    }
+
+    .theme-icon-light {
+      display: none;
+      color: #d97706;
+    }
+
+    .theme-icon-dark {
+      display: inline-block;
+      color: #818cf8;
+    }
+
+    [data-theme="light"] .theme-icon-dark {
+      display: none;
+    }
+
+    [data-theme="light"] .theme-icon-light {
+      display: inline-block;
     }
 
     main {
@@ -197,6 +318,7 @@
       display: flex;
       align-items: center;
       gap: 1rem;
+      box-shadow: var(--card-shadow);
       transition: all 0.25s ease;
     }
 
@@ -213,18 +335,19 @@
       align-items: center;
       justify-content: center;
       font-size: 1.15rem;
+      flex-shrink: 0;
     }
 
     .stat-total .stat-icon-box { background: rgba(99, 102, 241, 0.15); color: #818cf8; }
-    .stat-new .stat-icon-box { background: rgba(56, 189, 248, 0.15); color: #38bdf8; }
-    .stat-familiar .stat-icon-box { background: rgba(251, 191, 36, 0.15); color: #fbbf24; }
-    .stat-unfamiliar .stat-icon-box { background: rgba(251, 113, 133, 0.15); color: #fb7185; }
-    .stat-confident .stat-icon-box { background: rgba(52, 211, 153, 0.15); color: #34d399; }
+    .stat-new .stat-icon-box { background: rgba(56, 189, 248, 0.15); color: var(--status-new); }
+    .stat-familiar .stat-icon-box { background: rgba(251, 191, 36, 0.15); color: var(--status-familiar); }
+    .stat-unfamiliar .stat-icon-box { background: rgba(251, 113, 133, 0.15); color: var(--status-unfamiliar); }
+    .stat-confident .stat-icon-box { background: rgba(52, 211, 153, 0.15); color: var(--status-confident); }
 
     .stat-info .stat-num {
       font-size: 1.45rem;
       font-weight: 800;
-      color: #ffffff;
+      color: var(--text-heading);
       line-height: 1.1;
     }
 
@@ -242,13 +365,15 @@
       justify-content: center;
       gap: 0.5rem;
       margin-bottom: 2rem;
-      background: rgba(18, 24, 38, 0.6);
+      background: var(--bg-surface);
       padding: 0.4rem;
       border-radius: 14px;
       border: 1px solid var(--border-color);
       max-width: fit-content;
       margin-left: auto;
       margin-right: auto;
+      box-shadow: var(--card-shadow);
+      transition: background 0.25s ease;
     }
 
     .tab-btn {
@@ -267,8 +392,8 @@
     }
 
     .tab-btn:hover {
-      color: var(--text-primary);
-      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-heading);
+      background: var(--pill-hover-bg);
     }
 
     .tab-btn.active {
@@ -302,12 +427,14 @@
       align-items: center;
       flex-wrap: wrap;
       gap: 1.25rem;
+      box-shadow: var(--card-shadow);
+      transition: background 0.25s ease, border-color 0.25s ease;
     }
 
     .pane-title {
       font-size: 1.35rem;
       font-weight: 700;
-      color: #ffffff;
+      color: var(--text-heading);
       display: flex;
       align-items: center;
       gap: 0.65rem;
@@ -327,7 +454,7 @@
     }
 
     .custom-select, .custom-input {
-      background: #151d2f;
+      background: var(--bg-input);
       border: 1px solid var(--border-color);
       color: var(--text-primary);
       padding: 0.6rem 1rem;
@@ -335,7 +462,7 @@
       font-size: 0.875rem;
       font-weight: 500;
       outline: none;
-      transition: border-color 0.2s;
+      transition: border-color 0.2s, background-color 0.25s ease, color 0.25s ease;
     }
 
     .custom-select:focus, .custom-input:focus {
@@ -401,12 +528,13 @@
       justify-content: space-between;
       position: relative;
       overflow: hidden;
+      box-shadow: var(--card-shadow);
     }
 
     .word-card:hover {
       border-color: var(--border-color-hover);
       transform: translateY(-3px);
-      box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 16px 28px -10px rgba(0, 0, 0, 0.4);
     }
 
     .word-card-top {
@@ -419,7 +547,7 @@
     .english-word-title {
       font-size: 1.35rem;
       font-weight: 800;
-      color: #ffffff;
+      color: var(--text-heading);
       letter-spacing: -0.01em;
       word-break: break-word;
     }
@@ -427,7 +555,7 @@
     .tts-btn {
       background: rgba(99, 102, 241, 0.12);
       border: 1px solid rgba(99, 102, 241, 0.25);
-      color: #a5b4fc;
+      color: var(--accent-indigo);
       width: 32px;
       height: 32px;
       border-radius: 8px;
@@ -447,7 +575,7 @@
     }
 
     .bengali-meaning-box {
-      margin-bottom: 1.25rem;
+      margin-bottom: 0.85rem;
       min-height: 48px;
       display: flex;
       align-items: center;
@@ -456,21 +584,21 @@
     .bengali-text {
       font-size: 1.15rem;
       font-weight: 600;
-      color: #38bdf8;
-      background: rgba(56, 189, 248, 0.08);
-      border-left: 3px solid #38bdf8;
+      color: var(--bengali-color);
+      background: var(--bengali-bg);
+      border-left: 3px solid var(--bengali-color);
       padding: 0.4rem 0.75rem;
       border-radius: 0 8px 8px 0;
       width: 100%;
     }
 
     .word-example-box {
-      margin-top: 0.6rem;
+      margin-top: 0.35rem;
       margin-bottom: 0.85rem;
       font-size: 0.85rem;
-      color: #cbd5e1;
+      color: var(--quote-text);
       font-style: italic;
-      background: rgba(255, 255, 255, 0.04);
+      background: var(--quote-bg);
       border-left: 3px solid var(--accent-indigo);
       padding: 0.4rem 0.75rem;
       border-radius: 0 8px 8px 0;
@@ -482,7 +610,7 @@
       text-transform: uppercase;
       letter-spacing: 0.05em;
       font-weight: 700;
-      color: #a5b4fc;
+      color: var(--accent-indigo);
       display: block;
       margin-bottom: 0.15rem;
       font-style: normal;
@@ -522,9 +650,9 @@
       font-weight: 600;
       padding: 0.15rem 0.55rem;
       border-radius: 6px;
-      background: rgba(99, 102, 241, 0.16);
-      color: #a5b4fc;
-      border: 1px solid rgba(99, 102, 241, 0.3);
+      background: rgba(99, 102, 241, 0.14);
+      color: var(--accent-indigo);
+      border: 1px solid rgba(99, 102, 241, 0.28);
       display: inline-flex;
       align-items: center;
       gap: 0.3rem;
@@ -542,7 +670,7 @@
       padding: 0.4rem 0.2rem;
       border-radius: 8px;
       border: 1px solid var(--border-color);
-      background: rgba(255, 255, 255, 0.03);
+      background: var(--pill-bg);
       color: var(--text-secondary);
       cursor: pointer;
       text-align: center;
@@ -550,9 +678,9 @@
     }
 
     .btn-status-pill:hover {
-      background: rgba(255, 255, 255, 0.08);
-      color: #ffffff;
-      border-color: rgba(255, 255, 255, 0.2);
+      background: var(--pill-hover-bg);
+      color: var(--text-heading);
+      border-color: var(--border-color-hover);
     }
 
     .btn-status-pill.active-status {
@@ -576,7 +704,8 @@
       padding: 2.5rem 2rem;
       text-align: center;
       backdrop-filter: blur(16px);
-      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+      box-shadow: var(--card-shadow);
+      transition: background 0.25s ease, border-color 0.25s ease;
     }
 
     .exam-icon-hero {
@@ -599,12 +728,13 @@
       border-radius: 20px;
       padding: 2rem;
       backdrop-filter: blur(16px);
-      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+      box-shadow: var(--card-shadow);
+      transition: background 0.25s ease, border-color 0.25s ease;
     }
 
     .exam-progress-bar-wrap {
       height: 8px;
-      background: rgba(255, 255, 255, 0.06);
+      background: var(--option-letter-bg);
       border-radius: 9999px;
       overflow: hidden;
       margin-bottom: 1.75rem;
@@ -628,7 +758,7 @@
     }
 
     .exam-prompt-card {
-      background: rgba(255, 255, 255, 0.02);
+      background: var(--quote-bg);
       border: 1px solid var(--border-color);
       border-radius: 16px;
       padding: 2rem 1.5rem;
@@ -648,7 +778,7 @@
     .exam-prompt-word {
       font-size: 2.2rem;
       font-weight: 800;
-      color: #ffffff;
+      color: var(--text-heading);
       margin-bottom: 0.5rem;
       display: inline-flex;
       align-items: center;
@@ -663,11 +793,11 @@
     }
 
     .exam-option-btn {
-      background: rgba(255, 255, 255, 0.03);
+      background: var(--option-bg);
       border: 1px solid var(--border-color);
       border-radius: 14px;
       padding: 1.25rem 1.25rem;
-      color: #f1f5f9;
+      color: var(--text-primary);
       font-size: 1.05rem;
       font-weight: 600;
       text-align: left;
@@ -679,13 +809,13 @@
     }
 
     .exam-option-btn:hover {
-      background: rgba(255, 255, 255, 0.08);
-      border-color: rgba(99, 102, 241, 0.4);
+      background: var(--pill-hover-bg);
+      border-color: var(--border-color-hover);
       transform: translateY(-2px);
     }
 
     .exam-option-btn.selected {
-      background: rgba(99, 102, 241, 0.2);
+      background: rgba(99, 102, 241, 0.18);
       border-color: var(--accent-indigo);
       box-shadow: 0 0 16px var(--accent-indigo-glow);
     }
@@ -694,13 +824,14 @@
       width: 30px;
       height: 30px;
       border-radius: 8px;
-      background: rgba(255, 255, 255, 0.06);
+      background: var(--option-letter-bg);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 0.85rem;
       font-weight: 700;
       flex-shrink: 0;
+      color: var(--text-primary);
     }
 
     .exam-option-btn.selected .option-letter {
@@ -723,6 +854,8 @@
       padding: 2.5rem 2rem;
       backdrop-filter: blur(16px);
       text-align: center;
+      box-shadow: var(--card-shadow);
+      transition: background 0.25s ease, border-color 0.25s ease;
     }
 
     .score-circle {
@@ -736,12 +869,13 @@
       justify-content: center;
       border: 4px solid var(--accent-emerald);
       box-shadow: 0 0 25px var(--accent-emerald-glow);
+      background: var(--bg-card);
     }
 
     .score-circle .score-digits {
       font-size: 2rem;
       font-weight: 800;
-      color: #ffffff;
+      color: var(--text-heading);
       line-height: 1;
     }
 
@@ -760,7 +894,7 @@
     }
 
     .review-item {
-      background: rgba(255, 255, 255, 0.02);
+      background: var(--quote-bg);
       border: 1px solid var(--border-color);
       border-radius: 12px;
       padding: 1rem 1.25rem;
@@ -791,12 +925,12 @@
     }
 
     .toast-msg {
-      background: #1e293b;
-      color: #ffffff;
+      background: var(--bg-card);
+      color: var(--text-primary);
       padding: 0.8rem 1.25rem;
       border-radius: 10px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--card-shadow);
       font-size: 0.875rem;
       font-weight: 600;
       display: flex;
@@ -813,22 +947,85 @@
 
     @media (max-width: 768px) {
       header {
-        padding: 1rem;
-        flex-direction: column;
-        gap: 1rem;
+        padding: 0.85rem 1rem;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0.75rem;
       }
-      .exam-options-grid {
-        grid-template-columns: 1fr;
+      .brand {
+        font-size: 1.1rem;
+      }
+      .nav-links {
+        gap: 0.45rem;
+        flex-wrap: wrap;
+      }
+      .nav-btn, .theme-toggle-btn {
+        padding: 0.45rem 0.8rem;
+        font-size: 0.8rem;
+      }
+      main {
+        padding: 1.25rem 1rem 3rem;
+      }
+      .stats-bar {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+      }
+      .stat-total {
+        grid-column: 1 / -1;
+      }
+      .stat-card {
+        padding: 0.85rem 1rem;
+      }
+      .stat-info .stat-num {
+        font-size: 1.25rem;
+      }
+      .tab-nav {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: auto;
+        justify-content: flex-start;
+        padding: 0.35rem;
+      }
+      .tab-btn {
+        padding: 0.55rem 1rem;
+        font-size: 0.85rem;
+        white-space: nowrap;
+        flex: 1;
+        justify-content: center;
       }
       .pane-header {
+        padding: 1.25rem;
         flex-direction: column;
         align-items: flex-start;
       }
       .filter-controls {
         width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
       }
-      .filter-controls select, .filter-controls button {
-        flex: 1;
+      .filter-controls label {
+        display: none;
+      }
+      .filter-controls select {
+        width: 100%;
+      }
+      .filter-controls button {
+        grid-column: 1 / -1;
+        justify-content: center;
+      }
+      .word-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      .exam-options-grid {
+        grid-template-columns: 1fr;
+      }
+      .exam-prompt-word {
+        font-size: 1.7rem;
+      }
+      .exam-start-card, .exam-active-card, .results-card {
+        padding: 1.5rem 1.25rem;
       }
     }
   </style>
@@ -846,6 +1043,11 @@
     </a>
 
     <nav class="nav-links">
+      <button id="theme-toggle-btn" class="theme-toggle-btn" onclick="toggleTheme()" aria-label="Toggle Theme" title="Toggle Light / Dark Mode">
+        <i class="fa-solid fa-moon theme-icon-dark"></i>
+        <i class="fa-solid fa-sun theme-icon-light"></i>
+        <span class="theme-text">Dark</span>
+      </button>
       <a href="/" class="nav-btn nav-btn-ghost">
         <i class="fa-solid fa-house"></i>
         <span>Home</span>
@@ -1565,8 +1767,29 @@
       }
     }
 
-    // Initialize Random Words on Page Load
+    // --- THEME SWITCHER (LIGHT / DARK) ---
+    function toggleTheme() {
+      const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      try {
+        localStorage.setItem('vocab_hub_theme', newTheme);
+      } catch (e) {}
+      updateThemeUI(newTheme);
+      showToast(`Switched to ${newTheme.charAt(0).toUpperCase() + newTheme.slice(1)} Mode`, newTheme === 'dark' ? 'fa-moon' : 'fa-sun');
+    }
+
+    function updateThemeUI(theme) {
+      const textSpan = document.querySelector('.theme-text');
+      if (textSpan) {
+        textSpan.textContent = theme === 'dark' ? 'Dark' : 'Light';
+      }
+    }
+
+    // Initialize Page on Load
     document.addEventListener('DOMContentLoaded', () => {
+      const activeTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+      updateThemeUI(activeTheme);
       loadRandomWords();
     });
   </script>
