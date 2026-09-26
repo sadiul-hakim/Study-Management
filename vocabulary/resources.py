@@ -61,7 +61,7 @@ class WordCollectionResource(resources.ModelResource):
 
     class Meta:
         model = WordCollection
-        fields = ('id', 'english', 'bengali', 'vocabulary_type', 'status', 'created_at', 'updated_at')
+        fields = ('id', 'english', 'bengali', 'vocabulary_type', 'example', 'status', 'created_at', 'updated_at')
         export_order = fields
         import_id_fields = ('english',)
         skip_unchanged = True

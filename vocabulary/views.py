@@ -76,6 +76,7 @@ def api_random_words(request):
             'id': w.id,
             'english': w.english,
             'bengali': w.bengali,
+            'example': w.example or '',
             'type_id': w.vocabulary_type_id,
             'type_name': w.vocabulary_type.name if w.vocabulary_type else None,
             'status': w.status,
@@ -311,6 +312,7 @@ def add_word_htmx(request):
 
     english = request.POST.get('english', '').strip()
     type_id = request.POST.get('vocabulary_type', request.POST.get('type_id', '')).strip()
+    example = request.POST.get('example', '').strip()
 
     if not english:
         return HttpResponse(
@@ -340,6 +342,7 @@ def add_word_htmx(request):
             english=english,
             bengali=bengali,
             vocabulary_type=vocab_type,
+            example=example or None,
             status=WordCollection.Status.NEW,
         )
         type_badge = f' <span class="badge badge-info" style="font-size: 0.8rem; background: rgba(99,102,241,0.2); color: #818cf8; padding: 2px 8px; border-radius: 4px;">{vocab_type.name}</span>' if vocab_type else ''

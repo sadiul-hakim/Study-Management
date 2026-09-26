@@ -464,6 +464,30 @@
       width: 100%;
     }
 
+    .word-example-box {
+      margin-top: 0.6rem;
+      margin-bottom: 0.85rem;
+      font-size: 0.85rem;
+      color: #cbd5e1;
+      font-style: italic;
+      background: rgba(255, 255, 255, 0.04);
+      border-left: 3px solid var(--accent-indigo);
+      padding: 0.4rem 0.75rem;
+      border-radius: 0 8px 8px 0;
+      line-height: 1.4;
+    }
+
+    .word-example-label {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 700;
+      color: #a5b4fc;
+      display: block;
+      margin-bottom: 0.15rem;
+      font-style: normal;
+    }
+
     .status-actions-group {
       border-top: 1px solid var(--border-color);
       padding-top: 0.9rem;
@@ -1077,13 +1101,16 @@
 
           <form id="add-word-form" onsubmit="handleQuickAddWord(event)">
             <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 0.75rem;">
-              <input type="text" id="new-word-input" class="custom-input" placeholder="e.g. Look after, Ephemeral, Piece of cake..." required style="flex: 1; min-width: 220px; font-size: 1rem; padding: 0.75rem 1.25rem;" autocomplete="off" />
+              <input type="text" id="new-word-input" class="custom-input" placeholder="English word or phrase..." required style="flex: 1; min-width: 220px; font-size: 1rem; padding: 0.75rem 1.25rem;" autocomplete="off" />
               <select id="new-word-type" class="custom-select" style="min-width: 180px; padding: 0.75rem 1rem;">
                 <option value="">-- Type (Optional) --</option>
                 {% for vt in vocab_types %}
                 <option value="{{ vt.id }}">{{ vt.name }}</option>
                 {% endfor %}
               </select>
+            </div>
+            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 0.75rem;">
+              <input type="text" id="new-word-example" class="custom-input" placeholder="Example sentence (e.g. He decided to give up smoking)... (Optional)" style="flex: 1; min-width: 220px; font-size: 0.95rem; padding: 0.75rem 1.25rem;" autocomplete="off" />
               <button type="submit" class="action-btn-glow" style="padding: 0.75rem 1.75rem; font-size: 0.95rem;">
                 <i class="fa-solid fa-language"></i>
                 <span>Translate & Add</span>
@@ -1217,6 +1244,10 @@
         ? `<div style="margin-top: 0.35rem;"><span class="badge-vocab-type"><i class="fa-solid fa-tag"></i> ${word.type_name}</span></div>`
         : '';
 
+      const exampleHtml = word.example
+        ? `<div class="word-example-box"><span class="word-example-label"><i class="fa-solid fa-quote-left mr-1"></i> Example</span>"${word.example}"</div>`
+        : '';
+
       card.innerHTML = `
         <div>
           <div class="word-card-top">
@@ -1231,6 +1262,7 @@
           <div class="bengali-meaning-box">
             <div class="bengali-text">${word.bengali || '(No translation)'}</div>
           </div>
+          ${exampleHtml}
         </div>
 
         <div class="status-actions-group">
@@ -1505,6 +1537,10 @@
         if (typeSelect && typeSelect.value) {
           formData.append('vocabulary_type', typeSelect.value);
         }
+        const exampleInput = document.getElementById('new-word-example');
+        if (exampleInput && exampleInput.value.trim()) {
+          formData.append('example', exampleInput.value.trim());
+        }
 
         const resp = await fetch(`${baseUrl}/add-word/`, {
           method: 'POST',
@@ -1517,6 +1553,7 @@
         const html = await resp.text();
         feedback.innerHTML = html;
         input.value = '';
+        if (exampleInput) exampleInput.value = '';
 
         const countStat = document.getElementById('stat-total');
         if (countStat) {

@@ -20,9 +20,10 @@ class VocabularyTypeAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 @admin.register(WordCollection)
 class WordCollectionAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     resource_classes = [WordCollectionResource]
-    list_display = ('english', 'bengali', 'vocabulary_type', 'status', 'created_at')
+    list_display = ('english', 'bengali',
+                    'vocabulary_type',  'status', 'example',)
     list_filter = ('vocabulary_type', 'status', 'created_at')
-    search_fields = ('english', 'bengali')
+    search_fields = ('english', 'bengali', 'example')
     list_editable = ('vocabulary_type', 'status')
     list_select_related = ('vocabulary_type',)
     list_per_page = 50

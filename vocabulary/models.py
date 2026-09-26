@@ -36,6 +36,8 @@ class WordCollection(models.Model):
         blank=True,
         related_name='words'
     )
+    example = models.TextField(
+        _('Example Sentence'), blank=True, null=True)
     status = models.CharField(
         _('Status'),
         max_length=20,
