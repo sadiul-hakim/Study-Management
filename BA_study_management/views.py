@@ -7,8 +7,13 @@ from django.shortcuts import render
 from general.tasks import send_daily_reminders_task, send_daily_words_task
 
 
+from general.models import Notes
+
+
 def home(request):
-    return render(request, "home.html")
+    sticky_notes = Notes.objects.filter(show_on_home_page=True).order_by("order")
+    return render(request, "home.html", {"sticky_notes": sticky_notes})
+
 
 
 @csrf_exempt

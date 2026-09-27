@@ -493,13 +493,187 @@
         }
       }
       
-      @media (max-width: 480px) {
-        h1 {
-          font-size: 1.85rem;
+      /* Floating Sticky Notes */
+      .sticky-notes-container {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        max-width: 380px;
+        width: calc(100vw - 36px);
+        pointer-events: none;
+      }
+
+      .sticky-note-card {
+        pointer-events: auto;
+        position: relative;
+        background: linear-gradient(145deg, #fffef0 0%, #fef3c7 55%, #fde68a 100%);
+        border: 1px solid rgba(217, 119, 6, 0.3);
+        border-radius: 14px;
+        box-shadow: 0 12px 28px -4px rgba(0, 0, 0, 0.45), 0 6px 12px -2px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.4) inset;
+        color: #451a03;
+        overflow: hidden;
+        transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.3s ease;
+        animation: stickySlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+      }
+
+      .sticky-note-card:hover {
+        box-shadow: 0 18px 36px -6px rgba(0, 0, 0, 0.55), 0 8px 16px -2px rgba(0, 0, 0, 0.3);
+      }
+
+      @keyframes stickySlideIn {
+        from {
+          opacity: 0;
+          transform: translateY(24px) scale(0.95);
         }
-        .brand span {
-          font-size: 1.1rem;
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
         }
+      }
+
+      .sticky-note-card.dismissing {
+        animation: stickySlideOut 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      }
+
+      @keyframes stickySlideOut {
+        to {
+          opacity: 0;
+          transform: translateX(40px) scale(0.9);
+          max-height: 0;
+          margin-bottom: -12px;
+        }
+      }
+
+      .sticky-note-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 9px 14px;
+        background: rgba(245, 158, 11, 0.18);
+        border-bottom: 1px solid rgba(217, 119, 6, 0.2);
+        cursor: pointer;
+        user-select: none;
+      }
+
+      .sticky-note-title-wrap {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #78350f;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+      }
+
+      .sticky-note-pin {
+        color: #d97706;
+        font-size: 0.95rem;
+        transform: rotate(30deg);
+        filter: drop-shadow(0 1px 2px rgba(0,0,0,0.15));
+      }
+
+      .sticky-note-actions {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .sticky-btn {
+        background: transparent;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        width: 26px;
+        height: 26px;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #92400e;
+        font-size: 0.825rem;
+        transition: all 0.2s ease;
+      }
+
+      .sticky-btn:hover {
+        background: rgba(180, 83, 9, 0.15);
+        color: #451a03;
+      }
+
+      .sticky-btn.sticky-close-btn:hover {
+        background: rgba(239, 68, 68, 0.2);
+        color: #b91c1c;
+      }
+
+      .sticky-collapse-btn i {
+        transition: transform 0.25s ease;
+      }
+
+      .sticky-note-card.is-collapsed .sticky-collapse-btn i {
+        transform: rotate(180deg);
+      }
+
+      .sticky-note-body {
+        padding: 14px 16px;
+        max-height: 280px;
+        overflow-y: auto;
+        font-size: 0.925rem;
+        line-height: 1.6;
+        color: #3b1c04;
+        transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s ease, opacity 0.25s ease;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(180, 83, 9, 0.35) transparent;
+      }
+
+      .sticky-note-body::-webkit-scrollbar {
+        width: 5px;
+      }
+
+      .sticky-note-body::-webkit-scrollbar-thumb {
+        background: rgba(180, 83, 9, 0.3);
+        border-radius: 4px;
+      }
+
+      .sticky-note-card.is-collapsed .sticky-note-body {
+        max-height: 0 !important;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+        opacity: 0;
+        overflow: hidden;
+      }
+
+      .sticky-note-body p {
+        margin-bottom: 0.6rem;
+      }
+      .sticky-note-body p:last-child {
+        margin-bottom: 0;
+      }
+      .sticky-note-body h1,
+      .sticky-note-body h2,
+      .sticky-note-body h3,
+      .sticky-note-body h4 {
+        color: #78350f;
+        font-weight: 700;
+        margin-top: 0;
+        margin-bottom: 0.5rem;
+        font-size: 1.05rem;
+      }
+      .sticky-note-body ul,
+      .sticky-note-body ol {
+        padding-left: 1.25rem;
+        margin-bottom: 0.6rem;
+      }
+      .sticky-note-body li {
+        margin-bottom: 0.25rem;
+      }
+      .sticky-note-body a {
+        color: #b45309;
+        font-weight: 600;
+        text-decoration: underline;
       }
     </style>
   </head>
@@ -601,5 +775,54 @@
     <footer>
       <p>B.A. Study Management System &bull; Crafting consistency in learning</p>
     </footer>
+
+    {% if sticky_notes %}
+      <div class="sticky-notes-container" id="stickyNotesContainer">
+        {% for note in sticky_notes %}
+          <div class="sticky-note-card is-collapsed" id="sticky-note-{{ note.id }}" data-note-id="{{ note.id }}">
+            <div class="sticky-note-header" onclick="toggleStickyNote('sticky-note-{{ note.id }}')">
+              <div class="sticky-note-title-wrap">
+                <i class="fa-solid fa-thumbtack sticky-pin"></i>
+                <span>{{ note.title|default:"Sticky Note" }}</span>
+              </div>
+              <div class="sticky-note-actions" onclick="event.stopPropagation();">
+                <button type="button" class="sticky-btn sticky-collapse-btn" onclick="toggleStickyNote('sticky-note-{{ note.id }}')" title="Collapse / Expand note">
+                  <i class="fa-solid fa-chevron-up"></i>
+                </button>
+                <button type="button" class="sticky-btn sticky-close-btn" onclick="dismissStickyNote('sticky-note-{{ note.id }}')" title="Close / Hide note">
+                  <i class="fa-solid fa-xmark"></i>
+                </button>
+              </div>
+            </div>
+            <div class="sticky-note-body">
+              {{ note.note|safe }}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      <script>
+        function toggleStickyNote(noteId) {
+          const card = document.getElementById(noteId);
+          if (card) {
+            card.classList.toggle('is-collapsed');
+          }
+        }
+
+        function dismissStickyNote(noteId) {
+          const card = document.getElementById(noteId);
+          if (card) {
+            card.classList.add('dismissing');
+            setTimeout(() => {
+              card.remove();
+              const container = document.getElementById('stickyNotesContainer');
+              if (container && container.children.length === 0) {
+                container.remove();
+              }
+            }, 300);
+          }
+        }
+      </script>
+    {% endif %}
   </body>
 </html>

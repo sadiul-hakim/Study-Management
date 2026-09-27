@@ -13,10 +13,15 @@ class StudyNoteAdmin(admin.ModelAdmin):
 
 @admin.register(Notes)
 class NotesAdmin(admin.ModelAdmin):
-    search_fields = ("note",)
+    list_display = ("title", "order", "show_on_home_page")
+    list_editable = ("order", "show_on_home_page")
+    search_fields = ("title", "note")
+    list_filter = ("show_on_home_page",)
+    ordering = ("order",)
     change_list_template = "admin/general/note/change_list.html"
     list_per_page = 25
 
     def has_module_permission(self, request):
         self.model._meta.verbose_name_plural = "Notes"
         return super().has_module_permission(request)
+

@@ -74,10 +74,25 @@
     {% for note in cl.result_list %}
       <div class="col-12 col-md-6 col-lg-4 mb-4">
         <div class="card shadow-sm note-card">
+          {% if note.title %}
+            <div class="card-header bg-light py-2 px-3 font-weight-bold text-dark border-bottom" style="font-size: 0.95rem;">
+              {{ note.title }}
+            </div>
+          {% endif %}
           <div class="note-card-body">
             {{ note.note|safe }}
           </div>
           <div class="note-card-footer">
+            <div class="d-flex align-items-center mr-auto">
+              <span class="badge badge-light border mr-1 text-muted" title="Display Order">
+                <i class="fa-solid fa-arrow-down-1-9 mr-1"></i>#{{ note.order }}
+              </span>
+              {% if note.show_on_home_page %}
+                <span class="badge badge-success text-white" title="Visible on Home Page">
+                  <i class="fa-solid fa-house mr-1"></i>Home
+                </span>
+              {% endif %}
+            </div>
             <a href="{{ note.pk }}/change/" class="btn btn-primary btn-sm shadow-sm mr-2">
               <i class="fa-solid fa-pen-to-square mr-1"></i> Edit
             </a>

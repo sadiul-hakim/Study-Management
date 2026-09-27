@@ -21,11 +21,17 @@ class StudyNote(models.Model):
 
 
 class Notes(models.Model):
+    title = models.CharField(_("Title"), max_length=200, blank=True, default="")
     note = CKEditor5Field(_('Note'), config_name='default')
+    order = models.IntegerField(_("Order"), default=0)
+    show_on_home_page = models.BooleanField(_("Show on home page"), default=False)
 
     class Meta:
         verbose_name = _("Note")
         verbose_name_plural = _("Notes")
+        ordering = ["order"]
 
     def __str__(self):
-        return self.note[:50]
+        return self.title if self.title else self.note[:50]
+
+
