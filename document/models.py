@@ -83,7 +83,9 @@ class DocumentFile(models.Model):
         verbose_name_plural = _("Document Files")
 
     def __str__(self):
-        return self.file.name
+        if self.file and self.file.name:
+            return str(self.file.name)
+        return f"DocumentFile #{self.pk}" if self.pk else "DocumentFile"
 
 
 class Link(models.Model):
