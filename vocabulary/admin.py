@@ -8,7 +8,7 @@ from .resources import WordCollectionResource, VocabularyTypeResource
 @admin.register(VocabularyType)
 class VocabularyTypeAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     resource_classes = [VocabularyTypeResource]
-    list_display = ('name', 'description', 'word_count', 'created_at')
+    list_display = ('id', 'name', 'description', 'word_count', 'created_at')
     search_fields = ('name', 'description')
     list_per_page = 50
 

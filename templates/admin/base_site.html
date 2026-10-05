@@ -4,4 +4,10 @@
 {% block extrahead %}
   {{ block.super }}
   {% progressive_web_app_meta %}
+
+  <style>
+    .app-footer .float-end {
+      display: none !important;
+    }
+  </style>
 {% endblock %}
