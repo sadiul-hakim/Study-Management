@@ -97,7 +97,8 @@ class ReadingProgressAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 
         self.message_user(
             request,
-            _("Successfully duplicated %(count)d Reading Progress record(s).") % {"count": count},
+            _("Successfully duplicated %(count)d Reading Progress record(s).") % {
+                "count": count},
             messages.SUCCESS,
         )
 
@@ -121,7 +122,8 @@ class OtherStudyProgressAdmin(admin.ModelAdmin):
 
         self.message_user(
             request,
-            _("Successfully duplicated %(count)d Other Study Progress record(s).") % {"count": count},
+            _("Successfully duplicated %(count)d Other Study Progress record(s).") % {
+                "count": count},
             messages.SUCCESS,
         )
 
@@ -137,7 +139,8 @@ class ReadingPlanAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     resource_class = ReadingPlanResource
     list_display = ("course", "book", "chapter",
                     "start_around", "priority", "order", "note")
-    list_filter = ("course", "book", "priority")
+    list_filter = ("course", "book", "priority",
+                   ("start_around", admin.DateFieldListFilter),)
     search_fields = ("course__name", "book__title", "note")
     list_per_page = 25
     actions = ["move_to_revise", "move_to_writing_plan", "copy_entry"]
@@ -204,7 +207,8 @@ class ReadingPlanAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 
         self.message_user(
             request,
-            _("Successfully duplicated %(count)d Reading Plan(s).") % {"count": count},
+            _("Successfully duplicated %(count)d Reading Plan(s).") % {
+                "count": count},
             messages.SUCCESS,
         )
 
@@ -214,7 +218,8 @@ class ReviseAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     resource_class = ReviseResource
     list_display = ("book", "chapter", "possible_date",
                     "priority",  "order", "note")
-    list_filter = ("book", "priority",)
+    list_filter = ("book", "priority",
+                   ("possible_date", admin.DateFieldListFilter),)
     search_fields = ("book__title", "note")
     list_per_page = 25
     actions = ["move_to_writing_plan", "copy_entry"]
@@ -255,6 +260,7 @@ class ReviseAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 
         self.message_user(
             request,
-            _("Successfully duplicated %(count)d Revise record(s).") % {"count": count},
+            _("Successfully duplicated %(count)d Revise record(s).") % {
+                "count": count},
             messages.SUCCESS,
         )

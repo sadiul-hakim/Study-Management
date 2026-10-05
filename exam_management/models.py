@@ -10,6 +10,7 @@ class Exam(models.Model):
         Course, on_delete=models.CASCADE, verbose_name=_("Course"))
     name = models.CharField(_("Name"), max_length=200)
     exam_date = models.DateField(_("Exam date"))
+    completed = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = _("Exam")

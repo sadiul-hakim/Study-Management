@@ -14,6 +14,11 @@ class ImproveAdmin(admin.ModelAdmin):
 
 @admin.register(Exam)
 class ExamAdmin(admin.ModelAdmin):
-    list_display = ("name", "course", "exam_date")
-    list_filter = ("course",)
+    list_display = ("name", "course", "exam_date", "completed")
+    list_filter = (
+        "course",
+        "completed",
+        ("exam_date", admin.DateFieldListFilter),
+    )
+    date_hierarchy = "exam_date"
     list_per_page = 25

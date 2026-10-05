@@ -12,7 +12,8 @@ from .resources import WritingPlanResource
 class WritingPlanAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     resource_class = WritingPlanResource
     list_display = ("book", "chapter", "possible_date", "priority", "note")
-    list_filter = ("book", "priority",)
+    list_filter = ("book", "priority",
+                   ("possible_date", admin.DateFieldListFilter),)
     search_fields = ("book__title", "note")
     list_per_page = 25
     actions = ["copy_entry"]
@@ -28,6 +29,7 @@ class WritingPlanAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 
         self.message_user(
             request,
-            _("Successfully duplicated %(count)d Writing Plan(s).") % {"count": count},
+            _("Successfully duplicated %(count)d Writing Plan(s).") % {
+                "count": count},
             messages.SUCCESS,
         )
