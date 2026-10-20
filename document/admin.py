@@ -10,6 +10,7 @@ from .permissions import get_accessible_documents, get_accessible_links
 @admin.register(Link)
 class LinkAdmin(admin.ModelAdmin):
     list_display = ("name", "genre", "display_link", "open_link")
+    list_select_related = ("genre",)
     search_fields = ("name", "link")
     list_filter = ("genre", )
     list_per_page = 25
@@ -73,6 +74,7 @@ class DocumentFileInline(admin.TabularInline):
 @admin.register(Document)
 class DocumentAdmin(admin.ModelAdmin):
     list_display = ("name", "genre")
+    list_select_related = ("genre",)
     search_fields = ("name",)
     list_filter = ("genre",)
     list_per_page = 25

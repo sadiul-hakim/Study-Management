@@ -11,9 +11,18 @@ _scheduler = None
 
 
 def start():
-    """Starts the in-process background scheduler."""
+    """Starts the in-process background scheduler if enabled."""
     global _scheduler
     if _scheduler is not None and _scheduler.running:
+        return
+
+    # Check if in-process scheduler is explicitly enabled (disabled by default for PythonAnywhere)
+    if not getattr(settings, "ENABLE_INPROCESS_SCHEDULER", False):
+        logger.info(
+            "In-process APScheduler is disabled (ENABLE_INPROCESS_SCHEDULER=False). "
+            "For PythonAnywhere deployment, use Scheduled Tasks with 'python manage.py send_daily_emails' "
+            "to save CPU quota and memory."
+        )
         return
 
     # Avoid duplicate scheduler execution in development when Django's auto-reloader runs
@@ -21,7 +30,7 @@ def start():
         return
 
     # Avoid running scheduler during management commands like migrate, makemigrations, collectstatic
-    ignored_commands = ["makemigrations", "migrate", "test", "collectstatic", "shell"]
+    ignored_commands = ["makemigrations", "migrate", "test", "collectstatic", "shell", "send_daily_emails"]
     if any(cmd in sys.argv for cmd in ignored_commands):
         return
 

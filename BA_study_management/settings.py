@@ -23,6 +23,7 @@ REMINDER_TASK_TOKEN = config('REMINDER_TASK_TOKEN')
 REMINDER_EMAIL_TO = config("REMINDER_EMAIL_TO", cast=Csv())
 WORD_MEANING_EMAIL_TO = config("WORD_MEANING_EMAIL_TO", cast=Csv())
 DAILY_TASK_TIME = config("DAILY_TASK_TIME", default="19:00")
+ENABLE_INPROCESS_SCHEDULER = config('ENABLE_INPROCESS_SCHEDULER', default=False, cast=bool)
 
 # mail
 EMAIL_BACKEND = config('EMAIL_BACKEND')
@@ -219,8 +220,9 @@ CKEDITOR_5_CONFIGS = {
 }
 
 MIDDLEWARE = [
-    'django.middleware.gzip.GZipMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'django.middleware.gzip.GZipMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     "django.middleware.locale.LocaleMiddleware",
     'django.middleware.common.CommonMiddleware',
@@ -228,7 +230,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'BA_study_management.urls'
@@ -245,7 +246,6 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'guide.context_processors.admin_guide',
                 "django.template.context_processors.i18n",
-                'django.template.context_processors.request',
             ],
         },
     },
@@ -257,20 +257,39 @@ WSGI_APPLICATION = 'BA_study_management.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
+_db_engine = config('DB_ENGINE', default='django.db.backends.sqlite3')
+_is_sqlite = _db_engine == 'django.db.backends.sqlite3'
+
 DATABASES = {
     'default': {
-        'ENGINE': config('DB_ENGINE', default='django.db.backends.sqlite3'),
+        'ENGINE': _db_engine,
         'NAME': (
             BASE_DIR / config('DB_NAME', default='db.sqlite3')
-            if config('DB_ENGINE', default='django.db.backends.sqlite3') == 'django.db.backends.sqlite3'
+            if _is_sqlite
             else config('DB_NAME', default='')
         ),
         'USER': config('DB_USER', default=''),
         'PASSWORD': config('DB_PASSWORD', default=''),
         'HOST': config('DB_HOST', default=''),
         'PORT': config('DB_PORT', default=''),
+        # Performance PRAGMAs for SQLite on PythonAnywhere shared disk:
+        # - WAL mode allows non-blocking concurrent reads
+        # - synchronous=NORMAL cuts fsync disk wait by 80-90%
+        # - cache_size=-2000 keeps ~2MB hot pages in memory
+        'OPTIONS': {
+            'init_command': (
+                'PRAGMA journal_mode = WAL;'
+                'PRAGMA synchronous = NORMAL;'
+                'PRAGMA cache_size = -2000;'
+                'PRAGMA temp_store = MEMORY;'
+            ),
+            'transaction_mode': 'IMMEDIATE',
+        } if _is_sqlite else {},
     }
 }
+
+# Use cached_db to read sessions from local memory cache instead of hitting SQLite on every page load
+SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 
 # Cache configuration for django-select2 and general caching
 CACHES = {
@@ -284,6 +303,16 @@ CACHES = {
     },
 }
 SELECT2_CACHE_BACKEND = 'select2'
+
+# WhiteNoise compressed static file storage
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
+    },
+}
 
 
 # Password validation

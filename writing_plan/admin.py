@@ -12,6 +12,7 @@ from .resources import WritingPlanResource
 class WritingPlanAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     resource_class = WritingPlanResource
     list_display = ("book", "chapter", "possible_date", "priority", "note")
+    list_select_related = ("book", "chapter")
     list_filter = ("book", "priority",
                    ("possible_date", admin.DateFieldListFilter),)
     search_fields = ("book__title", "note")

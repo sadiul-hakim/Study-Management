@@ -31,3 +31,13 @@ class Guide(models.Model):
             self.WARNING: "card-warning",
             self.DANGER: "card-danger",
         }.get(self.type, "card-secondary")
+
+    def save(self, *args, **kwargs):
+        from django.core.cache import cache
+        cache.delete("admin_guide_cached")
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        from django.core.cache import cache
+        cache.delete("admin_guide_cached")
+        super().delete(*args, **kwargs)

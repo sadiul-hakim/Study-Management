@@ -6,6 +6,7 @@ from .models import Book, Genre, Author, ReadingProgress, ReadingPlan, StudyNote
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
     list_display = ("title", "author", "genre")
+    list_select_related = ("author", "genre")
     list_filter = ("author", "genre",)
     search_fields = ("title", "author", "genre",)
 
@@ -28,6 +29,7 @@ class AuthorAdmin(admin.ModelAdmin):
 class ReadingProgressAdmin(admin.ModelAdmin):
     list_display = ("book", "reading_page", "is_completed",
                     "is_postponed", "finish_around")
+    list_select_related = ("book",)
     search_fields = ("book", )
     list_per_page = 25
 
@@ -36,6 +38,7 @@ class ReadingProgressAdmin(admin.ModelAdmin):
 class ReadingPlanAdmin(admin.ModelAdmin):
     list_display = ("book", "note", "start_around",
                     "order")
+    list_select_related = ("book",)
     search_fields = ("book", )
     list_per_page = 25
 
@@ -43,6 +46,7 @@ class ReadingPlanAdmin(admin.ModelAdmin):
 @admin.register(StudyNote)
 class StudyNoteAdmin(admin.ModelAdmin):
     list_display = ("book", "page", "note")
+    list_select_related = ("book",)
     search_fields = ("book", "note",)
     list_filter = ("book",)
     list_per_page = 25
@@ -51,6 +55,7 @@ class StudyNoteAdmin(admin.ModelAdmin):
 @admin.register(Lend)
 class LendAdmin(admin.ModelAdmin):
     list_display = ("book", "receiver", "date", "return_date")
+    list_select_related = ("book",)
     search_fields = ("book", "receiver",)
     list_filter = ("receiver",)
     list_per_page = 25

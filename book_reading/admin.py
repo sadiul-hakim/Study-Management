@@ -19,6 +19,7 @@ class ChapterInline(admin.TabularInline):
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
     list_display = ("title", "course", "priority")
+    list_select_related = ("course",)
     list_filter = ("priority", "course")
     search_fields = ("title",)
     list_per_page = 25
@@ -31,6 +32,7 @@ class ReadingProgressAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     resource_class = ReadingProgressResource
     list_display = ("book", "chapter", "model", "current_page",
                     "reading_model", "status", "finish_around")
+    list_select_related = ("book", "chapter")
     list_filter = ("book", "status")
     list_per_page = 25
     actions = ["move_to_revise", "move_to_writing_plan", "copy_entry"]
@@ -139,6 +141,7 @@ class ReadingPlanAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     resource_class = ReadingPlanResource
     list_display = ("course", "book", "chapter",
                     "start_around", "priority", "order", "note")
+    list_select_related = ("course", "book", "chapter")
     list_filter = ("course", "book", "priority",
                    ("start_around", admin.DateFieldListFilter),)
     search_fields = ("course__name", "book__title", "note")
@@ -218,6 +221,7 @@ class ReviseAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     resource_class = ReviseResource
     list_display = ("book", "chapter", "possible_date",
                     "priority",  "order", "note")
+    list_select_related = ("book", "chapter")
     list_filter = ("book", "priority",
                    ("possible_date", admin.DateFieldListFilter),)
     search_fields = ("book__title", "note")

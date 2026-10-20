@@ -9,6 +9,7 @@ from .models import Improve, Exam
 @admin.register(Improve)
 class ImproveAdmin(admin.ModelAdmin):
     list_display = ("course", "book")
+    list_select_related = ("course", "book")
     list_filter = ("course",)
     search_fields = ("course__name", "book__title")
     list_per_page = 25
@@ -35,6 +36,7 @@ class ImproveAdmin(admin.ModelAdmin):
 @admin.register(Exam)
 class ExamAdmin(admin.ModelAdmin):
     list_display = ("name", "course", "exam_date", "completed")
+    list_select_related = ("course",)
     list_filter = (
         "course",
         "completed",

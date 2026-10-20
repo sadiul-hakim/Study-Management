@@ -21,6 +21,7 @@ class GenreAdmin(admin.ModelAdmin):
 @admin.register(LiteraryWork)
 class LiteraryWorkAdmin(admin.ModelAdmin):
     list_display = ("name", "author", "genre")
+    list_select_related = ("author", "genre")
     list_filter = ("genre", "author")
     search_fields = ("name", "author__name")
     list_per_page = 25

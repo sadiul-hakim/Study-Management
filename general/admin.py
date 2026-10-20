@@ -6,6 +6,7 @@ from .models import Notes, StudyNote
 @admin.register(StudyNote)
 class StudyNoteAdmin(admin.ModelAdmin):
     list_display = ("book", "page", "note")
+    list_select_related = ("book",)
     search_fields = ("book", "note",)
     list_filter = ("book",)
     list_per_page = 25
