@@ -1,6 +1,6 @@
-import os
 from pathlib import Path
-from decouple import config, Csv
+
+from decouple import Csv, config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -10,75 +10,69 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = config("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG', default=False, cast=bool)
+DEBUG = config("DEBUG", default=False, cast=bool)
 
-ALLOWED_HOSTS = config(
-    'ALLOWED_HOSTS', default='127.0.0.1,localhost', cast=Csv())
-INTERNAL_IPS = config('INTERNAL_IPS', default='127.0.0.1', cast=Csv())
+ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="127.0.0.1,localhost", cast=Csv())
+INTERNAL_IPS = config("INTERNAL_IPS", default="127.0.0.1", cast=Csv())
 
-REMINDER_TASK_TOKEN = config('REMINDER_TASK_TOKEN')
+REMINDER_TASK_TOKEN = config("REMINDER_TASK_TOKEN")
 REMINDER_EMAIL_TO = config("REMINDER_EMAIL_TO", cast=Csv())
 WORD_MEANING_EMAIL_TO = config("WORD_MEANING_EMAIL_TO", cast=Csv())
 DAILY_TASK_TIME = config("DAILY_TASK_TIME", default="19:00")
-ENABLE_INPROCESS_SCHEDULER = config('ENABLE_INPROCESS_SCHEDULER', default=False, cast=bool)
+ENABLE_INPROCESS_SCHEDULER = config(
+    "ENABLE_INPROCESS_SCHEDULER", default=False, cast=bool
+)
 
 # mail
-EMAIL_BACKEND = config('EMAIL_BACKEND')
-EMAIL_HOST = config('EMAIL_HOST')
-EMAIL_PORT = config('EMAIL_PORT', cast=int)
-EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
-EMAIL_HOST_USER = config('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+EMAIL_BACKEND = config("EMAIL_BACKEND")
+EMAIL_HOST = config("EMAIL_HOST")
+EMAIL_PORT = config("EMAIL_PORT", cast=int)
+EMAIL_USE_TLS = config("EMAIL_USE_TLS", cast=bool)
+EMAIL_HOST_USER = config("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 # Application definition
 
 INSTALLED_APPS = [
-    'jazzmin',
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'django_ckeditor_5',
-    'mamood_django_admin_log_viewer',
-    'import_export',
-    'pwa',
-    'django_select2',
-
+    "jazzmin",
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    "django_ckeditor_5",
+    "mamood_django_admin_log_viewer",
+    "import_export",
+    "pwa",
+    "django_select2",
     # apps
-    'general',
-    'vocabulary',
-    'book_reading',
-    'writing_plan',
-    'exam_management',
-    'literature',
-    'document',
-    'guide',
-    'BookCollection',
+    "general",
+    "vocabulary",
+    "book_reading",
+    "other_reading",
+    "writing_plan",
+    "exam_management",
+    "literature",
+    "document",
+    "guide",
 ]
 
-PWA_APP_NAME = 'StudyManagement Admin'
+PWA_APP_NAME = "StudyManagement Admin"
 PWA_APP_DESCRIPTION = "StudyManagement Admin Dashboard"
-PWA_APP_THEME_COLOR = '#10B981'
-PWA_APP_BACKGROUND_COLOR = '#111827'
-PWA_APP_DISPLAY = 'standalone'
-PWA_APP_SCOPE = '/'
-PWA_APP_START_URL = '/'
+PWA_APP_THEME_COLOR = "#10B981"
+PWA_APP_BACKGROUND_COLOR = "#111827"
+PWA_APP_DISPLAY = "standalone"
+PWA_APP_SCOPE = "/"
+PWA_APP_START_URL = "/"
 
 PWA_APP_ICONS = [
-    {
-        'src': '/static/admin/img/icon-192.png',
-        'sizes': '192x192'
-    },
-    {
-        'src': '/static/admin/img/icon-512.png',
-        'sizes': '512x512'
-    }
+    {"src": "/static/admin/img/icon-192.png", "sizes": "192x192"},
+    {"src": "/static/admin/img/icon-512.png", "sizes": "512x512"},
 ]
 
 SITE_TITLE_TEXT = f"{config('SITE_OWNER')}'s Study Tracker"
@@ -94,8 +88,12 @@ JAZZMIN_SETTINGS = {
     "show_theme_chooser": True,
     "language_chooser": True,
     "topmenu_links": [
-        {"name": "Home Portal", "url": "home", "permissions": [
-            "auth.view_user"], "icon": "fas fa-home"},
+        {
+            "name": "Home Portal",
+            "url": "home",
+            "permissions": ["auth.view_user"],
+            "icon": "fas fa-home",
+        },
     ],
     "icons": {
         "auth.user": "fas fa-user-shield",
@@ -106,10 +104,11 @@ JAZZMIN_SETTINGS = {
         "book_reading.readingProgress": "fa-solid fa-bars-progress",
         "book_reading.readingprogress": "fa-solid fa-bars-progress",
         "book_reading.otherStudyProgress": "fa-solid fa-list-check",
-        "book_reading.otherstudyprogress": "fa-solid fa-list-check",
         "book_reading.readingPlan": "fa-solid fa-fire-flame-curved",
         "book_reading.readingplan": "fa-solid fa-fire-flame-curved",
         "book_reading.revise": "fa-solid fa-arrows-rotate",
+        "other_reading.book": "fas fa-book-open",
+        "other_reading.otherstudyprogress": "fa-solid fa-list-check",
         "document.document": "fa-solid fa-folder-closed",
         "document.documentfile": "fa-solid fa-file-lines",
         "document.genre": "fa-solid fa-tag",
@@ -118,7 +117,7 @@ JAZZMIN_SETTINGS = {
         "exam_management.exam": "fa-solid fa-pen-ruler",
         "exam_management.improve": "fa-solid fa-arrow-trend-up",
         "general.notes": "fa-solid fa-sticky-note",
-        "general.studyNote": "fa-solid fa-file-pen",
+        "book_reading.studyNote": "fa-solid fa-file-pen",
         "general.studynote": "fa-solid fa-file-pen",
         "vocabulary.wordcollection": "fa-solid fa-spell-check",
         "vocabulary.vocabularyexamresult": "fa-solid fa-graduation-cap",
@@ -131,13 +130,9 @@ JAZZMIN_SETTINGS = {
         "literature.literaryWork": "fa-solid fa-book-journal-whills",
         "literature.literarywork": "fa-solid fa-book-journal-whills",
         "guide.guide": "fa-solid fa-circle-info",
-        "BookCollection.author": "fa-solid fa-user-pen",
-        "BookCollection.genre": "fa-solid fa-layer-group",
-        "BookCollection.book": "fa-solid fa-book-bookmark",
-        "BookCollection.readingprogress": "fa-solid fa-chart-line",
-        "BookCollection.readingplan": "fa-solid fa-calendar-days",
-        "BookCollection.studynote": "fa-solid fa-note-sticky",
-        "BookCollection.lend": "fa-solid fa-hand-holding-heart",
+        "other_reading.genre": "fa-solid fa-layer-group",
+        "other_reading.studynote": "fa-solid fa-note-sticky",
+        "other_reading.lend": "fa-solid fa-hand-holding-heart",
     },
     "changeform_format": "horizontal_tabs",
 }
@@ -170,8 +165,8 @@ JAZZMIN_UI_TWEAKS = {
         "info": "btn-info",
         "warning": "btn-warning",
         "danger": "btn-danger",
-        "success": "btn-success"
-    }
+        "success": "btn-success",
+    },
 }
 
 CKEDITOR_5_CONFIGS = {
@@ -220,89 +215,91 @@ CKEDITOR_5_CONFIGS = {
 }
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
-    'django.middleware.gzip.GZipMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
+    "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+    "django.middleware.gzip.GZipMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = 'BA_study_management.urls'
+ROOT_URLCONF = "BA_study_management.urls"
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / "templates"],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-                'guide.context_processors.admin_guide',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [BASE_DIR / "templates"],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
+                "guide.context_processors.admin_guide",
                 "django.template.context_processors.i18n",
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'BA_study_management.wsgi.application'
+WSGI_APPLICATION = "BA_study_management.wsgi.application"
 
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-_db_engine = config('DB_ENGINE', default='django.db.backends.sqlite3')
-_is_sqlite = _db_engine == 'django.db.backends.sqlite3'
+_db_engine = config("DB_ENGINE", default="django.db.backends.sqlite3")
+_is_sqlite = _db_engine == "django.db.backends.sqlite3"
 
 DATABASES = {
-    'default': {
-        'ENGINE': _db_engine,
-        'NAME': (
-            BASE_DIR / config('DB_NAME', default='db.sqlite3')
+    "default": {
+        "ENGINE": _db_engine,
+        "NAME": (
+            BASE_DIR / config("DB_NAME", default="db.sqlite3")
             if _is_sqlite
-            else config('DB_NAME', default='')
+            else config("DB_NAME", default="")
         ),
-        'USER': config('DB_USER', default=''),
-        'PASSWORD': config('DB_PASSWORD', default=''),
-        'HOST': config('DB_HOST', default=''),
-        'PORT': config('DB_PORT', default=''),
+        "USER": config("DB_USER", default=""),
+        "PASSWORD": config("DB_PASSWORD", default=""),
+        "HOST": config("DB_HOST", default=""),
+        "PORT": config("DB_PORT", default=""),
         # Performance PRAGMAs for SQLite on PythonAnywhere shared disk:
         # - WAL mode allows non-blocking concurrent reads
         # - synchronous=NORMAL cuts fsync disk wait by 80-90%
         # - cache_size=-2000 keeps ~2MB hot pages in memory
-        'OPTIONS': {
-            'init_command': (
-                'PRAGMA journal_mode = WAL;'
-                'PRAGMA synchronous = NORMAL;'
-                'PRAGMA cache_size = -2000;'
-                'PRAGMA temp_store = MEMORY;'
+        "OPTIONS": {
+            "init_command": (
+                "PRAGMA journal_mode = WAL;"
+                "PRAGMA synchronous = NORMAL;"
+                "PRAGMA cache_size = -2000;"
+                "PRAGMA temp_store = MEMORY;"
             ),
-            'transaction_mode': 'IMMEDIATE',
-        } if _is_sqlite else {},
+            "transaction_mode": "IMMEDIATE",
+        }
+        if _is_sqlite
+        else {},
     }
 }
 
 # Use cached_db to read sessions from local memory cache instead of hitting SQLite on every page load
-SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
+SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
 
 # Cache configuration for django-select2 and general caching
 CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'study-management-default-cache',
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "study-management-default-cache",
     },
-    'select2': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'study-management-select2-cache',
+    "select2": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "study-management-select2-cache",
     },
 }
-SELECT2_CACHE_BACKEND = 'select2'
+SELECT2_CACHE_BACKEND = "select2"
 
 # WhiteNoise compressed static file storage
 STORAGES = {
@@ -320,16 +317,16 @@ STORAGES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 
@@ -337,9 +334,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
 
-LANGUAGE_CODE = config('LANGUAGE_CODE', default='en')
+LANGUAGE_CODE = config("LANGUAGE_CODE", default="en")
 
-TIME_ZONE = config('TIME_ZONE', default='Asia/Dhaka')
+TIME_ZONE = config("TIME_ZONE", default="Asia/Dhaka")
 
 USE_I18N = True
 
@@ -351,13 +348,13 @@ LANGUAGES = [
 ]
 
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [
     BASE_DIR / "static",
@@ -370,22 +367,21 @@ LOCALE_PATHS = [
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
-LOG_VIEWER_FILES = ['app.log', 'error.log']  # add your actual log file names
-LOG_VIEWER_FILES_DIR = BASE_DIR / 'logs'  # path to your logs folder
-LOG_VIEWER_PAGE_LENGTH = config(
-    'LOG_VIEWER_PAGE_LENGTH', default=100, cast=int)
+LOG_VIEWER_FILES = ["app.log", "error.log"]  # add your actual log file names
+LOG_VIEWER_FILES_DIR = BASE_DIR / "logs"  # path to your logs folder
+LOG_VIEWER_PAGE_LENGTH = config("LOG_VIEWER_PAGE_LENGTH", default=100, cast=int)
 
 LOG_VIEWER_FORMATS = {
-    'bracket_timestamp': {
-        'pattern': r'^\[(?P<timestamp>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d{3})\]\s+(?P<level>\w+)\s+(?P<module>\S+)\s+\S+:\d+\s+-\s+(?P<message>.*)$',
-        'timestamp_format': '%Y-%m-%d %H:%M:%S,%f',
-        'description': 'Bracketed timestamp, level, module, func:line - message',
+    "bracket_timestamp": {
+        "pattern": r"^\[(?P<timestamp>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d{3})\]\s+(?P<level>\w+)\s+(?P<module>\S+)\s+\S+:\d+\s+-\s+(?P<message>.*)$",
+        "timestamp_format": "%Y-%m-%d %H:%M:%S,%f",
+        "description": "Bracketed timestamp, level, module, func:line - message",
     }
 }
 
 LOG_VIEWER_FILE_FORMATS = {
-    'app.log': 'bracket_timestamp',
-    'error.log': 'bracket_timestamp',
+    "app.log": "bracket_timestamp",
+    "error.log": "bracket_timestamp",
 }
 
 LOG_DIR = BASE_DIR / "logs"
@@ -394,11 +390,10 @@ LOG_DIR.mkdir(exist_ok=True)
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
-
     "formatters": {
         "verbose": {
             "format": "[{asctime}] {levelname:<8} {name} "
-                      "{module}.{funcName}:{lineno} - {message}",
+            "{module}.{funcName}:{lineno} - {message}",
             "style": "{",
         },
         "simple": {
@@ -406,13 +401,12 @@ LOGGING = {
             "style": "{",
         },
     },
-
     "handlers": {
         "file": {
             "level": "INFO",
             "class": "logging.handlers.RotatingFileHandler",
             "filename": LOG_DIR / "app.log",
-            "maxBytes": 5 * 1024 * 1024,   # 5 MB
+            "maxBytes": 5 * 1024 * 1024,  # 5 MB
             "backupCount": 5,
             "formatter": "verbose",
             "delay": True,
@@ -421,18 +415,16 @@ LOGGING = {
             "level": "ERROR",
             "class": "logging.handlers.RotatingFileHandler",
             "filename": LOG_DIR / "error.log",
-            "maxBytes": 5 * 1024 * 1024,   # 5 MB
+            "maxBytes": 5 * 1024 * 1024,  # 5 MB
             "backupCount": 5,
             "formatter": "verbose",
             "delay": True,
         },
     },
-
     "root": {
         "handlers": ["file", "error_file"],
         "level": "INFO",
     },
-
     "loggers": {
         "django": {
             "handlers": ["file"],

@@ -1,15 +1,8 @@
 from django.contrib import admin
-from .models import Notes, StudyNote
+
+from .models import Notes
+
 # Register your models here.
-
-
-@admin.register(StudyNote)
-class StudyNoteAdmin(admin.ModelAdmin):
-    list_display = ("book", "page", "note")
-    list_select_related = ("book",)
-    search_fields = ("book", "note",)
-    list_filter = ("book",)
-    list_per_page = 25
 
 
 @admin.register(Notes)
@@ -25,4 +18,3 @@ class NotesAdmin(admin.ModelAdmin):
     def has_module_permission(self, request):
         self.model._meta.verbose_name_plural = "Notes"
         return super().has_module_permission(request)
-

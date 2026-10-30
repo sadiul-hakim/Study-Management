@@ -1,13 +1,24 @@
 from datetime import timedelta
+
 from django.contrib import admin, messages
 from django.db import transaction
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-from writing_plan.models import WritingPlan
-from .models import Book, Chapter, ReadingProgress, Course, ReadingPlan, Revise, OtherStudyProgress
-
-from .resources import ReadingProgressResource, ReadingPlanResource, ReviseResource
 from import_export.admin import ImportExportModelAdmin
+
+from writing_plan.models import WritingPlan
+
+from .models import (
+    Book,
+    Chapter,
+    Course,
+    ReadingPlan,
+    ReadingProgress,
+    Revise,
+    StudyNote,
+)
+from .resources import ReadingPlanResource, ReadingProgressResource, ReviseResource
+
 # Models
 
 
@@ -30,8 +41,15 @@ class BookAdmin(admin.ModelAdmin):
 @admin.register(ReadingProgress)
 class ReadingProgressAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     resource_class = ReadingProgressResource
-    list_display = ("book", "chapter", "model", "current_page",
-                    "reading_model", "status", "finish_around")
+    list_display = (
+        "book",
+        "chapter",
+        "model",
+        "current_page",
+        "reading_model",
+        "status",
+        "finish_around",
+    )
     list_select_related = ("book", "chapter")
     list_filter = ("book", "status")
     list_per_page = 25
@@ -56,7 +74,10 @@ class ReadingProgressAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 
         self.message_user(
             request,
-            _("Successfully moved %(count)d Reading Progress record(s) to Revise (Scheduled for %(date)s).") % {
+            _(
+                "Successfully moved %(count)d Reading Progress record(s) to Revise (Scheduled for %(date)s)."
+            )
+            % {
                 "count": count,
                 "date": target_date,
             },
@@ -72,7 +93,9 @@ class ReadingProgressAdmin(ImportExportModelAdmin, admin.ModelAdmin):
                 WritingPlan.objects.create(
                     book=progress.book,
                     chapter=progress.chapter,
-                    priority=progress.book.priority if progress.book else WritingPlan.MEDIUM,
+                    priority=progress.book.priority
+                    if progress.book
+                    else WritingPlan.MEDIUM,
                     possible_date=target_date,
                     note="",
                 )
@@ -81,7 +104,10 @@ class ReadingProgressAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 
         self.message_user(
             request,
-            _("Successfully moved %(count)d Reading Progress record(s) to Writing Plan (Scheduled for %(date)s).") % {
+            _(
+                "Successfully moved %(count)d Reading Progress record(s) to Writing Plan (Scheduled for %(date)s)."
+            )
+            % {
                 "count": count,
                 "date": target_date,
             },
@@ -99,33 +125,8 @@ class ReadingProgressAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 
         self.message_user(
             request,
-            _("Successfully duplicated %(count)d Reading Progress record(s).") % {
-                "count": count},
-            messages.SUCCESS,
-        )
-
-
-@admin.register(OtherStudyProgress)
-class OtherStudyProgressAdmin(admin.ModelAdmin):
-    list_display = ("topic_name", "status", "note")
-    list_filter = ("status",)
-    search_fields = ("topic_name",)
-    list_per_page = 25
-    actions = ["copy_entry"]
-
-    @admin.action(description=_("Copy"))
-    def copy_entry(self, request, queryset):
-        count = 0
-        with transaction.atomic():
-            for obj in queryset:
-                obj.pk = None
-                obj.save()
-                count += 1
-
-        self.message_user(
-            request,
-            _("Successfully duplicated %(count)d Other Study Progress record(s).") % {
-                "count": count},
+            _("Successfully duplicated %(count)d Reading Progress record(s).")
+            % {"count": count},
             messages.SUCCESS,
         )
 
@@ -139,11 +140,22 @@ class CourseAdmin(admin.ModelAdmin):
 @admin.register(ReadingPlan)
 class ReadingPlanAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     resource_class = ReadingPlanResource
-    list_display = ("course", "book", "chapter",
-                    "start_around", "priority", "order", "note")
+    list_display = (
+        "course",
+        "book",
+        "chapter",
+        "start_around",
+        "priority",
+        "order",
+        "note",
+    )
     list_select_related = ("course", "book", "chapter")
-    list_filter = ("course", "book", "priority",
-                   ("start_around", admin.DateFieldListFilter),)
+    list_filter = (
+        "course",
+        "book",
+        "priority",
+        ("start_around", admin.DateFieldListFilter),
+    )
     search_fields = ("course__name", "book__title", "note")
     list_per_page = 25
     actions = ["move_to_revise", "move_to_writing_plan", "copy_entry"]
@@ -167,7 +179,10 @@ class ReadingPlanAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 
         self.message_user(
             request,
-            _("Successfully moved %(count)d Reading Plan(s) to Revise (Scheduled for %(date)s).") % {
+            _(
+                "Successfully moved %(count)d Reading Plan(s) to Revise (Scheduled for %(date)s)."
+            )
+            % {
                 "count": count,
                 "date": target_date,
             },
@@ -192,7 +207,10 @@ class ReadingPlanAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 
         self.message_user(
             request,
-            _("Successfully moved %(count)d Reading Plan(s) to Writing Plan (Scheduled for %(date)s).") % {
+            _(
+                "Successfully moved %(count)d Reading Plan(s) to Writing Plan (Scheduled for %(date)s)."
+            )
+            % {
                 "count": count,
                 "date": target_date,
             },
@@ -210,8 +228,7 @@ class ReadingPlanAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 
         self.message_user(
             request,
-            _("Successfully duplicated %(count)d Reading Plan(s).") % {
-                "count": count},
+            _("Successfully duplicated %(count)d Reading Plan(s).") % {"count": count},
             messages.SUCCESS,
         )
 
@@ -219,11 +236,13 @@ class ReadingPlanAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 @admin.register(Revise)
 class ReviseAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     resource_class = ReviseResource
-    list_display = ("book", "chapter", "possible_date",
-                    "priority",  "order", "note")
+    list_display = ("book", "chapter", "possible_date", "priority", "order", "note")
     list_select_related = ("book", "chapter")
-    list_filter = ("book", "priority",
-                   ("possible_date", admin.DateFieldListFilter),)
+    list_filter = (
+        "book",
+        "priority",
+        ("possible_date", admin.DateFieldListFilter),
+    )
     search_fields = ("book__title", "note")
     list_per_page = 25
     actions = ["move_to_writing_plan", "copy_entry"]
@@ -246,7 +265,10 @@ class ReviseAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 
         self.message_user(
             request,
-            _("Successfully moved %(count)d Revise record(s) to Writing Plan (Scheduled for %(date)s).") % {
+            _(
+                "Successfully moved %(count)d Revise record(s) to Writing Plan (Scheduled for %(date)s)."
+            )
+            % {
                 "count": count,
                 "date": target_date,
             },
@@ -264,7 +286,18 @@ class ReviseAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 
         self.message_user(
             request,
-            _("Successfully duplicated %(count)d Revise record(s).") % {
-                "count": count},
+            _("Successfully duplicated %(count)d Revise record(s).") % {"count": count},
             messages.SUCCESS,
         )
+
+
+@admin.register(StudyNote)
+class StudyNoteAdmin(admin.ModelAdmin):
+    list_display = ("book", "page", "note")
+    list_select_related = ("book",)
+    search_fields = (
+        "book",
+        "note",
+    )
+    list_filter = ("book",)
+    list_per_page = 25

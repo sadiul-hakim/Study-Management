@@ -1,7 +1,6 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-
 # Create your models here.
 
 
@@ -29,12 +28,18 @@ class Book(models.Model):
     ]
 
     course = models.ForeignKey(
-        Course, on_delete=models.CASCADE, related_name="books", null=True,
-        blank=True, verbose_name=_("Course"))
+        Course,
+        on_delete=models.CASCADE,
+        related_name="books",
+        null=True,
+        blank=True,
+        verbose_name=_("Course"),
+    )
     title = models.CharField(_("Title"), max_length=255)
     author = models.CharField(_("Author"), max_length=255, blank=True)
     priority = models.IntegerField(
-        _("Priority"), choices=PRIORITY_CHOICES, default=MEDIUM)
+        _("Priority"), choices=PRIORITY_CHOICES, default=MEDIUM
+    )
 
     class Meta:
         verbose_name = _("Book")
@@ -46,8 +51,7 @@ class Book(models.Model):
 
 class Chapter(models.Model):
     book = models.ForeignKey(
-        Book, on_delete=models.CASCADE, related_name="chapters",
-        verbose_name=_("Book")
+        Book, on_delete=models.CASCADE, related_name="chapters", verbose_name=_("Book")
     )
     title = models.CharField(_("Title"), max_length=255)
     chapter_number = models.IntegerField(_("Chapter number"))
@@ -74,14 +78,18 @@ class ReadingProgress(models.Model):
     ]
 
     chapter = models.ForeignKey(
-        Chapter, on_delete=models.CASCADE, null=True, blank=True,
-        verbose_name=_("Chapter"))
-    book = models.ForeignKey(
-        Book, on_delete=models.CASCADE, verbose_name=_("Book"))
+        Chapter,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        verbose_name=_("Chapter"),
+    )
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, verbose_name=_("Book"))
     current_page = models.IntegerField(_("Current page"), default=0)
     model = models.CharField(_("Model"), max_length=100, default=0)
     status = models.IntegerField(
-        _("Status"), choices=PRIORITY_CHOICES, default=NOT_STARTED)
+        _("Status"), choices=PRIORITY_CHOICES, default=NOT_STARTED
+    )
     reading_model = models.BooleanField(_("Reading model"), default=False)
 
     updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
@@ -93,33 +101,6 @@ class ReadingProgress(models.Model):
 
     def __str__(self):
         return f"{self.chapter} - page {self.current_page}"
-
-
-class OtherStudyProgress(models.Model):
-    NOT_STARTED = 1
-    IN_PROGRESS = 2
-    POSTPONED = 3
-    COMPLETED = 4
-
-    PRIORITY_CHOICES = [
-        (NOT_STARTED, _("Not Started")),
-        (IN_PROGRESS, _("In Progress")),
-        (POSTPONED, _("Postponed")),
-        (COMPLETED, _("Completed")),
-    ]
-
-    topic_name = models.CharField(
-        _("Topic name"), max_length=200, null=False, blank=False)
-    note = models.TextField(_("Note"))
-    status = models.IntegerField(
-        _("Status"), choices=PRIORITY_CHOICES, default=NOT_STARTED)
-
-    class Meta:
-        verbose_name = _("Other Study Progress")
-        verbose_name_plural = _("Other Study Progress")
-
-    def __str__(self):
-        return f"{self.topic_name}"
 
 
 class ReadingPlan(models.Model):
@@ -134,14 +115,19 @@ class ReadingPlan(models.Model):
     ]
 
     priority = models.IntegerField(
-        _("Priority"), choices=PRIORITY_CHOICES, default=MEDIUM)
+        _("Priority"), choices=PRIORITY_CHOICES, default=MEDIUM
+    )
     course = models.ForeignKey(
-        Course, on_delete=models.CASCADE, verbose_name=_("Course"))
-    book = models.ForeignKey(
-        Book, on_delete=models.CASCADE, verbose_name=_("Book"))
+        Course, on_delete=models.CASCADE, verbose_name=_("Course")
+    )
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, verbose_name=_("Book"))
     chapter = models.ForeignKey(
-        Chapter, on_delete=models.CASCADE, null=True, blank=True,
-        verbose_name=_("Chapter"))
+        Chapter,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        verbose_name=_("Chapter"),
+    )
     note = models.TextField(_("Note"), blank=True)
     start_around = models.DateField(_("Start around"), null=True, blank=True)
     order = models.IntegerField(_("Order"), default=0)
@@ -166,12 +152,16 @@ class Revise(models.Model):
     ]
 
     priority = models.IntegerField(
-        _("Priority"), choices=PRIORITY_CHOICES, default=MEDIUM)
-    book = models.ForeignKey(
-        Book, on_delete=models.CASCADE, verbose_name=_("Book"))
+        _("Priority"), choices=PRIORITY_CHOICES, default=MEDIUM
+    )
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, verbose_name=_("Book"))
     chapter = models.ForeignKey(
-        Chapter, on_delete=models.CASCADE, null=True, blank=True,
-        verbose_name=_("Chapter"))
+        Chapter,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        verbose_name=_("Chapter"),
+    )
     note = models.TextField(_("Note"), blank=True)
     possible_date = models.DateField(_("Possible date"), null=True, blank=True)
     order = models.IntegerField(_("Order"), default=0)
@@ -182,3 +172,16 @@ class Revise(models.Model):
 
     def __str__(self):
         return f"{self.book} - {self.chapter}"
+
+
+class StudyNote(models.Model):
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, verbose_name=_("Book"))
+    page = models.IntegerField(_("Page"), default=0)
+    note = models.TextField(_("Note"), max_length=500)
+
+    class Meta:
+        verbose_name = _("Study Note")
+        verbose_name_plural = _("Study Notes")
+
+    def __str__(self):
+        return f"{self.book} - Page {self.page}"
