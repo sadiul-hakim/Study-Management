@@ -6,11 +6,79 @@
 
 {% block content %}
   {% if guide %}
-    <div class="alert {% if guide.type == guide.WARNING %}alert-warning border-warning{% elif guide.type == guide.DANGER %}alert-danger border-danger{% else %}alert-info border-info{% endif %} shadow-sm mb-4 d-flex align-items-center" role="alert" style="border-left: 5px solid; border-radius: 6px;">
+    <div class="alert {% if guide.type == 1 %}
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        alert-warning border-warning
+
+
+
+
+
+
+
+
+
+
+      {% elif guide.type == 2 %}
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        alert-danger border-danger
+
+
+
+
+
+
+
+
+
+
+      {% else %}
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        alert-info border-info
+
+
+
+
+
+
+
+
+
+
+      {% endif %} shadow-sm mb-4 d-flex align-items-center"
+      role="alert"
+      style="border-left: 5px solid; border-radius: 6px;">
       <div class="mr-3" style="font-size: 1.5rem; line-height: 1;">
-        {% if guide.type == guide.WARNING %}
+        {% if guide.type == 1 %}
           <i class="fa-solid fa-triangle-exclamation text-warning"></i>
-        {% elif guide.type == guide.DANGER %}
+        {% elif guide.type == 2 %}
           <i class="fa-solid fa-circle-exclamation text-danger"></i>
         {% else %}
           <i class="fa-solid fa-lightbulb text-info"></i>
@@ -33,18 +101,10 @@
             <i class="fa-solid fa-bolt text-warning mr-2"></i> Quick Workflows
           </div>
           <div class="d-flex flex-wrap align-items-center">
-            <a href="/vocabulary/" target="_blank" class="btn btn-sm btn-outline-info mr-2 mb-1 shadow-sm">
-              <i class="fa-solid fa-spell-check mr-1"></i> Vocabulary Hub
-            </a>
-            <a href="/admin/viewer" class="btn btn-sm btn-outline-primary mr-2 mb-1 shadow-sm">
-              <i class="fa-solid fa-folder-open mr-1"></i> Document Viewer
-            </a>
-            <a href="/admin/logs/" class="btn btn-sm btn-outline-dark mr-2 mb-1 shadow-sm">
-              <i class="fa-solid fa-terminal mr-1"></i> Log Viewer
-            </a>
-            <a href="/" target="_blank" class="btn btn-sm btn-outline-secondary mb-1 shadow-sm">
-              <i class="fa-solid fa-globe mr-1"></i> Portal Home
-            </a>
+            <a href="/vocabulary/" target="_blank" class="btn btn-sm btn-outline-info mr-2 mb-1 shadow-sm"><i class="fa-solid fa-spell-check mr-1"></i> Vocabulary Hub</a>
+            <a href="/admin/viewer" class="btn btn-sm btn-outline-primary mr-2 mb-1 shadow-sm"><i class="fa-solid fa-folder-open mr-1"></i> Document Viewer</a>
+            <a href="/admin/logs/" class="btn btn-sm btn-outline-dark mr-2 mb-1 shadow-sm"><i class="fa-solid fa-terminal mr-1"></i> Log Viewer</a>
+            <a href="/" target="_blank" class="btn btn-sm btn-outline-secondary mb-1 shadow-sm"><i class="fa-solid fa-globe mr-1"></i> Portal Home</a>
           </div>
         </div>
 
@@ -58,15 +118,11 @@
               {% csrf_token %}
               <div class="input-group shadow-sm">
                 <div class="input-group-prepend">
-                  <span class="input-group-text bg-light border-right-0">
-                    <i class="fa-solid fa-language text-muted"></i>
-                  </span>
+                  <span class="input-group-text bg-light border-right-0"><i class="fa-solid fa-language text-muted"></i></span>
                 </div>
                 <input type="text" name="english" class="form-control border-left-0" placeholder="Enter English word to translate..." required autocomplete="off" />
                 <div class="input-group-append">
-                  <button type="submit" class="btn btn-success font-weight-bold px-3">
-                    <i class="fa-solid fa-plus mr-1"></i> Add
-                  </button>
+                  <button type="submit" class="btn btn-success font-weight-bold px-3"><i class="fa-solid fa-plus mr-1"></i> Add</button>
                 </div>
               </div>
             </form>
@@ -77,6 +133,119 @@
     </div>
   </div>
 
-  {{ block.super }}
-{% endblock %}
+  <div class="row">
+    <div class="col-12 col-md-6 mb-2">
+      {% if exam_list %}
+        <div class="card p-3 h-100">
+          <h5 class="card-title">Upcoming Exam...</h5>
+          <div class="card-body">
+            <ul class="list-group">
+              {% for exam in exam_list %}
+                <li class="list-group-item">
+                  <span class="lead text-primary">{{ exam.course }}</span> - <span class="text-muted">{{ exam.name }}</span><br />
+                  <span class="text-muted">{{ exam.exam_date }}</span>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+    <div class="col-12 col-md-6 mb-2">
+      {% if improve_exam_list %}
+        <div class="card p-3 h-100">
+          <h5 class="card-title">Improve Exam...</h5>
+          <div class="card-body">
+            <ul class="list-group">
+              {% for improve_exam in improve_exam_list %}
+                <li class="list-group-item">
+                  <p class="lead text-primary m-0">{{ improve_exam.course }}</p>
+                  <span class="text-muted">{{ improve_exam.book }}</span>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+    <div class="col-12 col-md-6 mb-2">
+      {% if reading_progress %}
+        <div class="card p-3 h-100">
+          <h5 class="card-title">Academic Reading Progress...</h5>
+          <div class="card-body">
+            <ul class="list-group">
+              {% for progress in reading_progress %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <div>
+                    <p class="lead text-primary m-0">{{ progress.book }}</p>
+                    <span class="text-muted">{{ progress.chapter }}</span>
+                  </div>
+                  <p class="text-info">{{ progress.get_status_display }}</p>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+    <div class="col-12 col-md-6 mb-2">
+      {% if other_study_progress %}
+        <div class="card p-3 h-100">
+          <h5 class="card-title">Side Reading Progress...</h5>
+          <div class="card-body">
+            <ul class="list-group">
+              {% for progress in other_study_progress %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <div>
+                    <p class="lead text-primary m-0">{{ progress.topic_name }}</p>
+                    <span class="text-muted">{{ progress.book.title }}</span>
+                    {% if progress.chapter %}
+                      <span class="text-muted">- {{ progress.chapter.title }}</span>
+                    {% endif %}
+                  </div>
+                  <p class="text-info">{{ progress.get_status_display }}</p>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+    <div class="col-12 col-md-6 mb-2">
+      {% if reading_plan %}
+        <div class="card p-3 h-100">
+          <h5 class="card-title">Reading Next...</h5>
+          <div class="card-body">
+            <ul class="list-group">
+              {% for plan in reading_plan %}
+                <li class="list-group-item">
+                  <span class="lead text-primary">{{ plan.book }}</span> - <span class="text-muted">{{ plan.chapter.title }}</span><br />
+                  <span class="text-muted">{{ plan.start_around }}</span>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+    <div class="col-12 col-md-6 mb-2">
+      {% if revise %}
+        <div class="card p-3 h-100">
+          <h5 class="card-title">Revise Next...</h5>
+          <div class="card-body">
+            <ul class="list-group">
+              {% for rev in revise %}
+                <li class="list-group-item">
+                  <span class="lead text-primary">{{ rev.book }}</span> - <span class="text-muted">{{ rev.chapter.title }}</span> <br />
+                  <span class="text-muted">{{ rev.possible_date }}</span>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
 
+  {% comment %} {{ block.super }} {% endcomment %}
+{% endblock %}
