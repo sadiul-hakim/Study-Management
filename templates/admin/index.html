@@ -17,7 +17,9 @@
         
         
         
+        
         alert-warning border-warning
+
 
 
 
@@ -39,7 +41,9 @@
         
         
         
+        
         alert-danger border-danger
+
 
 
 
@@ -61,7 +65,9 @@
         
         
         
+        
         alert-info border-info
+
 
 
 
@@ -134,8 +140,8 @@
   </div>
 
   <div class="row">
-    <div class="col-12 col-md-6 mb-2">
-      {% if exam_list %}
+    {% if exam_list %}
+      <div class="col-12 col-md-6 mb-2">
         <div class="card p-3 h-100">
           <h5 class="card-title">Upcoming Exam...</h5>
           <div class="card-body">
@@ -149,10 +155,10 @@
             </ul>
           </div>
         </div>
-      {% endif %}
-    </div>
-    <div class="col-12 col-md-6 mb-2">
-      {% if improve_exam_list %}
+      </div>
+    {% endif %}
+    {% if improve_exam_list %}
+      <div class="col-12 col-md-6 mb-2">
         <div class="card p-3 h-100">
           <h5 class="card-title">Improve Exam...</h5>
           <div class="card-body">
@@ -166,10 +172,10 @@
             </ul>
           </div>
         </div>
-      {% endif %}
-    </div>
-    <div class="col-12 col-md-6 mb-2">
-      {% if reading_progress %}
+      </div>
+    {% endif %}
+    {% if reading_progress %}
+      <div class="col-12 col-md-6 mb-2">
         <div class="card p-3 h-100">
           <h5 class="card-title">Academic Reading Progress...</h5>
           <div class="card-body">
@@ -186,10 +192,10 @@
             </ul>
           </div>
         </div>
-      {% endif %}
-    </div>
-    <div class="col-12 col-md-6 mb-2">
-      {% if other_study_progress %}
+      </div>
+    {% endif %}
+    {% if other_study_progress %}
+      <div class="col-12 col-md-6 mb-2">
         <div class="card p-3 h-100">
           <h5 class="card-title">Side Reading Progress...</h5>
           <div class="card-body">
@@ -209,10 +215,10 @@
             </ul>
           </div>
         </div>
-      {% endif %}
-    </div>
-    <div class="col-12 col-md-6 mb-2">
-      {% if reading_plan %}
+      </div>
+    {% endif %}
+    {% if reading_plan %}
+      <div class="col-12 col-md-6 mb-2">
         <div class="card p-3 h-100">
           <h5 class="card-title">Reading Next...</h5>
           <div class="card-body">
@@ -226,10 +232,10 @@
             </ul>
           </div>
         </div>
-      {% endif %}
-    </div>
-    <div class="col-12 col-md-6 mb-2">
-      {% if revise %}
+      </div>
+    {% endif %}
+    {% if revise %}
+      <div class="col-12 col-md-6 mb-2">
         <div class="card p-3 h-100">
           <h5 class="card-title">Revise Next...</h5>
           <div class="card-body">
@@ -243,8 +249,8 @@
             </ul>
           </div>
         </div>
-      {% endif %}
-    </div>
+      </div>
+    {% endif %}
   </div>
 
   {% comment %} {{ block.super }} {% endcomment %}
