@@ -2,7 +2,7 @@ from .models import Exam, Improve
 
 
 def admin_exam(request):
-    exam = Exam.objects.all() or False
+    exam = Exam.objects.filter(completed=False).order_by("-exam_date").all() or False
     return {"exam_list": exam if exam is not False else None}
 
 
