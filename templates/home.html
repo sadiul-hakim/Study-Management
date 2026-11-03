@@ -1,4 +1,5 @@
 {% load pwa %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -7,9 +8,6 @@
     <title>B.A. Study Management — Personal Academic Hub</title>
     {% progressive_web_app_meta %}
     <meta name="description" content="Personal academic tracker to organize book reading, writing plans, examinations, vocabulary building, and long-term learning." />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
     <style>
@@ -36,7 +34,7 @@
       }
       
       body {
-        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-family: Arial, Helvetica, sans-serif;
         background-color: var(--bg-primary);
         color: var(--text-primary);
         min-height: 100vh;
@@ -110,16 +108,10 @@
       }
       
       .brand-icon {
-        width: 40px;
-        height: 40px;
         border-radius: 10px;
-        background: linear-gradient(135deg, var(--accent-indigo), var(--accent-violet));
         display: flex;
         align-items: center;
         justify-content: center;
-        color: white;
-        box-shadow: 0 4px 15px rgba(99, 102, 241, 0.35);
-        font-size: 1.1rem;
       }
       
       .nav-links {
@@ -264,13 +256,11 @@
         left: 24px;
         font-size: 4rem;
         line-height: 1;
-        font-family: Georgia, serif;
         color: rgba(99, 102, 241, 0.25);
         pointer-events: none;
       }
       
       .quote-text {
-        font-family: 'Cinzel', 'Playfair Display', Georgia, serif;
         font-size: 1.15rem;
         color: #e2e8f0;
         line-height: 1.7;
@@ -506,7 +496,7 @@
         width: calc(100vw - 36px);
         pointer-events: none;
       }
-
+      
       .sticky-note-card {
         pointer-events: auto;
         position: relative;
@@ -519,11 +509,11 @@
         transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.3s ease;
         animation: stickySlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) backwards;
       }
-
+      
       .sticky-note-card:hover {
         box-shadow: 0 18px 36px -6px rgba(0, 0, 0, 0.55), 0 8px 16px -2px rgba(0, 0, 0, 0.3);
       }
-
+      
       @keyframes stickySlideIn {
         from {
           opacity: 0;
@@ -534,11 +524,11 @@
           transform: translateY(0) scale(1);
         }
       }
-
+      
       .sticky-note-card.dismissing {
         animation: stickySlideOut 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
       }
-
+      
       @keyframes stickySlideOut {
         to {
           opacity: 0;
@@ -547,7 +537,7 @@
           margin-bottom: -12px;
         }
       }
-
+      
       .sticky-note-header {
         display: flex;
         align-items: center;
@@ -558,7 +548,7 @@
         cursor: pointer;
         user-select: none;
       }
-
+      
       .sticky-note-title-wrap {
         display: flex;
         align-items: center;
@@ -569,20 +559,20 @@
         letter-spacing: 0.02em;
         text-transform: uppercase;
       }
-
+      
       .sticky-note-pin {
         color: #d97706;
         font-size: 0.95rem;
         transform: rotate(30deg);
-        filter: drop-shadow(0 1px 2px rgba(0,0,0,0.15));
+        filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.15));
       }
-
+      
       .sticky-note-actions {
         display: flex;
         align-items: center;
         gap: 4px;
       }
-
+      
       .sticky-btn {
         background: transparent;
         border: none;
@@ -598,25 +588,25 @@
         font-size: 0.825rem;
         transition: all 0.2s ease;
       }
-
+      
       .sticky-btn:hover {
         background: rgba(180, 83, 9, 0.15);
         color: #451a03;
       }
-
+      
       .sticky-btn.sticky-close-btn:hover {
         background: rgba(239, 68, 68, 0.2);
         color: #b91c1c;
       }
-
+      
       .sticky-collapse-btn i {
         transition: transform 0.25s ease;
       }
-
+      
       .sticky-note-card.is-collapsed .sticky-collapse-btn i {
         transform: rotate(180deg);
       }
-
+      
       .sticky-note-body {
         padding: 14px 16px;
         max-height: 280px;
@@ -628,16 +618,16 @@
         scrollbar-width: thin;
         scrollbar-color: rgba(180, 83, 9, 0.35) transparent;
       }
-
+      
       .sticky-note-body::-webkit-scrollbar {
         width: 5px;
       }
-
+      
       .sticky-note-body::-webkit-scrollbar-thumb {
         background: rgba(180, 83, 9, 0.3);
         border-radius: 4px;
       }
-
+      
       .sticky-note-card.is-collapsed .sticky-note-body {
         max-height: 0 !important;
         padding-top: 0 !important;
@@ -645,7 +635,7 @@
         opacity: 0;
         overflow: hidden;
       }
-
+      
       .sticky-note-body p {
         margin-bottom: 0.6rem;
       }
@@ -683,7 +673,7 @@
     <header>
       <a href="/" class="brand">
         <div class="brand-icon">
-          <i class="fa-solid fa-graduation-cap"></i>
+          <img src="{% static 'images/login_logo.png' %}" alt="logo" width="40px" height="40px" />
         </div>
         <span>Study Tracker</span>
       </a>
@@ -736,40 +726,6 @@
           <span>Browse Document Viewer</span>
         </a>
       </div>
-
-      <div class="features-grid">
-        <div class="feature-card">
-          <div class="feature-icon-wrap icon-indigo">
-            <i class="fa-solid fa-book-open"></i>
-          </div>
-          <h3 class="feature-title">Book & Syllabus Tracking</h3>
-          <p class="feature-desc">Monitor chapter progress, page marks, and active reading cycles across multiple courses.</p>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-icon-wrap icon-emerald">
-            <i class="fa-solid fa-rotate"></i>
-          </div>
-          <h3 class="feature-title">Smart Revision Queue</h3>
-          <p class="feature-desc">Priority-based revision scheduling with automated daily email reminders so nothing is forgotten.</p>
-        </div>
-
-        <a href="/vocabulary/" class="feature-card" style="text-decoration: none; cursor: pointer;">
-          <div class="feature-icon-wrap icon-amber">
-            <i class="fa-solid fa-spell-check"></i>
-          </div>
-          <h3 class="feature-title">Vocabulary Engine & Exam</h3>
-          <p class="feature-desc">Read random words, update learning status, and test recall with 10-word interactive exams.</p>
-        </a>
-
-        <div class="feature-card">
-          <div class="feature-icon-wrap icon-purple">
-            <i class="fa-solid fa-pen-nib"></i>
-          </div>
-          <h3 class="feature-title">Writing & Exam Prep</h3>
-          <p class="feature-desc">Organize essay plans, exam countdown dates, and improvement targets for peak performance.</p>
-        </div>
-      </div>
     </main>
 
     <footer>
@@ -783,43 +739,37 @@
             <div class="sticky-note-header" onclick="toggleStickyNote('sticky-note-{{ note.id }}')">
               <div class="sticky-note-title-wrap">
                 <i class="fa-solid fa-thumbtack sticky-pin"></i>
-                <span>{{ note.title|default:"Sticky Note" }}</span>
+                <span>{{ note.title|default:'Sticky Note' }}</span>
               </div>
               <div class="sticky-note-actions" onclick="event.stopPropagation();">
-                <button type="button" class="sticky-btn sticky-collapse-btn" onclick="toggleStickyNote('sticky-note-{{ note.id }}')" title="Collapse / Expand note">
-                  <i class="fa-solid fa-chevron-up"></i>
-                </button>
-                <button type="button" class="sticky-btn sticky-close-btn" onclick="dismissStickyNote('sticky-note-{{ note.id }}')" title="Close / Hide note">
-                  <i class="fa-solid fa-xmark"></i>
-                </button>
+                <button type="button" class="sticky-btn sticky-collapse-btn" onclick="toggleStickyNote('sticky-note-{{ note.id }}')" title="Collapse / Expand note"><i class="fa-solid fa-chevron-up"></i></button>
+                <button type="button" class="sticky-btn sticky-close-btn" onclick="dismissStickyNote('sticky-note-{{ note.id }}')" title="Close / Hide note"><i class="fa-solid fa-xmark"></i></button>
               </div>
             </div>
-            <div class="sticky-note-body">
-              {{ note.note|safe }}
-            </div>
+            <div class="sticky-note-body">{{ note.note|safe }}</div>
           </div>
         {% endfor %}
       </div>
 
       <script>
         function toggleStickyNote(noteId) {
-          const card = document.getElementById(noteId);
+          const card = document.getElementById(noteId)
           if (card) {
-            card.classList.toggle('is-collapsed');
+            card.classList.toggle('is-collapsed')
           }
         }
-
+        
         function dismissStickyNote(noteId) {
-          const card = document.getElementById(noteId);
+          const card = document.getElementById(noteId)
           if (card) {
-            card.classList.add('dismissing');
+            card.classList.add('dismissing')
             setTimeout(() => {
-              card.remove();
-              const container = document.getElementById('stickyNotesContainer');
+              card.remove()
+              const container = document.getElementById('stickyNotesContainer')
               if (container && container.children.length === 0) {
-                container.remove();
+                container.remove()
               }
-            }, 300);
+            }, 300)
           }
         }
       </script>
